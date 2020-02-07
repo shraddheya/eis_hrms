@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+#local copy just to test locally
+l200207/frontendMinShrad/
