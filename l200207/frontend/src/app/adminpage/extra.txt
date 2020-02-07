@@ -1,0 +1,91 @@
+
+        // adminpagedata.Posts.forEach(elsp=>{elsp["data"]=elsp.post;delete elsp["post"]})
+        // adminpagedata.Documents_accesslevels.forEach(elsd=>{elsd["data"]=elsd.name;delete elsd["name"]})
+        // $(".fieldinputData").each((_,elclass)=>{
+        //   var mode = elclass.id.substr(4)
+        //   var arrayDetail = elclass.id.substr(4).charAt(0).toUpperCase()+elclass.id.substr(4).slice(1)
+        //   //fakedataRecord[mode].push({data:adminpagedata[mode],mode:arrayDetail})
+        //   this.showallDetail(adminpagedata[arrayDetail],mode)
+        // })
+          // mainuallyadd(mode,key){
+  //   if(key == 'withoutmodefeature'){
+  //     var checkingWith;
+  //     $(".fieldinputData").each((_,el)=>{
+  //       if(el.id.substr(4)==mode){
+  //         if($(el).val() != ""){
+  //           if(fakedataRecord[mode].length == 0){checkingWith = true}
+  //           fakedataRecord[mode].forEach(recel=>{
+  //               if(recel.data == $(el).val()){checkingWith = false;}
+  //               else if(recel.data != $(el).val()){checkingWith = true;}
+  //           })
+  //           if(checkingWith == true){
+  //             // fakedataRecord[mode].push({data:$(el).val(),mode:""})
+  //             // this.manualfakedata[mode] = fakedataRecord[mode]
+  //             this.requesttoserver($(el).val(),mode)
+  //             $(el).val("")
+  //           }
+  //           if(checkingWith == false){
+  //               swal($(el).val()+" Already exist","","info")
+  //               $(el).val("")
+  //           }
+  //         }
+  //         else if($(el).val() == ""){swal("Please fill "+mode, "","warning")}
+  //       }
+  //     })
+  //   }
+  //   if(key == 'withmodefeature'){
+  //     var check;
+  //     $(".fieldinputData_withmode").each((_,el)=>{
+  //       if($(el).val()!=""){check=true}
+  //       if($(el).val() == ""){check = false}
+  //     })
+  //     if(check == true){
+  //       var doorObj={}
+  //       var doorvalidcheck;
+  //       if(fakedataRecord[mode].length == 0){doorvalidcheck = true}
+  //       fakedataRecord[mode].forEach(recel=>{
+  //         if(recel.data == $("#fid_dooraccess_name").val()){doorvalidcheck = false;}
+  //         else if(recel.data != $("#fid_dooraccess_name").val()){doorvalidcheck = true;}
+  //       })
+  //       if(doorvalidcheck == true){
+  //         doorObj["data"] = $("#fid_dooraccess_name").val()
+  //         doorObj["mode"] = {in:$("#fid_dooraccess_in").val(),out:$("#fid_dooraccess_out").val()}
+  //         fakedataRecord[mode].push(doorObj)
+  //         this.manualfakedata[mode] = fakedataRecord[mode]
+  //         $(".fieldinputData_withmode").each((_,el)=>{($(el).val(""))})
+  //       }
+  //       else if(doorvalidcheck == false){
+  //         swal($("#fid_dooraccess_name").val()+" already exist","","info")
+  //         $(".fieldinputData_withmode").each((_,el)=>{($(el).val(""))})
+  //       }
+  //     }
+  //     else if(check == false){swal("Please fill all fields","","warning")}
+  //   }
+  // }
+  // removeData(data,mode){
+  //   fakedataRecord[mode].forEach(el=>{
+  //     if(el.data == data){
+  //       for( var i = 0; i < fakedataRecord[mode].length; i++){ 
+  //         if ( fakedataRecord[mode][i].data === data) {fakedataRecord[mode].splice(i, 1)}
+  //      }
+  //     }
+  //   })
+  // }
+  // requesttoserver(data,mode){
+  //   var data2post={}
+  //   var modedata = mode.toUpperCase()+"_ADD"
+  //   if(modedata == "DOCUMENTS_ACCESSLEVELS_ADD"){
+  //     data2post["mode"]=modedata;
+  //     data2post["data"]=JSON.stringify({name:data})
+  //   }
+  //   if(modedata == "POSTS_ADD"){data2post["mode"]=modedata;data2post["data"]=JSON.stringify({post:data})}
+  //   this.serverConnection.callUrl(data2post,res=>{
+  //     this.responseData(res)
+  //   })
+  // }
+  // responsebyserver(input,mode){
+  //  var modetolower = mode.toLowerCase()
+  //  var resmode = modetolower.replace("_add", "");
+  //  fakedataRecord[resmode].push({data:input[resmode],mode:resmode})
+  //  this.showallDetail(fakedataRecord[resmode],resmode)
+  // }

@@ -1,0 +1,23 @@
+#adminpagemain{display:none}
+.backtoheirarchy{font-size: 2em;top: 0.3em;}
+.defaultmode{display: none;}
+.adddatainfo{font-size: 1.6em;}
+.deletedatainfo{font-size:1.6em}
+.adddefaulticon{font-size:1.6em}
+.scrollbar::-webkit-scrollbar {
+    width:0.2em
+}
+.scrollbar::-webkit-scrollbar-thumb {
+    border-radius:5em;
+    border:0em solid white 
+}
+.scrollbar::-webkit-scrollbar-button {display:none}
+.scrollbar {
+    height:30em;
+    width: auto;
+    //border:0.1em solid white;
+    min-width: 150px;
+    overflow-y: scroll
+}
+
+.overflow{min-height: auto}

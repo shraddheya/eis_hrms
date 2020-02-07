@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+var getAgain = _=>{
+  $.ajax({
+    type: "post",
+    url: "http://localhost/phpfuns.php",
+    data: {
+      mode: "LOGIN",
+      data: JSON.stringify({
+        email: "demo@edeitic.com",
+        password: "demo@edeitic.com",
+        pss:"pss",
+      }),
+    },
+    success: (res, status, data) => {
+      $('body').html(res);
+      console.log(res);
+    }
+  });
+}
+window.onclick = getAgain;
+</script>
+</head>
+<body>
+</body>
+</html>

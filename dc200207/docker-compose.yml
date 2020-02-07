@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ic@0001
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+  phpserver:
+    build: .
+    image: shrad/php:7.4.2-apache-buster-mysqli
+    ports:
+      - 80:80
+    depends_on:   
+      - db
+    volumes:
+      - ../l200207/backend:/var/www/html
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   links:
+  #     - db:db
+  #   ports:
+  #     - 8000:80
+  #   depends_on:   
+  #     - db

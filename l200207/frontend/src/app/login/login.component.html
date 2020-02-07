@@ -1,0 +1,376 @@
+<div id="loginModal" class="scrollbar">
+  <div class="overflow">
+    <div class="fixed-top bg-dark">
+      <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark " [containerInside]="false">
+        <mdb-navbar-brand><a class="navbar-brand" href="#home">HRMS</a></mdb-navbar-brand>
+        <links>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link waves-light" href="#features" mdbWavesEffect>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>Features<span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link waves-light" href="#pricingplan" mdbWavesEffect>
+                <mdb-icon fas icon="hand-holding-usd"></mdb-icon>Pricing
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link waves-light" name="selectprice" #paymentbynavbar
+                (click)="payment('navbarclick',paymentbynavbar.name)" mdbWavesEffect>
+                <mdb-icon fas icon="shopping-cart"></mdb-icon> Buy
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link waves-light" (click)="openlogin()" mdbWavesEffect>
+                <mdb-icon fas icon="sign-in-alt"></mdb-icon> Sign In
+              </a>
+            </li>
+          </ul>
+        </links>
+      </mdb-navbar>
+    </div>
+    <!-- <section class="bg-white" id="home">
+      <mdb-card cascade="true" wider="true" reverse="true" class="p-5">
+        <div class="view view-cascade overlay waves-light p-4" mdbWavesEffect>
+          <mdb-card-img src="../../assets/images/baner.png"></mdb-card-img>
+          <a>
+            <div class="mask rgba-white-slight"></div>
+          </a>
+        </div>
+        <mdb-card-body cascade="true" class="text-center">
+          <mdb-card-title>
+            <h4>
+              <strong>HRMS System</strong>
+            </h4>
+          </mdb-card-title>
+          <mdb-card-text>
+            This is a platform where you can manage your office Work
+          </mdb-card-text>
+        </mdb-card-body>
+      </mdb-card>
+    </section> -->
+    <section class="bg-white font-weight-bold" id="home" style="font-family:'Geneva'">
+      <div class="p-5">
+        <div class="p-5">
+          <mdb-carousel [animation]="'slide'" class="z-depth-3">
+            <mdb-carousel-item>
+              <img class="d-block w-100" src="../../assets/images/baner.png" alt="Third slide">
+            </mdb-carousel-item>
+            <mdb-carousel-item>
+              <img class="d-block w-100" src="../../assets/images/adduser.png" alt="First slide">
+            </mdb-carousel-item>
+            <mdb-carousel-item>
+              <img class="d-block w-100" src="../../assets/images/adminpanel.png" alt="Second slide">
+            </mdb-carousel-item>
+            <mdb-carousel-item>
+              <img class="d-block w-100" src="../../assets/images/netwaorkclick.png" alt="Third slide">
+            </mdb-carousel-item>
+            <mdb-carousel-item>
+              <img class="d-block w-100" src="../../assets/images/salaryslip.png" alt="Third slide">
+            </mdb-carousel-item>
+          </mdb-carousel>
+          <div class="p-4 z-depth-3">
+            <h5 class="text-center">This is a platform where you can manage your office Work</h5>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="bg-white" id="features">
+      <div class="p-4">
+        <div class="container my-5 p-5 z-depth-1">
+          <section class="dark-grey-text">
+            <h2 class="text-center font-weight-bold mb-4 pb-2">Features</h2>
+            <p class="text-center lead grey-text mx-auto mb-5">
+              Below features of HRMS will making your work easy
+            </p>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row mb-3">
+                  <div class="col-2">
+                    <i class="fas fa-2x fa-user-plus deep-dark-text"></i>
+                  </div>
+                  <div class="col-10">
+                    <h5 class="font-weight-bold mb-3">Add Users</h5>
+                    <p class="grey-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit maiores
+                      nam, aperiam minima assumenda deleniti hic.</p>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-2">
+                    <i class="fas fa-2x fa-user-times deep-dark-text"></i>
+                  </div>
+                  <div class="col-10">
+                    <h5 class="font-weight-bold mb-3">Remove Users</h5>
+                    <p class="grey-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit maiores
+                      nam, aperiam minima assumenda deleniti hic.</p>
+                  </div>
+                </div>
+                <div class="row mb-md-0 mb-3">
+                  <div class="col-2">
+                    <i class="fas fa-2x fa-user-edit deep-dark-text"></i>
+                  </div>
+                  <div class="col-10">
+                    <h5 class="font-weight-bold mb-3">Edit Users</h5>
+                    <p class="grey-text mb-md-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit
+                      maiores nam, aperiam minima assumenda deleniti hic.</p>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-md-4 text-center">
+                <img class="img-fluid" src="../../assets/images/banerimage.png"
+                  alt="Sample image">
+              </div> -->
+              <div class="col-md-6
+              
+              ">
+                <div class="row mb-3">
+                  <div class="col-2">
+                    <i class="far fa-2x fa-money-bill-alt deep-dark-text"></i>
+                  </div>
+                  <div class="col-10">
+                    <h5 class="font-weight-bold mb-3">Salary Slip</h5>
+                    <p class="grey-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit maiores
+                      nam, aperiam minima assumenda deleniti hic.</p>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-2">
+                    <i class="fas fa-2x fa-calendar-check deep-dark-text"></i>
+                  </div>
+                  <div class="col-10">
+                    <h5 class="font-weight-bold mb-3">Attendance</h5>
+                    <p class="grey-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit maiores
+                      nam, aperiam minima assumenda deleniti hic.</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-2">
+                    <i class="fas fa-2x fa-id-card-alt deep-dark-text"></i>
+                  </div>
+                  <div class="col-10">
+                    <h5 class="font-weight-bold mb-3">Card Allot</h5>
+                    <p class="grey-text mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit
+                      maiores nam, aperiam minima assumenda deleniti hic.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+    <section class="bg-white" id="pricingplan">
+      <div class="" style="padding:3em">
+        <section class="p-md-3 mx-md-5 text-center text-lg-left">
+          <h2 class="text-center mx-auto font-weight-bold mb-5">Pricing Plan</h2>
+          <div class="row">
+            <div class="col-lg-4 mb-4">
+              <div class="card text-center">
+                <div class="card-header white-text grey darken-3">
+                  <h4>Basic</h4>
+                  <div class="d-flex justify-content-center align-items-end">
+                    <h3 class="mb-0 h3">$50</h3>
+                    <p class="mb-0 ml-2">/ 3 month</p>
+                  </div>
+                </div>
+                <i class="fas fa-chalkboard fa-2x pt-5 dark-text"></i>
+                <div class="card-body">
+                  <p class="lead font-weight-bold">Pricing plan</p>
+                  <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                  </p>
+                  <a class="btn btn-dark btn-md" name="basic" #pricingbasic
+                    (click)="payment('viapriceplan',pricingbasic.name)" role="button">Buy</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+              <div class="card text-center">
+                <div class="card-header white-text grey darken-3">
+                  <h4>Express</h4>
+                  <div class="d-flex justify-content-center align-items-end">
+                    <h3 class="mb-0 h3">$90</h3>
+                    <p class="mb-0 ml-2">/ 6 month</p>
+                  </div>
+                </div>
+                <i class="fas fa-briefcase fa-2x pt-5 dark-text"></i>
+                <div class="card-body">
+                  <p class="lead font-weight-bold">Pricing plan</p>
+                  <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                  </p>
+                  <a class="btn btn-dark btn-md" name="express" #pricingexpress
+                    (click)="payment('viapriceplan',pricingexpress.name)" role="button">Buy</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+              <div class="card text-center">
+                <div class="card-header white-text grey darken-3">
+                  <h4>Super</h4>
+                  <div class="d-flex justify-content-center align-items-end">
+                    <h3 class="mb-0 h3">$120</h3>
+                    <p class="mb-0 ml-2">/ 1 year</p>
+                  </div>
+                </div>
+                <i class="fas fa-gem fa-2x pt-5 yellow-dark"></i>
+                <div class="card-body">
+                  <p class="lead font-weight-bold">Pricing plan</p>
+                  <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                  </p>
+                  <a class="btn btn-dark btn-md" name="super" #pricingsuper
+                    (click)="payment('viapriceplan',pricingsuper.name)" role="button">Buy</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+    <section class="bg-white">
+      <div class="p-5" id="demo_logincredentail">
+        <div class="row justify-content-end">
+          <div class="col-sm-4 col-xs-3">
+            <mdb-card style="width:auto;">
+              <mdb-card-body>
+                <mdb-card-title class="">
+                  <h5>You can See Demo Using below Username and Password</h5>
+                </mdb-card-title>
+                <mdb-card-text class="font-weight-bold">Username - demo@edeitic.com</mdb-card-text>
+                <mdb-card-text class="font-weight-bold">Password - demo123</mdb-card-text>
+              </mdb-card-body>
+            </mdb-card>
+          </div>
+        </div>
+      </div>
+    </section>
+    <a href="#home">
+      <mdb-icon fas icon="chevron-circle-up" class="clicktop text-white bg-dark z-depth-1 rounded-circle"></mdb-icon>
+    </a>
+    <div mdbModal #frame="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
+      aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center p-4 border border-white">
+            <mdb-icon fas icon="chevron-left" class="detailback text-dark text-left hoverable"
+              (click)="dismisModal('frame','modal')"></mdb-icon>
+            <h4 class="modal-title w-100 loginfeature font-weight-bold">Sign in</h4>
+          </div>
+          <!-- \S+\s*\r\n -->
+          <div class="modal-body mx-3 p-3">
+            <div id="login">
+              <div class="md-form mb-5">
+                <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
+                <input type="email" id="email" (keydown.enter)="checkusermail()" (input)="email=$event.target.value"
+                  class="form-control" mdbInput>
+                <label for="defaultForm-email">Email</label>
+              </div>
+              <div class="md-form mb-4">
+                <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
+                <input type="password" id="passwords" (keydown.enter)="logincomponent('loginuser','')"
+                  (input)="password=$event.target.value" class="form-control" mdbInput>
+                <span id="password_viewhide">
+                  <i class="fas fa-eye showtext" (click)="passwordView('text','password')"></i>
+                  <i class="fas fa-eye-slash showpassword" (click)="passwordView('password','text')"></i>
+                </span>
+                <label for="defaultForm-pass">Password</label>
+              </div>
+              <div class="row p-4">
+                <div class="col-6 text-left">
+                  <mdb-checkbox #checkbox (click)="logincomponent('remberme',checkbox)" [checked]="false"
+                    [default]="true">
+                    Remember me</mdb-checkbox>
+                </div>
+                <div class="col-6 text-right">
+                  <a id="forpassword" (click)="logincomponent('forgetpassword','')" class="dark-text ml-1">Forgot
+                    Password?</a>
+                  <a class="text-success border border-success p-2" id="genpassword"
+                    (click)="logincomponent('genratepassword','')">Genrate
+                    Password</a>
+                </div>
+              </div>
+            </div>
+            <div id="Genrateotp">
+              <p class="text-center font-weight-bold">Please verify your EmailId</p>
+              <div class="md-form mb-5" id="Confirm_emailfield">
+                <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
+                <input type="email" (keydown.enter)="logincomponent('getOpt','')" id="defaultForm-email"
+                  (input)="forgetpassword_email=$event.target.value" class="form-control" mdbInput>
+                <label for="defaultForm-email">Email</label>
+              </div>
+              <div class="md-form mb-5" id="Login_otpinputfield">
+                <mdb-icon fas icon="key"></mdb-icon>
+                <input type="text" id="defaultForm_otp" class="form-control" mdbInput disabled>
+                <label for="defaultForm-email">OTP</label>
+              </div>
+              <div id="newpassword" class="p-4">
+                <div class="md-form p-2">
+                  <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
+                  <input type="password" id="createpassword" (input)="createpassword=$event.target.value"
+                    class="form-control" mdbInput>
+                  <label for="">Create Password</label>
+                </div>
+                <div class="md-form p-2">
+                  <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
+                  <input type="password" id="confirmpassword" (input)="confirmpassword=$event.target.value"
+                    class="form-control" mdbInput>
+                  <label for="">Confirm Password</label>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-3 otpbutton">
+                  <button mdbBtn color="dark" class="waves-light p-2" (click)="logincomponent('getOpt','')"
+                    mdbWavesEffect>Get
+                    OTP</button>
+                </div>
+                <div class="col-3 verifyotpbutton">
+                  <button mdbBtn color="dark" class="waves-light p-2" (click)="logincomponent('verifyotp','')"
+                    mdbWavesEffect>
+                    Verify</button>
+                </div>
+                <div class="col-3 stopotpprocess">
+                  <button mdbBtn color="dark" class="waves-light p-2" (click)="logincomponent('stop_otpprocess','')"
+                    mdbWavesEffect>
+                    Cancel</button>
+                </div>
+                <div class="col-3 newpassword_value">
+                  <button mdbBtn color="dark" class="waves-light p-2" (click)="logincomponent('newpasswordmode','')"
+                    mdbWavesEffect>OK</button>
+                </div>
+              </div>
+            </div>
+            <div id="ui_genratepassword">
+              <p class="text-center font-weight-bold">{{email}}</p>
+              <div class="md-form p-2">
+                <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
+                <input type="password" id="gcreatepassword" (input)="gcreatepassword=$event.target.value"
+                  class="form-control" mdbInput>
+                <label for="">Create Password</label>
+              </div>
+              <div class="md-form p-2">
+                <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
+                <input type="password" #idforgpassword name={{email}}
+                  (keydown.enter)="logincomponent('sendrequest_pass',idforgpassword.name)" id="gconfirmpassword"
+                  (input)="gconfirmpassword=$event.target.value" class="form-control" mdbInput>
+                <label for="">Confirm Password</label>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center border border-white">
+            <div class="loginfeature">
+              <button mdbBtn color="dark" class="waves-light" (click)="logincomponent('loginuser','')"
+                mdbWavesEffect>Login</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

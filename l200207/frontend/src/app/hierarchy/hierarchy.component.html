@@ -1,0 +1,450 @@
+<div id="Heirarchy_Component">
+  <!--Navbar-->
+  <div class="header">
+    <mdb-navbar class="versionview mt-5" id="versionview_demomode"
+      SideClass="navbar navbar-expand-lg navbar-dark unique-color" [containerInside]="false">
+      <mdb-navbar-brand><a class="navbar-brand text-white font-weight-bold">HRMS</a></mdb-navbar-brand>
+      <links>
+        <ul class="navbar-nav mr-5">
+          <li class="nav-item">
+            <button class="p-3" type="button"   (click)="payment('viademo','demoprice')" size="md" mdbBtn color="dark" mdbWavesEffect>Buy
+              Now <i class="fas fa-shopping-cart"></i></button>
+          </li>
+        </ul>
+      </links>
+    </mdb-navbar>
+  </div>
+  <!--/.Navbar-->
+  <img class="versionview" id="versionview_promode" src="../../assets/images/HRMS_LOGO190618.png" alt="HRMS">
+  <section id="backgroundRGraph" class="bg-dark">
+    <div id="hierarchy"></div>
+  </section>
+  <div id="profilebutton">
+    <div class="btn-group" mdbDropdown>
+      <img id="DP" src="../../assets/images/main.png" mdbDropdownToggle class="profileimage dropdown-toggle waves-light"
+        mdbWavesEffect>
+      <div id="dropdown_profile" class="dropdown-menu dropdown-menu-left text-light">
+        <a class="mt-xs-5 dropdown-item text-dark text-center " (click)="clicked('notify')">
+          <mdb-icon fas icon="bell"></mdb-icon><span id="notycount" class="bg-dark badge">0</span>
+        </a>
+        <a id="adminbutton" class="dropdown-item text-dark text-center" (click)="clicked('adminpanel_click')">
+          <mdb-icon fas icon="user-shield"></mdb-icon>
+        </a>
+        <a id="" class="dropdown-item text-dark text-center" (click)="clicked('settings_click')">
+          <mdb-icon fas icon="cog"></mdb-icon>
+        </a>
+        <a class="dropdown-item text-dark text-center" (click)="clicked('logout')">
+          <mdb-icon fas icon="sign-out-alt"></mdb-icon>
+        </a>
+      </div>
+      <div id="notifrender" class="bg-white">
+        <div id="cancelnotif">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="dismisModal('notifrender','div')">
+            <mdb-icon fas icon="backspace"></mdb-icon>
+          </button>
+        </div>
+        <table class="table">
+          <tr *ngFor="let notview of notificationcol">
+            <th>{{notview.what}}</th>
+            <th>{{notview.why}}</th>
+            <th>{{notview.when}}</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <mdb-icon id="buttPlus" class="text-white" fas icon="plus-circle" (click)="userAdd()"></mdb-icon>
+  <div mdbModal #addUsers="mdbModal" [config]="{backdrop: 'static'}" class="modal fade left" id="frameModalAdduser"
+    tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center p-2 border border-white">
+          <h4 class="modal-title w-100 font-weight-bold">Add Users</h4>
+          <button type="button" class="close pull-right hoverable" aria-label="Close"
+            (click)="dismisModal('addUsers','modal')">
+            <mdb-icon fas icon="backspace"></mdb-icon>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-4">
+              <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers(usrAdd)" id="usrAdd_post"
+                #usrAdd>
+                <option selected disabled>User Post</option>
+                <option *ngFor="let postlist of selOfPost" value="{{postlist.id}}">{{postlist.name}}</option>
+              </select>
+            </div>
+            <div class="col-4" id="report_select">
+              <select class="inputusers form-control" (click)="changeIps_addGUIusers(usrAdd1)" id="usrAdd_boss"
+                #usrAdd1>
+                <option selected disabled>Reporting Officer</option>
+                <option *ngFor="let bosslist of selOfBoss" value="{{bosslist.id}}">{{bosslist.fname}}</option>
+              </select>
+            </div>
+            <div class="col-4" id="titles_select">
+              <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers(usrAdd2)" id="usrAdd_title"
+                #usrAdd2>
+                <option selected disabled>Title</option>
+                <option *ngFor="let title of selOfTitle" value="{{title}}">{{title}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_fname" placeholder="Firstname*">
+                <label for="form1" class="">Firstname</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_mname" placeholder="Middlename">
+                <label for="form1" class="">Middle name</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_lname" placeholder="Lastname*">
+                <label for="form1" class="">Lastname</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_contactno"
+                  placeholder="Contactnumber*">
+                <label for="form1" class="">Contact Number</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="email" class="inputusers form-control" id="usrAdd_email" placeholder="Email*">
+                <label for="form1" class="">Email</label>
+              </div>
+            </div>
+          </div>
+
+          <span class="address font-weight-bold" id="address_parmanent">
+            Parmanent Address
+          </span>
+          <div class="row">
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_houseno"
+                  placeholder="House Number">
+                <label for="form1" class="">House Number</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_area"
+                  placeholder="Area">
+                <label for="form1" class="">Area</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_city"
+                  placeholder="City">
+                <label for="form1" class="">City</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_state"
+                  placeholder="State">
+                <label for="form1" class="">State</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_country"
+                  placeholder="Country">
+                <label for="form1" class="">Country</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_pincode"
+                  placeholder="Pincode">
+                <label for="form1" class="">Pincode</label>
+              </div>
+            </div>
+          </div>
+
+          <span class="address font-weight-bold" id="address_corresponding">
+            Corresponding Address
+          </span>
+          <div class="row">
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_houseno"
+                  placeholder="House Number">
+                <label for="form1" class="">House Number</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_area"
+                  placeholder="Area">
+                <label for="form1" class="">Area</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_city"
+                  placeholder="City">
+                <label for="form1" class="">City</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_state"
+                  placeholder="State">
+                <label for="form1" class="">State</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_country"
+                  placeholder="Country">
+                <label for="form1" class="">Country</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_pincode"
+                  placeholder="Pincode">
+                <label for="form1" class="">Pincode</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4 addUserinput_Sh">
+              <select class="inputusers form-control mb-3" id="usrAdd_permission">
+                <option selected disabled>Permission</option>
+                <option *ngFor="let addpermitlist of selOfPermision" value="{{addpermitlist.value}}">
+                  {{addpermitlist.name}}</option>
+              </select>
+            </div>
+          </div>
+          <!-- Default form contact -->
+        </div>
+        <div class="modal-footer d-flex justify-content-center border border-white">
+          <button mdbBtn type="button" color="dark" class="addUsers_click waves-light"
+            (click)="mainupulationSend('addusers')" mdbWavesEffect>Create</button>
+          <button mdbBtn type="button" color="dark" class="addreset_click waves-light" (click)="clicked('resetAddForm')"
+            mdbWavesEffect>Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal" id="frameModalTopHierarchy"
+    tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center border border-white">
+          <div class="row">
+            <div class="col-12">
+              <img class="profileimage" id="usersDp" src="../../assets/images/main.png" alt="Image not found">
+            </div>
+          </div>
+          <div id="updprofile" class="file z-depth-1 bg-white">
+            <mdb-icon fas icon="camera" class="p-1 picset"></mdb-icon>
+            <input class="profilePic" #profilePicture (change)="uploadimage($event)" type="file" name="file" />
+          </div>
+          <mdb-icon fas icon="chevron-left" class="detailback text-dark text-left hoverable"
+            (click)="dismisModal('hierachyView','modal')"></mdb-icon>
+        </div>
+        <div class="modal-body">
+          <h4 class="modal-title w-100 font-weight-bold text-center p-3">User Detail</h4>
+          <div class="row">
+            <div class="col-3">
+              <p>
+                <mdb-icon id="editable" class="mr-1 p-3 heirarchyicon" fas icon="pencil-alt"></mdb-icon>
+                <mdb-icon id="viewmode" class="mr-1 p-3 heirarchyicon" fas icon="eye"></mdb-icon>
+                <mdb-icon id="delete" #deleteRecord (click)="mainupulationSend('deleteRecord')"
+                  class="mr-1 p-3 heirarchyicon" fas icon="trash"></mdb-icon>
+              </p>
+            </div>
+            <div class="col-3">
+              <button id="cardAllot" size="md" (click)="clicked('cardallotation')" mdbBtn color="dark"
+                mdbWavesEffect>Card Allot</button>
+            </div>
+            <div class="col-3">
+              <img class="img-fluid" src="../../assets/images/cardscan2.gif" id="loading_img">
+            </div>
+            <div class="col-3"><button class="allotdisabled" type="button" size="md" mdbBtn color="dark"
+                (click)="clicked('opensalaryslip')" mdbWavesEffect>
+                <mdb-icon fas icon="rupee-sign" class="p-1"></mdb-icon><span id="view_current_salary"> </span>
+              </button></div>
+          </div>
+          <div id="edit" class="p-3">
+            <div class="row">
+              <div class="col-6">
+                <label id="usrNode_id" class="lblEditToggle" style="visibility:hidden" required></label>
+              </div>
+              <div class="col-6">
+                <label id="usrNode_boss" class="lblEditToggle" style="visibility:hidden" required></label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-6">
+                <i class="fas fa-user fieldicons mr-2"></i>
+                <label id="usrNode_title" class="lblEditToggle" required></label>&nbsp;
+                <label id="usrNode_fname" class="lblEditToggle" required></label>&nbsp;
+                <label id="usrNode_mname" class="lblEditToggle" required></label>&nbsp;
+                <label id="usrNode_lname" class="lblEditToggle" required></label>
+              </div>
+              <div class="form-group col-6">
+                <i class="fas fa-envelope fieldicons mr-2"></i>
+                <label id="usrNode_email" class="lblEditToggle" required></label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <i class="fas fa-phone fieldicons mr-2"></i>
+                  <label id="usrNode_contactno" class="lblEditToggle" required></label>
+                </div>
+              </div>
+            </div>
+            <label id="labelAddressC" class="addresstage">Corresponding Address</label>
+            <div class="row caddress form-group ">
+              <div class="col-4">
+                <i class="fas fa-home fieldicons mr-2"></i>
+                <label id="usrNode_address_c_houseno" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-map-marked-alt fieldicons mr-2"></i>
+                <label id="usrNode_address_c_area" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-city fieldicons mr-2"></i>
+                <label id="usrNode_address_c_city" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-flag fieldicons mr-2"></i>
+                <label id="usrNode_address_c_state" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-globe-asia fieldicons mr-2"></i>
+                <label id="usrNode_address_c_country" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-keyboard fieldicons mr-2"></i>
+                <label id="usrNode_address_c_pincode" class="lblEditToggle addressrecord"></label>
+              </div>
+            </div>
+            <label id="labelAddressP" class="addresstage">Permanent Address</label>
+            <div class="row paddress form-group">
+              <div class="col-4">
+                <i class="fas fa-home fieldicons mr-2"></i>
+                <label id="usrNode_address_p_houseno" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-map-marked-alt fieldicons mr-2"></i>
+                <label id="usrNode_address_p_area" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-city fieldicons mr-2"></i>
+                <label id="usrNode_address_p_city" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-flag fieldicons mr-2"></i>
+                <label id="usrNode_address_p_state" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-globe-asia fieldicons mr-2"></i>
+                <label id="usrNode_address_p_country" class="lblEditToggle addressrecord"></label>
+              </div>
+              <div class="col-4">
+                <i class="fas fa-keyboard fieldicons mr-2"></i>
+                <label id="usrNode_address_p_pincode" class="lblEditToggle addressrecord"
+                  (keydown.enter)="mainupulationSend('updateUserrecord')"></label>
+              </div>
+            </div>
+          </div>
+          <div id="calendar" class=""></div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center border border-white">
+          <div class="row">
+            <div class="col-4">
+              <button type="button" #updateUserrecord (click)="mainupulationSend('updateUserrecord')" name="updateUser1"
+                class="updateusers allotdisabled btn btn-dark text-white">Update</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mdbModal #salaryslip="mdbModal" [config]="{backdrop: 'static'}" class="modal fade" id="frameModalSalary"
+    tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <mdb-icon fas icon="backspace" class="dismisssalmodal text-left hoverable" style="font-size: 1.7em;"
+            (click)="dismisModal('salaryslip','modal')"></mdb-icon>
+        </div>
+        <div class="modal-body">
+          <div id="salary_information_view">
+            <table mdbTable bordered="true" class="sal_table">
+              <tr *ngFor="let data of salary_userinfo">
+                <th>{{data.heading}}</th>
+                <td>{{data.value}}</td>
+              </tr>
+              <tr>
+                <th colspan="2">Salary detail</th>
+              </tr>
+              <tr *ngFor="let grodddata of salary_grossincome">
+                <th>{{grodddata.heading}}</th>
+                <td>{{grodddata.value}}</td>
+              </tr>
+              <tr>
+                <th colspan="2">GrossSalary - {{grossTotal}}</th>
+              </tr>
+              <tr>
+                <th colspan="2">Extra Income</th>
+              </tr>
+              <tr *ngFor="let extradata of salary_extraincome">
+                <th>{{extradata.heading}}</th>
+                <td>{{extradata.value}}</td>
+              </tr>
+              <tr>
+                <th>ExtraIncome - {{extraTotal}}</th>
+                <th>Current Salary - {{grossTotal + extraTotal}}</th>
+              </tr>
+              <tr *ngFor="let salview_data of salary_permit">
+                <th>{{salview_data.heading}}</th>
+                <td>{{salview_data.value}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-lg btn-dark text-white" id="printsalaryslip"
+            (click)="clicked('printsalaryslip')">Print Slip</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mdbModal #setting="mdbModal" [config]="{backdrop: 'static'}" class="modal" id="setting" tabindex="-1"
+    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header border border-white">
+          <mdb-icon fas icon="chevron-left" class="detailback text-dark text-left hoverable"
+            (click)="dismisModal('setting','modal')"></mdb-icon>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer border border-white">
+        </div>
+      </div>
+    </div>
+  </div>
+  <mdb-icon fas icon="comment-alt" id="chatbox" class="text-white" (click)="clicked('chatbox')"></mdb-icon>
+</div>

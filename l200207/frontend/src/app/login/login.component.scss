@@ -1,0 +1,39 @@
+#Genrateotp,#hierarchy,#Login_otpinputfield,.verifyotpbutton,#newpassword,.showpassword,#genpassword{display:none}
+#password_viewhide{
+  position: absolute;   
+  top:0.3em;
+  right:0em;
+  font-size: 1.4em;
+}
+.scrollbar::-webkit-scrollbar {
+  width:0em
+}
+.scrollbar {
+  height:65em;
+  overflow-y: scroll
+}
+.overflow{min-height: auto}
+#Header{
+  position:fixed;
+}
+.clicktop{
+  position: fixed;
+  bottom: 0.4em;
+  right: 0.4em;
+  font-size: 2.5em;
+}
+#democredentials{
+  position: absolute;
+  bottom:0em;
+  right:0em;
+
+}
+#banerimage{
+  position: absolute;
+  top: 4em;
+}
+.demoversionClick{
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+}

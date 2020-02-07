@@ -1,0 +1,123 @@
+#backgroundRGraph{position: absolute;height: 100%;width: 100%;}
+#hierarchy{height: 100%;width: 100%;} 
+#report_select,#buttPlus,#titles_select,.addUserinput_Sh,.address,#viewmode,#cardAllot,#alertInfo,.addUsers_click,
+.addreset_click,#loading_img,.versionview,#demoversionnav,#notifrender,#settings,#profilebutton,.setchangepass,#chatbox{display:none;}
+#buttPlus{
+  position: absolute;
+  right: 0.2em;
+  bottom: 0.2em;
+  font-size: 2.5em;
+  z-index: 2;
+  cursor: pointer;
+}
+#Heirarchy_Component{display:none}
+#chatboxonline{
+  position: absolute;
+}
+#versionview_promode{
+  position: absolute;
+  width: 10em;
+  left: 1em;
+  top: 1em;
+  z-index: 1;
+}
+#chatbox{
+  position: absolute;
+  right: 1.9em;
+  bottom: 0.2em;
+  font-size: 2.5em;
+  z-index: 2;
+  cursor: pointer;
+}
+#frameModalTopHierarchy{overflow-x: hidden;overflow-y: auto;}
+#frameModalSalary{overflow-x: hidden;overflow-y: auto;}
+.heirarchyicon {font-size: 1.5em;}
+#cardAllot{cursor: pointer;}
+
+#DP{
+  height: 3em;
+  width: 3em;
+  border-radius: 5em;
+  right: 1em;
+  position: absolute;
+  cursor: pointer;
+}
+#profilebutton{
+  position: fixed;
+  right: -6.4em;
+  top:-0.4em;
+  width: 6em;
+}
+.header{z-index: 1;}
+#dropdown_profile{
+  top: 0.9em;
+  left: -165px;
+  will-change: transform;
+  margin: 0em;
+  width: 1em;
+  font-size: 2em;
+}
+#notificationList{position: relative;}
+#notycount{   position: absolute;
+  position: absolute;
+  top: 0.5em;
+  right: 1.5em;
+  font-size: 0.2;
+  border-radius: 71%;
+  color: white;}
+.sal_table{position: relative;}
+#notifrender{
+  position: absolute;
+  height:auto;
+  width:auto;
+  padding:1em;
+  right: 0;
+  top: 4em;
+}
+#settings{
+  position: absolute;
+  height: auto;
+  right: 7px;
+  top: 3em;
+  width: 22em;
+}
+.sendicon{
+  font-size: 2em;
+  position: absolute;
+  top: 2.4em;
+  left: 0;
+}
+.activedot{font-size: 0.6em;}
+#messagebox{
+  position: relative;
+}
+#updprofile{
+  position: absolute;
+  top: 3.8em;
+  left: 6.1em;
+  border-radius: 4em;
+  overflow: hidden;
+}
+.chatprofile{
+  position: relative;
+  height: 3em;
+  width: 3em;
+  padding: 0.1em;
+}
+.picset{font-size: 1.1em;}
+.detailback{position: absolute;font-size: 2em;}
+#usersDp{
+  height: 5em;
+  width: 5em;
+  border-radius: 5em;
+  margin-left: 2em;
+}
+.profilePic ,input[type="file"]{
+  position: absolute;
+  font-size: 50px;
+  opacity: 0;
+  right: 0;
+  top: 0;
+}
+.camicon{position: relative;}
+.navbar-nav{position: absolute;right: 1em;}
