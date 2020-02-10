@@ -12,8 +12,7 @@ if (isset($mode)) {
 }
 
 if ($mode === "LOGIN") {
-  // session_start();
-  if(session_status() === PHP_SESSION_NONE) session_start();
+  if (session_status() === PHP_SESSION_NONE) session_start();
   $link = mysqli_connect('db', 'root', 'ic@0001');
   $data['email'] = strtolower($data['email']);
   if ($data["email"] === "demo@edeitic.com") {
@@ -112,49 +111,13 @@ if ($mode === "LOGIN") {
   $UsrData['users']     = $retArray;
   // print_r(json_encode());
   $_SESSION['userData'] = $UsrData['users'];
-  print_r(json_encode($_SESSION['userData']));
+  print_r("session : ".json_encode($_SESSION)."\n");
   exit($mode . "success" . json_encode($UsrData));
 } else {
-  $_SESSION['DBnm'] = $DBnm;
-  $link = mysqli_connect('db', 'root', 'ic@0001', $DBnm);
-  // $link = mysqli_connect('db', 'root', 'ic@0001');
+  if (session_status() == PHP_SESSION_NONE) session_start();
+  print_r("session : ".json_encode($_SESSION)."\n");
+  $link = mysqli_connect('db', 'root', 'ic@0001', $_SESSION["DBnm"]);
 }
-
-// if ($mode === "REGISTER") { // Add Users Who have Permissions
-//   $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-//   $stmt->bind_param(
-//     'issssssisssssisssssi',
-//     $data['prid'],
-//     $data["title"],
-//     $data["fname"],
-//     $data["mname"],
-//     $data["lname"],
-//     $data["email"],
-//     $data["contactno"],
-//     $data['post'],
-//     $data["address_c_houseno"],
-//     $data["address_c_area"],
-//     $data["address_c_city"],
-//     $data["address_c_state"],
-//     $data["address_c_country"],
-//     $data["address_c_pincode"],
-//     $data["address_p_houseno"],
-//     $data["address_p_area"],
-//     $data["address_p_city"],
-//     $data["address_p_state"],
-//     $data["address_p_country"],
-//     $data["address_p_pincode"]
-//   );
-//   $stmt->execute();
-//   if ($stmt->error) exit($stmt->error . " failure ");
-//   $stmtc = $link->prepare("INSERT INTO connections(prid1,prid2,connection)VALUES(?,?,'Boss')");
-//   $stmtc->bind_param('ii', $data['prid'], $data['boss']);
-//   $stmtc->execute();
-//   $newcon = $stmtc->insert_id;
-//   if ($stmtc->error) exit($stmtc->error . ' Failure');
-//   print_r($mode . " success" . json_encode($data));
-//   exit();
-// }
 
 if ($mode === "SALARYSLIP") { // Select Salart
   $stmt = $link->prepare("SELECT prid,basic_salary,pf,medical,ta,da,hra,overtime,prepared_by,check_by,authorised_by,telephone_internet,bonus,house_rent,other FROM salaries where prid = ?");
