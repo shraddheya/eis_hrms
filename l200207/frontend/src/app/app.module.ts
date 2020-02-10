@@ -9,6 +9,9 @@ import { HttpClientModule } from "@angular/common/http";
 import { AdminpageComponent } from './adminpage/adminpage.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PaymentComponent } from './payment/payment.component';
+import { FrontpageComponent } from './frontpage/frontpage.component';
+import { CookieService } from "ngx-cookie-service";
+import { RouterModule, Routes } from "@angular/router";
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,15 +19,18 @@ import { PaymentComponent } from './payment/payment.component';
     HierarchyComponent,
     AdminpageComponent,
     PaymentComponent,
+    FrontpageComponent,
+
  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule,
   ],
-  providers: [],
+  providers: [ CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
