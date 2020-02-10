@@ -111,12 +111,26 @@ if ($mode === "LOGIN") {
   $UsrData['users']     = $retArray;
   // print_r(json_encode());
   $_SESSION['userData'] = $UsrData['users'];
-  print_r("session : ".json_encode($_SESSION)."\n");
+  print_r("session : " . json_encode($_SESSION) . "\n");
   exit($mode . "success" . json_encode($UsrData));
 } else {
   if (session_status() == PHP_SESSION_NONE) session_start();
-  print_r("session : ".json_encode($_SESSION)."\n");
+  print_r("session : " . json_encode($_SESSION) . "\n");
   $link = mysqli_connect('db', 'root', 'ic@0001', $_SESSION["DBnm"]);
+}
+
+if ($mode === "REGISTER") { // Add Users Who have Permissions
+  $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+  $stmt->bind_param('issssssisssssisssssi', $data['prid'], $data["title"], $data["fname"], $data["mname"], $data["lname"], $data["email"], $data["contactno"], $data['post'], $data["address_c_houseno"], $data["address_c_area"], $data["address_c_city"], $data["address_c_state"], $data["address_c_country"], $data["address_c_pincode"], $data["address_p_houseno"], $data["address_p_area"], $data["address_p_city"], $data["address_p_state"], $data["address_p_country"], $data["address_p_pincode"]);
+  $stmt->execute();
+  if ($stmt->error) exit($stmt->error . " failure ");
+  $stmtc = $link->prepare("INSERT INTO connections(prid1,prid2,connection)VALUES(?,?,'Boss')");
+  $stmtc->bind_param('ii', $data['prid'], $data['boss']);
+  $stmtc->execute();
+  $newcon = $stmtc->insert_id;
+  if ($stmtc->error) exit($stmtc->error . ' Failure');
+  print_r($mode . " success" . json_encode($data));
+  exit();
 }
 
 if ($mode === "SALARYSLIP") { // Select Salart
@@ -124,7 +138,8 @@ if ($mode === "SALARYSLIP") { // Select Salart
   $stmt->bind_param("i", $data['prid']);
   $stmt->execute();
   $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-  if ($stmt->error) exit(' Failure');
+  print_r($res);
+  if ($stmt->error) exit($stmt->error.' Failure');
   print_r($mode . " success" . json_encode($res));
   exit();
 }
@@ -148,7 +163,30 @@ if ($mode === "NOTIFICATION") { // Send Notification Who LoggedIn
   $stmt->bind_param("i", $data['whom']);
   $stmt->execute();
   $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-  if ($stmt->error) exit(' failure');
+  if ($stmt->error) exit($stmt->error.' failure');
   print_r($mode . " success" . json_encode($result));
   exit;
 }
+
+if ($mode === "ACCESSLEVELS_ADD"){
+  // $permissions 
+  $stmt = $link->prepare("INSERT INTO accesslevels(`name`,`inid`,`outid`)VALUES(?,?,?)");
+  $stmt->bind_param("sss", $data['name'], $data['inid'], $data['outid']);
+  $stmt->execute();
+  if($stmt->error) exit($stmt->error.' Failure');
+  $stmtR = $link->prepare("SELECT id,`name`,inid,outid FROM accesslevels WHERE id=(LAST_INSERT_ID())");
+  $stmtR->execute();
+  $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
+  print_r($mode . " success". json_encode($getdata));
+  exit();
+}
+
+if($mode === "ACCESSLEVELS_ALLOT"){
+  $stmt = $link->prepare("UPDATE users SET access_levels = ? where prid = ?");
+  $stmt->bind_param("si", $data['access_levels'], $data['prid']);
+  $stmt->execute();
+  if($stmt->error) exit($stmt->error."Failure");
+  print_r($mode . " success".json_encode($data));
+  exit();
+}
+
