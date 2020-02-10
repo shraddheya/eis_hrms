@@ -18,11 +18,11 @@ services:
       - db
     volumes:
       - ../l200207/backend:/var/www/html
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    links:
-      - db:db
-    ports:
-      - 8000:80
-    depends_on:   
-      - db
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   links:
+  #     - db:db
+  #   ports:
+  #     - 8000:80
+  #   depends_on:   
+  #     - db
