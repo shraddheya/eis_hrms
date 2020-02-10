@@ -12,7 +12,8 @@ if (isset($mode)) {
 }
 
 if ($mode === "LOGIN") {
-  session_start();
+  // session_start();
+  if(session_status() === PHP_SESSION_NONE) session_start();
   $link = mysqli_connect('db', 'root', 'ic@0001');
   $data['email'] = strtolower($data['email']);
   if ($data["email"] === "demo@edeitic.com") {
@@ -114,6 +115,7 @@ if ($mode === "LOGIN") {
   print_r(json_encode($_SESSION['userData']));
   exit($mode . "success" . json_encode($UsrData));
 } else {
+  $_SESSION['DBnm'] = $DBnm;
   $link = mysqli_connect('db', 'root', 'ic@0001', $DBnm);
   // $link = mysqli_connect('db', 'root', 'ic@0001');
 }
