@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ModalDirective } from 'angular-bootstrap-md';
+import { CookieService } from "ngx-cookie-service";
 declare var $jit: any
 import 'src/assets/fakedataarray.js';
 import * as moment from 'moment';
@@ -20,7 +21,6 @@ var selPost, hierarchytree, domAngular, rgraph, notificationlist, sal_info, tota
 })
 export class HierarchyComponent implements OnInit {
   imgname = require("src/assets/images/main.png");
-  constructor() { }
   @ViewChild('addUsers', { static: true }) addUsers: ModalDirective;
   @ViewChild('hierachyView', { static: true }) hierachyView: ModalDirective;
   @ViewChild('salaryslip', { static: true }) salaryslip: ModalDirective;
@@ -92,7 +92,7 @@ export class HierarchyComponent implements OnInit {
   ngOnInit() {
     domAngular = this.hierachyView;
     $(".showuser,.updateusers").hide();
-    this.serverConnection.callUrl({ mode: "ISLOGGEDIN", data: JSON.stringify({ email: "saylor@edeitic.com" }) }, res => { this.responseData(res) })
+    // this.serverConnection.callUrl({ mode: "ISLOGGEDIN", data: JSON.stringify({ email: "saylor@edeitic.com" }) }, res => { this.responseData(res) })
   }
   init(status = false, dataset, mail) {
     versionmode = dataset.keyversion

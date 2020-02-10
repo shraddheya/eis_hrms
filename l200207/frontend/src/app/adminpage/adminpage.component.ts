@@ -1,5 +1,6 @@
 import { Component, OnInit, ɵConsole } from '@angular/core';
 import { server } from '../server';
+import { CookieService } from "ngx-cookie-service";
 declare var swal: any;
 var adminpagedata;
 var fakedataRecord = { Posts: [], Documents_accesslevels: [], Accesslevels: [] };
@@ -12,7 +13,6 @@ export class AdminpageComponent implements OnInit {
   serverConnection = new server
   exportadminpagedata = fakedataRecord
   exportdefaultdata = { Posts: [], Documents_accesslevels: [], Accesslevels: [] }
-  constructor() { }
   ngOnInit() { }
   adminpage(data) { adminpagedata = data } //Set data in global variable adminpagedata
   displayproperty(mode) {

@@ -3,13 +3,17 @@ import { ModalDirective } from 'angular-bootstrap-md';
 import { HierarchyComponent } from 'src/app/hierarchy/hierarchy.component';
 import { PaymentComponent } from "src/app/payment/payment.component";
 import { server } from '../server';
-declare var swal: any
+import { CookiesGetSet } from "../cookies";
+import { CookieService } from 'ngx-cookie-service';
+declare var swal: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent implements OnInit {
+ 
   email;
   password;
   forgetpassword_email;
@@ -20,27 +24,32 @@ export class LoginComponent implements OnInit {
   HierarchyComponentObject = new HierarchyComponent();
   PaymentComponentObject = new PaymentComponent();
   @ViewChild('frame', { static: true }) frame: ModalDirective;
-  serverConnection = new server
-  openlogin(){
-    this.frame.show()
-  }
-  dismisModal(mode, key){
-    (key == "modal") ? this[mode].hide() : $("#" + mode).hide() 
+  serverConnection = new server;
+  cookiesData = new CookiesGetSet;
+  // ngAfterViewInit(){this.frame.show();}
+  // dismisModal(mode, key){
+  //   (key == "modal") ? this[mode].hide() : $("#" + mode).hide() 
+  // }
+  showhidePanel(firstparam, secondparam) {
+    $("#" + firstparam).show();
+    $("#" + secondparam).hide();
   }
   ngOnInit() {
-    $("#Genrateotp,#Login_otpinputfield,.verifyotpbutton,#newpassword,#ui_genratepassword").hide()
+    console.log(CookieService)
+    $("#Genrateotp,.modal-backdrop,#Login_otpinputfield,.verifyotpbutton,#newpassword,#ui_genratepassword").hide()
   }
   logincomponent(mode, input) {
     switch (mode) {
       case 'loginuser':
         var loginobj = { email: this.email, password: this.password }
-        this.serverConnection.callUrl({ mode: "LOGIN", data: JSON.stringify(loginobj)}, res => { this.responseData(res) })
+        this.serverConnection.callUrl({ mode: "LOGIN", data: JSON.stringify(loginobj) }, res => { this.responseData(res) })
         return
       case 'remberme':
-        ($(input).prop("checked") == false) ? (this.email == null && this.password == null) ? swal("Email and Password requierd", "", "info") : "" : "";
+        var savecred;
+        ($(input).prop("checked") == false) ? savecred = true : savecred = false;
         return
       case 'forgetpassword':
-        $(".loginfeature,#login,.newpassword_value").hide(); 
+        $(".loginfeature,#login,.newpassword_value").hide();
         $("#Genrateotp").show();
         return
       case 'getOpt':
@@ -78,16 +87,17 @@ export class LoginComponent implements OnInit {
         swal(response.record, "", "error")
         return
       case 'login':
-        (response.record != undefined)?this.HierarchyComponentObject.init(true, response.record, response.other.data.email):"";
+        this.cookiesData.getCookiesData(response);
+        (response.record != undefined) ? this.HierarchyComponentObject.init(true, response.record, response.other.data.email) : "";
         return
       case 'newusers':
         var newuser_object;
         response.record.forEach(nuserel => { newuser_object = nuserel })
         if (response.record.length == 0) { swal("Email not Found in record", "", "warning") }
         if (response.record.length != 0) {
-          (newuser_object.password == null) ? newuser_object["password"] = "" :"";
-          (newuser_object.password == "") ? $("#genpassword").show():$("#genpassword").hide();
-          (newuser_object.password != "") ? $("#forpassword").show():$("#forpassword").hide();
+          (newuser_object.password == null) ? newuser_object["password"] = "" : "";
+          (newuser_object.password == "") ? $("#genpassword").show() : $("#genpassword").hide();
+          (newuser_object.password != "") ? $("#forpassword").show() : $("#forpassword").hide();
         }
         return
       case 'genratepassword':
@@ -101,16 +111,16 @@ export class LoginComponent implements OnInit {
         return
     }
   }
-  passwordView(format,input) {
-    $("#passwords").attr("type",format);
-    $(".show"+format).hide();
-    $(".show"+input).show();
+  passwordView(format, input) {
+    $("#passwords").attr("type", format);
+    $(".show" + format).hide();
+    $(".show" + input).show();
   }
   checkusermail() {
     this.serverConnection.callUrl({ mode: "NEWUSERS", data: JSON.stringify({ email: this.email }) }, res => { this.responseData(res) })
   }
-  payment(mode,input){
-    var dataobj = {mode:mode,data:input}
+  payment(mode, input) {
+    var dataobj = { mode: mode, data: input }
     this.PaymentComponentObject.requestdata(dataobj)
   }
 }

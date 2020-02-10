@@ -115,7 +115,7 @@ if ($mode === "LOGIN") {
   print_r(json_encode($_SESSION['userData']));
   exit($mode . "success" . json_encode($UsrData));
 } else {
-  // $link = mysqli_connect('db', 'root', 'ic@0001', $DBnm);
+  $link = mysqli_connect('db', 'root', 'ic@0001', $DBnm);
   
 }
 ?>
