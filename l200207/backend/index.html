@@ -130,6 +130,20 @@ window.onclick = getAgain;
   // })
 
   // callURL({
+  //   mode: "DELETE_USERS",
+  //   data: {
+  //    prid: "1576729391917"
+  //   }
+  // })
+
+  callURL({
+    mode: "DOCUMENTS_ACCESSLEVELS_ADD",
+    data: {
+     name: "Voter-Id-Card"
+    }
+  })
+
+  // callURL({
   //   mode: "GETATTENDANCE",
   //   data: {
   //    prid: "1576729391917",
@@ -200,16 +214,23 @@ window.onclick = getAgain;
 
   // callURL({
   //   mode : "ADMINDASHBOARD",
+  //   data : {}
+  // })
+
+  // callURL({
+  //   mode : "ACCESSLEVELS_ADD",
   //   data : {
+  //     name:"Door-2",
+  //     inid:"123456789",
+  //     outid:"987654321"
   //   }
   // })
 
   callURL({
-    mode : "ACCESSLEVELS_ADD",
+    mode : "DOCUMENTS_ACCESSLEVELS_ALLOT",
     data : {
-      name:"Door-2",
-      inid:"123456789",
-      outid:"987654321"
+      prid:"1577940978527",
+      documents_accesslevels:"Aadhaar Card"
     }
   })
 

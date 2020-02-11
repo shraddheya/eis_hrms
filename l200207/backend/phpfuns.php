@@ -190,3 +190,112 @@ if($mode === "ACCESSLEVELS_ALLOT"){
   exit();
 }
 
+
+if ($mode === "ADMINDASHBOARD") { // Sending All Tables
+
+  $stmt = $link->prepare("SELECT id,`name`,`inid`,`outid` FROM accesslevels"); // accesslevels
+  $stmt->execute();
+  $UsrData["Accesslevels"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM attendance"); // Attendance
+  $stmt->execute();
+  $UsrData["Attendance"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM connections"); // Connections
+  $stmt->execute();
+  $UsrData["Connections"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT id,`name` FROM documents_accesslevels"); // documents
+  $stmt->execute();
+  $UsrData["Documents_accesslevels"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM experience"); // experience
+  $stmt->execute();
+  $UsrData["Experience"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM holidays"); // holidays
+  $stmt->execute();
+  $UsrData["Holidays"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT id,post FROM posts"); //Posts
+  $stmt->execute();
+  $UsrData["Posts"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM salaries"); // Salaries
+  $stmt->execute();
+  $UsrData["Salaries"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT id,`name` FROM services"); // Services
+  $stmt->execute();
+  $UsrData["Services"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM transactions"); // Transactions
+  $stmt->execute();
+  $UsrData["Transactions"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT prid,title,fname,lname,email,post,createdAt FROM users");
+  $stmt->execute();
+  $UsrData["Users"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  if ($stmt->error) exit(' failure');
+  exit($mode . " success" . json_encode($UsrData));
+}
+
+if ($mode === "CURRENT_SALARY") {
+  $stmt = $link->prepare("UPDATE users SET current_salary = ? WHERE prid =?");
+  $stmt->bind_param("ii", $data['current_salary'], $data['prid']);
+  $stmt->execute();
+  if ($stmt->error) exit($stmt->error . " Failure");
+  print_r($mode . " success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "DELETE_USERS") { // Delete Users
+  $permissions = 0b00001000;
+  if ($permissions & 0b00001000) {
+    $stmt = $link->prepare("DELETE FROM users WHERE prid = ?");
+    $stmt->bind_param("i", $data['prid']);
+    $stmt->execute();
+    if ($stmt->error) exit(' failure');
+    print_r($mode . " success" . json_encode($data));
+    exit();
+  }
+}
+
+if ($mode === "DOCUMENTS_ACCESSLEVELS_ADD") { // Add Document Accesslevels 
+  $stmt = $link->prepare("INSERT INTO documents_accesslevels(`name`) VALUES(?)");
+  $stmt->bind_param("s", $data['name']);
+  $stmt->execute();
+  if ($stmt->error) exit(' Failure');
+  $stmtR = $link->prepare("SELECT id,name FROM documents_accesslevels WHERE id=(LAST_INSERT_ID())");
+  $stmtR->execute();
+  $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
+  print_r($mode . " success" . json_encode($getdata));
+  exit();
+}
+
+if ($mode === "DCUMENTS_ACCESSLEVELS_DLT") {
+  $stmt = $link->prepare("DELETE FROM `documents_accesslevels` WHERE id =?");
+  $stmt->bind_param("i", $data['id']);
+  $stmt->execute();
+  if ($stmt->error) exit(' failure');
+  print_r($mode . " success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "ACCESSLEVELS_DLT") {
+  $stmt = $link->prepare("DELETE FROM `accesslevels` WHERE id =?");
+  $stmt->bind_param("i", $data['id']);
+  $stmt->execute();
+  if ($stmt->error) exit(' failure');
+  print_r($mode . " success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "DOCUMENTS_ACCESSLEVELS_ALLOT") {
+  $stmt = $link->prepare("UPDATE users SET documents_accesslevels = ? WHERE prid = ?");
+  $stmt->bind_param("si", $data['documents_accesslevels'], $data['prid']);
+  $stmt->execute();
+  if ($stmt->error) exit(' Failure');
+  print_r($mode . " success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "DOCUMENTS_ACCESSLEVELS_MEMBERS") {
+  $stmt = $link->prepare("SELECT u.prid,u.title,u.fname,u.mname,u.lname,u.email,u.documents_accesslevels FROM __master_users as u, __master_documents_accesslevels as da WHERE da.id = u.documents_accesslevels AND u.documents_accesslevels = ?");
+  $stmt->bind_param("s", $data['documents_accesslevels']);
+  $stmt->execute();
+  $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  if ($stmt->error) exit(' Failure');
+  print_r($mode . " success" . json_encode($res));
+  exit();
+}
