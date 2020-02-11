@@ -1,8 +1,8 @@
 import { Component, OnInit, ɵConsole } from '@angular/core';
 import { server } from '../server';
-import { CookieService } from "ngx-cookie-service";
 declare var swal: any;
 var adminpagedata;
+var ssidglob_adminpage;
 var fakedataRecord = { Posts: [], Documents_accesslevels: [], Accesslevels: [] };
 @Component({
   selector: 'app-adminpage',
@@ -10,12 +10,14 @@ var fakedataRecord = { Posts: [], Documents_accesslevels: [], Accesslevels: [] }
   styleUrls: ['./adminpage.component.scss']
 })
 export class AdminpageComponent implements OnInit {
+  ssidAdminpage;
   serverConnection = new server
   exportadminpagedata = fakedataRecord
   exportdefaultdata = { Posts: [], Documents_accesslevels: [], Accesslevels: [] }
   ngOnInit() { }
   adminpage(data) { adminpagedata = data } //Set data in global variable adminpagedata
   displayproperty(mode) {
+    ssidglob_adminpage = this.ssidAdminpage
     switch (mode) {
       case 'hideadminpanel':
         $("#adminpagemain").hide();
@@ -51,7 +53,7 @@ export class AdminpageComponent implements OnInit {
           if ($(el).val() != "") {
             var checkmode = fakedataRecord[mode.charAt(0).toUpperCase() + mode.slice(1)], addmode = mode.toUpperCase() + "_ADD";
             (checkmode.length != 0) ? checkmode.forEach(recel => { (recel.data == $(el).val()) ? checkingWith = false : checkingWith = true }) : checkingWith = true;
-            (checkingWith == true) ? this.serverConnection.callUrl({ mode: addmode, data: JSON.stringify({ [extra]: $(el).val() }) }, res => { this.responseData(res) }) : swal($(el).val() + " Already exist", "", "info");
+            (checkingWith == true) ? this.serverConnection.callUrl({session_Id:ssidglob_adminpage, mode: addmode, data: JSON.stringify({ [extra]: $(el).val() }) }, res => { this.responseData(res) }) : swal($(el).val() + " Already exist", "", "info");
             $(el).val("")
           }
         }
@@ -71,7 +73,7 @@ export class AdminpageComponent implements OnInit {
         }
       });
       (checkdata == 3) ? finalrequest = true : "";
-      (finalrequest == true) ? this.serverConnection.callUrl({ mode: "ACCESSLEVELS_ADD", data: JSON.stringify(dataObject) }, res => { this.responseData(res) }) : "";
+      (finalrequest == true) ? this.serverConnection.callUrl({session_Id:ssidglob_adminpage, mode: "ACCESSLEVELS_ADD", data: JSON.stringify(dataObject) }, res => { this.responseData(res) }) : "";
     }
   }
   removeDataadminpanel(data, mode) {
@@ -110,7 +112,7 @@ export class AdminpageComponent implements OnInit {
   defaultAdd(value, key, mode) {
     var servermode = mode.toUpperCase() + "_ADD";
     var sendobj = {}; sendobj[key] = value
-    this.serverConnection.callUrl({ mode: servermode, data: JSON.stringify(sendobj) }, res => {
+    this.serverConnection.callUrl({session_Id:ssidglob_adminpage, mode: servermode, data: JSON.stringify(sendobj) }, res => {
       res.record["data"] = res.record[key]; delete res.record[key]
       $(".defaultsection").each((_, el) => {
         $("#" + el.id).hide(); $("#viewmanual_" + mode).show()

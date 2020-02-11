@@ -12,6 +12,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
 import { CookieService } from "ngx-cookie-service";
 import { RouterModule, Routes } from "@angular/router";
+const testVar = 'some value';
 @NgModule({
   declarations: [
     AppComponent,

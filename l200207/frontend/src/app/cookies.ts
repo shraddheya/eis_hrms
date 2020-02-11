@@ -1,13 +1,13 @@
-import { FrontpageComponent } from "src/app/frontpage/frontpage.component";
 import { CookieService } from "ngx-cookie-service";
-export class CookiesGetSet {
-  loginData;
-  getCookiesData(data) {
-    this.loginData = data
+var resdata;
+export class session_cookies {
+  cookiesdata = new sessionsend(CookieService)
+  setCookiesData=async(data,next)=>{
+    resdata = data
   }
-  // checkcookiesData = async (param, next) => {
-  //   var status
-  //   (this.loginData == undefined) ? status = false : status = this.loginData;
-  //   next(status)
-  // }
+}
+export class sessionsend{
+  constructor(cookiesSession){
+    console.log(cookiesSession)
+  }
 }

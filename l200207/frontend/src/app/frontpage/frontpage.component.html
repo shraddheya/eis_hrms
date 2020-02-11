@@ -17,13 +17,13 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link waves-light" name="selectprice" #paymentbynavbar
+              <a class="nav-link waves-light"  name="selectprice" #paymentbynavbar
                 (click)="payment('navbarclick',paymentbynavbar.name)" mdbWavesEffect>
                 <mdb-icon fas icon="shopping-cart"></mdb-icon> Buy
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link waves-light" (click)="openlogin(frame)"  mdbWavesEffect>
+              <a class="nav-link waves-light" routerLink="portal"  routerLinkActive="active-link" (click)="openlogin(frame)"  mdbWavesEffect>
                 <mdb-icon fas icon="sign-in-alt"></mdb-icon> Sign In
               </a>
             </li>

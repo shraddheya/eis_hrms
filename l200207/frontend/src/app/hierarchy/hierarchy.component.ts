@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, Injectable,OnInit, ViewChild, Input } from '@angular/core';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { CookieService } from "ngx-cookie-service";
 declare var $jit: any
@@ -9,10 +9,9 @@ import 'fullcalendar';
 import { AdminpageComponent } from '../adminpage/adminpage.component';
 import { PaymentComponent } from "../payment/payment.component";
 import { server } from '../server';
-import { version } from 'punycode';
 declare var swal: any
 declare var require: any
-var selPost, hierarchytree, domAngular, rgraph, notificationlist, sal_info, total_gross, total_extra, versionmodecheck,
+var selPost, hierarchytree,globssid_tree ,domAngular, rgraph, notificationlist, sal_info, total_gross, total_extra, versionmodecheck,
   versionmode, attendance = [], adminpermision, usrprid;
 @Component({
   selector: 'app-hierarchy',
@@ -21,6 +20,7 @@ var selPost, hierarchytree, domAngular, rgraph, notificationlist, sal_info, tota
 })
 export class HierarchyComponent implements OnInit {
   imgname = require("src/assets/images/main.png");
+  message;
   @ViewChild('addUsers', { static: true }) addUsers: ModalDirective;
   @ViewChild('hierachyView', { static: true }) hierachyView: ModalDirective;
   @ViewChild('salaryslip', { static: true }) salaryslip: ModalDirective;
@@ -69,7 +69,7 @@ export class HierarchyComponent implements OnInit {
         this.createDataTree(hierarchytree);
         swal("User added", "", "success");
         return;
-      case 'updateuser':
+        case 'updateuser':
         this.hierachyView.hide();
         for (var i = 0; i < hierarchytree.length; i++) {
           if (hierarchytree[i].id == user.id) {
@@ -92,9 +92,14 @@ export class HierarchyComponent implements OnInit {
   ngOnInit() {
     domAngular = this.hierachyView;
     $(".showuser,.updateusers").hide();
-    // this.serverConnection.callUrl({ mode: "ISLOGGEDIN", data: JSON.stringify({ email: "saylor@edeitic.com" }) }, res => { this.responseData(res) })
+    // this.serverConnection.callUrl({session_Id:globssid_tree, mode: "ISLOGGEDIN", data: JSON.stringify({ email: "saylor@edeitic.com" }) }, res => { this.responseData(res) })
+  }
+  reciveMessage($event){
+    this.message = $event
   }
   init(status = false, dataset, mail) {
+    this.AdminpageObject.ssidAdminpage = this.message
+    globssid_tree = this.message
     versionmode = dataset.keyversion
     hierarchytree = dataset.users;
     selPost = dataset.posts;
@@ -109,7 +114,7 @@ export class HierarchyComponent implements OnInit {
       }
     })
     if (status == true) {
-      this.serverConnection.callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: usrprid }), key: versionmode }, res => { this.responseData(res) });
+      this.serverConnection.callUrl({session_Id:globssid_tree, mode: "NOTIFICATION", data: JSON.stringify({ whom: usrprid }) }, res => { this.responseData(res) });
       $(".versionview").each((_, el) => { (el.id.substr(12) == versionmode) ? $(el).show() : $(el).hide() });
       (this.adminfeature >= 1) && (this.adminfeature <= 4) ? $("#adminbutton").show() : $("#adminbutton").hide()
       if ((this.adminfeature >= 1) && (this.adminfeature <= 4)) adminpermision = true;
@@ -135,7 +140,7 @@ export class HierarchyComponent implements OnInit {
     switch (mode) {
       case 'cardallotation':
         var prid = $("#usrNode_id").html();
-        this.serverConnection.callUrl({ mode: "CLEARASSOCIATION", data: JSON.stringify({ tagdata: prid }), key: versionmode },
+        this.serverConnection.callUrl({session_Id:globssid_tree, mode: "CLEARASSOCIATION", data: JSON.stringify({ tagdata: prid }) },
           res => {
             this.responseData(res);
           })
@@ -149,10 +154,10 @@ export class HierarchyComponent implements OnInit {
         if (versionmodecheck == "pro") this.notificationcol = notificationlist;
         return
       case 'logout':
-        this.serverConnection.callUrl({ mode: "LOGOUT" }, res => { this.responseData(res) })
+        this.serverConnection.callUrl({session_Id:globssid_tree, mode: "LOGOUT" }, res => { this.responseData(res) })
         return
       case 'adminpanel_click':
-        (adminpermision == true) ? this.serverConnection.callUrl({ mode: "ADMINDASHBOARD", key: versionmode }, res => { this.responseData(res) }) : "";
+        (adminpermision == true) ? this.serverConnection.callUrl({session_Id:globssid_tree, mode: "ADMINDASHBOARD" }, res => { this.responseData(res) }) : "";
         return
       case 'settings_click':
         (versionmodecheck == "demo") ? swal("Demo version", "", "error") : this.setting.show();
@@ -195,14 +200,14 @@ export class HierarchyComponent implements OnInit {
     var reader = new FileReader();
     reader.readAsDataURL(this.fileData);
     reader.onload = (_event) => {
-      this.serverConnection.callUrl({ mode: "UPLOADPICTURE", data: JSON.stringify({ prid: usrprid, picture: reader.result }) }, res => { this.responseData(res) })
+      this.serverConnection.callUrl({session_Id:globssid_tree, mode: "UPLOADPICTURE", data: JSON.stringify({ prid: usrprid, picture: reader.result }) }, res => { this.responseData(res) })
     }
   }
   initJIT() {
     rgraph = new $jit.RGraph({
       injectInto: 'hierarchy',
       background: { CanvasStyles: { strokeStyle: '#ccc' } },
-      Navigation: { enable: true, panning: true, zooming: 5 },
+      Navigation: { enable: true, panning: true, zooming: 7 },
       Node: { color: '#FFFFFF' },
       Edge: { color: '#C0C0C0', lineWidth: 1.4, spline: false },
       onBeforeCompute: node => {
@@ -251,14 +256,14 @@ export class HierarchyComponent implements OnInit {
         var style = domElement.style;
         style.display = ''; style.cursor = 'pointer';
         if (node._depth <= 1) {
-          style.fontSize = "1.3em";
+          style.fontSize = "1em";
           style.color = "#FFFFFF";
         } else if (node._depth == 2) {
-          style.fontSize = "1.3em";
+          style.fontSize = "1em";
           style.color = "#FFFFFF";
         } else {
           style.display = 'block';
-          style.fontSize = "1.3em";
+          style.fontSize = "1em";
           style.color = "#FFFFFF";
         }
         var left = parseInt(style.left);
@@ -372,27 +377,27 @@ export class HierarchyComponent implements OnInit {
         var userData = {}
         $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
         var i = 0; i++; userData["prid"] = (new Date).getTime() + i - 2678400;
-        this.serverConnection.callUrl({ mode: "REGISTER", data: JSON.stringify(userData), key: versionmode }, res => {
+        this.serverConnection.callUrl({session_Id:globssid_tree, mode: "REGISTER", data: JSON.stringify(userData) }, res => {
           this.responseData(res)
         })
         return
       case ('updateUserrecord'):
         var userDataupdate = {}
         $('.lblEditToggle').each((i, u) => { userDataupdate[u.id.substr(8)] = $(u).html() })
-        this.serverConnection.callUrl({ mode: "UPDATE_USERS", data: JSON.stringify(userDataupdate), key: versionmode }, res => {
+        this.serverConnection.callUrl({session_Id:globssid_tree, mode: "UPDATE_USERS", data: JSON.stringify(userDataupdate) }, res => {
           this.responseData(res)
         })
         return
       case ('deleteRecord'):
         var prid = $("#usrNode_id").html();
-        this.serverConnection.callUrl({ mode: "DELETE_USERS", data: JSON.stringify({ prid: prid }), key: versionmode }, res => {
+        this.serverConnection.callUrl({session_Id:globssid_tree, mode: "DELETE_USERS", data: JSON.stringify({ prid: prid }) }, res => {
           this.responseData(res)
         })
         return
     }
   }
   salaryResponse(prid) {
-    this.serverConnection.callUrl({ mode: "SALARYSLIP", data: JSON.stringify({ prid: prid }), key: versionmode }, res => {
+    this.serverConnection.callUrl({session_Id:globssid_tree, mode: "SALARYSLIP", data: JSON.stringify({ prid: prid }) }, res => {
       this.responseData(res)
     })
   }
@@ -447,7 +452,7 @@ export class HierarchyComponent implements OnInit {
       })
     });
     sal_info["permisionsalslip"] = permition_salslip;
-    this.serverConnection.callUrl({ mode: "CURRENT_SALARY", data: JSON.stringify({ prid: uid_sal, current_salary: currentsalary }) }, res => { this.responseData(res) })
+    this.serverConnection.callUrl({session_Id:globssid_tree, mode: "CURRENT_SALARY", data: JSON.stringify({ prid: uid_sal, current_salary: currentsalary }) }, res => { this.responseData(res) })
   }
   populateCalendarAttendance(prid, dataInterest = moment()) {
     var month = dataInterest.month();
@@ -460,7 +465,7 @@ export class HierarchyComponent implements OnInit {
     })
     if (attendance_Interest.length < 1) {
       $('#calendar').hide();
-      this.serverConnection.callUrl({ mode: "GETATTENDANCE", data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, res => {
+      this.serverConnection.callUrl({session_Id:globssid_tree, mode: "GETATTENDANCE", data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, res => {
         this.responseData(res)
       })
     }
@@ -519,13 +524,13 @@ export class HierarchyComponent implements OnInit {
         (response.record == "Demo Version") ? swal(response.record, "", "error") : this.addUserNode2GUI(response.record, "addusers");
         return
       case 'clearassociation':
-        (response.record == "success") ? this.serverConnection.callUrl({ mode: "GETCARDID", data: JSON.stringify(response.other.data) }, res => { this.responseData(res) }) : swal(response.record, "", "error");
+        (response.record == "success") ? this.serverConnection.callUrl({session_Id:globssid_tree, mode: "GETCARDID", data: JSON.stringify(response.other.data) }, res => { this.responseData(res) }) : swal(response.record, "", "error");
         return
       case 'getcardid':
         var check;
         response.record.forEach(el => {
           check = el.tagid == "" ? false : true;
-          if (el.tagid == "") this.serverConnection.callUrl({ mode: "GETCARDID", data: JSON.stringify(response.other.data) }, res => { this.responseData(res) })
+          if (el.tagid == "") this.serverConnection.callUrl({session_Id:globssid_tree, mode: "GETCARDID", data: JSON.stringify(response.other.data) }, res => { this.responseData(res) })
         });
         (check == false) ? $("#loading_img").show() : $("#loading_img").hide();
         (check == false) ? $("#cardAllot,#viewmode,.detailback").hide() : $("#cardAllot,#viewmode,.detailback").show();

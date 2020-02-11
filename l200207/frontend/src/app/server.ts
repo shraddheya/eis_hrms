@@ -7,6 +7,7 @@
 // tslint:disable whitespace
 export class server {
   callUrl = async (data2Post, next) => {
+    console.log(data2Post)
     $.ajax({
       type: "post",
       // url: "http://DESKTOP-4T5LA3J/hrm-angular+php/phpfuns.php",

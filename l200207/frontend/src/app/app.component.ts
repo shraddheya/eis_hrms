@@ -7,5 +7,5 @@ declare var swal:any
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
+  session_id;
 }

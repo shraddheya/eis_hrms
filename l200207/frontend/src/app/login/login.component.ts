@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component,Input ,OnInit, ViewChild, EventEmitter,Output } from '@angular/core';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { HierarchyComponent } from 'src/app/hierarchy/hierarchy.component';
 import { PaymentComponent } from "src/app/payment/payment.component";
 import { server } from '../server';
-import { CookiesGetSet } from "../cookies";
-import { CookieService } from 'ngx-cookie-service';
+import { session_cookies } from "../cookies";
 declare var swal: any;
 @Component({
   selector: 'app-login',
@@ -13,7 +12,9 @@ declare var swal: any;
 })
 
 export class LoginComponent implements OnInit {
- 
+  ssidResp: string = "Hello world";
+
+  @Output() ssidRespEvent = new EventEmitter<string>();
   email;
   password;
   forgetpassword_email;
@@ -23,9 +24,9 @@ export class LoginComponent implements OnInit {
   gconfirmpassword;
   HierarchyComponentObject = new HierarchyComponent();
   PaymentComponentObject = new PaymentComponent();
+  sessionData = new session_cookies();
   @ViewChild('frame', { static: true }) frame: ModalDirective;
   serverConnection = new server;
-  cookiesData = new CookiesGetSet;
   // ngAfterViewInit(){this.frame.show();}
   // dismisModal(mode, key){
   //   (key == "modal") ? this[mode].hide() : $("#" + mode).hide() 
@@ -35,14 +36,17 @@ export class LoginComponent implements OnInit {
     $("#" + secondparam).hide();
   }
   ngOnInit() {
-    console.log(CookieService)
     $("#Genrateotp,.modal-backdrop,#Login_otpinputfield,.verifyotpbutton,#newpassword,#ui_genratepassword").hide()
   }
   logincomponent(mode, input) {
     switch (mode) {
       case 'loginuser':
+        var ssid = btoa("SSID"+this.email+this.password)
+        this.HierarchyComponentObject.message = ssid
+        // this.ssidResp = ssid
+        // this.ssidRespEvent.emit(this.ssidResp)
         var loginobj = { email: this.email, password: this.password }
-        this.serverConnection.callUrl({ mode: "LOGIN", data: JSON.stringify(loginobj) }, res => { this.responseData(res) })
+        this.serverConnection.callUrl({ mode: "LOGIN", data: JSON.stringify(loginobj),session_Id:ssid}, res => { this.responseData(res) })
         return
       case 'remberme':
         var savecred;
@@ -87,7 +91,9 @@ export class LoginComponent implements OnInit {
         swal(response.record, "", "error")
         return
       case 'login':
-        this.cookiesData.getCookiesData(response);
+        this.sessionData.setCookiesData(response.record,res=>{
+          console.log(res)
+        });
         (response.record != undefined) ? this.HierarchyComponentObject.init(true, response.record, response.other.data.email) : "";
         return
       case 'newusers':
