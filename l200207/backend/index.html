@@ -1,67 +1,7 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-var getAgain = _=>{
-  $.ajax({
-    type: "post",
-    url: "http://localhost/phpfuns.php",
-    data: {
-      // mode: "LOGIN",
-      // data: JSON.stringify({
-      //   email: "demo@edeitic.com",
-      //   password: "demo@edeitic.com",
-      //   pss:"pss",
-      // }),
-
-      mode: "REGISTER",
-      data: JSON.stringify({
-        address_c_area: "xyz",
-        address_c_city: "xyz",
-        address_c_country: "xyz",
-        address_c_houseno: "xyz",
-        address_c_pincode: "101",
-        address_c_state: "xyz",
-        address_p_area: "xyz",
-        address_p_city: "xyz",
-        address_p_country: "xyz",
-        address_p_houseno: "xyz",
-        address_p_pincode: "101",
-        address_p_state: "xyz",
-        boss: "1560156094493",
-        contactno: "7897897899",
-        fname: "Elon",
-        lname: "Musk",
-        email: "elonmusk@edeitic.com",
-        mname: "-",
-        permission: "0",
-        post: "23",
-        prid: "1564462044190",
-        title: "Mr"
-      }),
-
-
-    },
-    success: (res, status, data) => {
-      $('body').html(res);
-      console.log(res);
-    }
-  });
-}
-window.onclick = getAgain;
-</script>
-</head>
-<body>
-</body>
-</html> -->
-
-
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
   // $(document).click(evt=>window.location.reload())
-  $(document).click(function() {
+  $(document).click(function () {
     location.reload();
   })
   var callURL = data2post => {
@@ -117,15 +57,15 @@ window.onclick = getAgain;
   // callURL({
   //   mode: "SALARYSLIP",
   //   data: {
-  //    prid: "1576729391917"
+  //     prid: "1576729391917"
   //   }
   // })
 
   // callURL({
   //   mode: "CURRENT_SALARY",
   //   data: {
-  //    prid: "1576729391917",
-  //    current_salary: "100"
+  //     prid: "1576729391917",
+  //     current_salary: "100"
   //   }
   // })
 
@@ -136,12 +76,25 @@ window.onclick = getAgain;
   //   }
   // })
 
-  callURL({
-    mode: "DOCUMENTS_ACCESSLEVELS_ADD",
-    data: {
-     name: "Voter-Id-Card"
-    }
-  })
+  // callURL({
+  //   mode: "DOCUMENTS_ACCESSLEVELS_ADD",
+  //   data: {
+  //     name: "Voter-Id-Card"
+  //   }
+  // })
+
+  // callURL({
+  //   mode: "DCUMENTS_ACCESSLEVELS_DLT",
+  //   data: {
+  //     id: "2"
+  //   }
+  // })
+
+
+  // callURL({
+  //   mode: "DOCUMENTS_ACCESSLEVELS_MEMBERS",
+  //   data: {}
+  // })
 
   // callURL({
   //   mode: "GETATTENDANCE",
@@ -167,6 +120,14 @@ window.onclick = getAgain;
   //   }
   // })
 
+  // callURL({
+  //   mode: "CLEARASSOCIATION",
+  //   data: {
+  //     tagdata: "1577940978527"
+  //   }
+  // })
+
+
 
   // callURL({
   //   mode: "UPDATE_USERS",
@@ -183,13 +144,13 @@ window.onclick = getAgain;
   //   }
   // })
 
-  callURL({
-    mode: "LOGIN",
-    data: {
-     email: "demo@edeitic.com",
-     password: "demo@edeitic.com"
-    }
-  })
+  // callURL({
+  //   mode: "LOGIN",
+  //   data: {
+  //     email: "demo@edeitic.com",
+  //     password: "demo@edeitic.com"
+  //   }
+  // })
 
   // callURL({
   //   mode : "ISLOGGEDIN",
@@ -213,26 +174,34 @@ window.onclick = getAgain;
   // })
 
   // callURL({
-  //   mode : "ADMINDASHBOARD",
-  //   data : {}
+  //   mode: "ADMINDASHBOARD",
+  //   data: {}
   // })
 
   // callURL({
-  //   mode : "ACCESSLEVELS_ADD",
-  //   data : {
-  //     name:"Door-2",
-  //     inid:"123456789",
-  //     outid:"987654321"
+  //   mode: "ACCESSLEVELS_ADD",
+  //   data: {
+  //     name: "Door-2",
+  //     inid: "123456789",
+  //     outid: "987654321"
   //   }
   // })
 
-  callURL({
-    mode : "DOCUMENTS_ACCESSLEVELS_ALLOT",
-    data : {
-      prid:"1577940978527",
-      documents_accesslevels:"Aadhaar Card"
-    }
-  })
+  // callURL({
+  //   mode: "DOCUMENTS_ACCESSLEVELS_ALLOT",
+  //   data: {
+  //     prid: "1577940978527",
+  //     documents_accesslevels: "Aadhaar Card"
+  //   }
+  // })
+
+  // callURL({
+  //   mode: "ACCESSLEVELS_DLT",
+  //   data: {
+  //     id: "3"
+  //   }
+  // })
+
 
   // callURL({
   //   mode: "SALARY_ADD",
@@ -255,38 +224,38 @@ window.onclick = getAgain;
   //   }
   // })
 
-//  callURL({
-//     mode : "REGISTER",
-//     data : {
-//       address_c_area: "xyz",
-//       address_c_city: "xyz",
-//       address_c_country: "xyz",
-//       address_c_houseno: "xyz",
-//       address_c_pincode: "101",
-//       address_c_state: "xyz",
-//       address_p_area: "xyz",
-//       address_p_city: "xyz",
-//       address_p_country: "xyz",
-//       address_p_houseno: "xyz",
-//       address_p_pincode: "101",
-//       address_p_state: "xyz",
-//       boss: "1560156094493",
-//       contactno: "7897897899",
-//       fname: "Elon",
-//       lname: "Musk",
-//       email: "elonmusk@edeitic.com",
-//       mname: "-",
-//       permission: "0",
-//       post: "23",
-//       prid: "1564462044190",
-//       title: "Mr"
-//     }
-//   })
+  //  callURL({
+  //     mode : "REGISTER",
+  //     data : {
+  //       address_c_area: "xyz",
+  //       address_c_city: "xyz",
+  //       address_c_country: "xyz",
+  //       address_c_houseno: "xyz",
+  //       address_c_pincode: "101",
+  //       address_c_state: "xyz",
+  //       address_p_area: "xyz",
+  //       address_p_city: "xyz",
+  //       address_p_country: "xyz",
+  //       address_p_houseno: "xyz",
+  //       address_p_pincode: "101",
+  //       address_p_state: "xyz",
+  //       boss: "1560156094493",
+  //       contactno: "7897897899",
+  //       fname: "Elon",
+  //       lname: "Musk",
+  //       email: "elonmusk@edeitic.com",
+  //       mname: "-",
+  //       permission: "0",
+  //       post: "23",
+  //       prid: "1564462044190",
+  //       title: "Mr"
+  //     }
+  //   })
 
-// callURL({
-//   mode:"NOTIFICATION",
-//   data: {whom: "1560156094488"}
-// })
+  // callURL({
+  //   mode: "NOTIFICATION",
+  //   data: { whom: "1560156094488" }
+  // })
 
 //  callURL({
 //     mode : "POSTS_DLT",

@@ -119,6 +119,13 @@ if ($mode === "LOGIN") {
   $link = mysqli_connect('db', 'root', 'ic@0001', $_SESSION["DBnm"]);
 }
 
+if ($mode === "ISLOGGEDIN") { // Check Is-Login-?
+  if (isset($_SESSION['userData'])) exit($mode . "success" . json_encode($_SESSION['userData']));
+  exit($mode . 'success' . json_encode('IS LOGGED IN'));
+  // print_r($mode . "success" . json_encode($_SESSION['userData']));
+  // exit();
+}
+
 if ($mode === "REGISTER") { // Add Users Who have Permissions
   $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
   $stmt->bind_param('issssssisssssisssssi', $data['prid'], $data["title"], $data["fname"], $data["mname"], $data["lname"], $data["email"], $data["contactno"], $data['post'], $data["address_c_houseno"], $data["address_c_area"], $data["address_c_city"], $data["address_c_state"], $data["address_c_country"], $data["address_c_pincode"], $data["address_p_houseno"], $data["address_p_area"], $data["address_p_city"], $data["address_p_state"], $data["address_p_country"], $data["address_p_pincode"]);
@@ -139,7 +146,7 @@ if ($mode === "SALARYSLIP") { // Select Salart
   $stmt->execute();
   $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
   print_r($res);
-  if ($stmt->error) exit($stmt->error.' Failure');
+  if ($stmt->error) exit($stmt->error . ' Failure');
   print_r($mode . " success" . json_encode($res));
   exit();
 }
@@ -163,33 +170,23 @@ if ($mode === "NOTIFICATION") { // Send Notification Who LoggedIn
   $stmt->bind_param("i", $data['whom']);
   $stmt->execute();
   $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-  if ($stmt->error) exit($stmt->error.' failure');
+  if ($stmt->error) exit($stmt->error . ' failure');
   print_r($mode . " success" . json_encode($result));
   exit;
 }
 
-if ($mode === "ACCESSLEVELS_ADD"){
+if ($mode === "ACCESSLEVELS_ADD") {
   // $permissions 
   $stmt = $link->prepare("INSERT INTO accesslevels(`name`,`inid`,`outid`)VALUES(?,?,?)");
   $stmt->bind_param("sss", $data['name'], $data['inid'], $data['outid']);
   $stmt->execute();
-  if($stmt->error) exit($stmt->error.' Failure');
+  if ($stmt->error) exit($stmt->error . ' Failure');
   $stmtR = $link->prepare("SELECT id,`name`,inid,outid FROM accesslevels WHERE id=(LAST_INSERT_ID())");
   $stmtR->execute();
   $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
-  print_r($mode . " success". json_encode($getdata));
+  print_r($mode . " success" . json_encode($getdata));
   exit();
 }
-
-if($mode === "ACCESSLEVELS_ALLOT"){
-  $stmt = $link->prepare("UPDATE users SET access_levels = ? where prid = ?");
-  $stmt->bind_param("si", $data['access_levels'], $data['prid']);
-  $stmt->execute();
-  if($stmt->error) exit($stmt->error."Failure");
-  print_r($mode . " success".json_encode($data));
-  exit();
-}
-
 
 if ($mode === "ADMINDASHBOARD") { // Sending All Tables
 
@@ -281,21 +278,94 @@ if ($mode === "ACCESSLEVELS_DLT") {
   exit();
 }
 
-if ($mode === "DOCUMENTS_ACCESSLEVELS_ALLOT") {
-  $stmt = $link->prepare("UPDATE users SET documents_accesslevels = ? WHERE prid = ?");
-  $stmt->bind_param("si", $data['documents_accesslevels'], $data['prid']);
+if ($mode === "GETATTENDANCE") { // Get Attendance If have Permissions
+  $attend = [];
+  $permitted = true;
+  if (!$permitted) exit('failure');
+  $stmt = $link->prepare("SELECT *  FROM attendance WHERE prid = ? ");
+  $stmt->bind_param('i', $data['prid']);
   $stmt->execute();
-  if ($stmt->error) exit(' Failure');
+  $attend = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  if ($stmt->error) exit($stmt->error);
+  $stmt->close();
+  print_r($mode . " success" . json_encode($attend));
+  exit();
+}
+
+if ($mode === "LOGOUT") { // Users Logout Mode
+  unset($_SESSION['userData']);
+  session_unset();
+  session_destroy();
+  exit($mode . 'success' . json_encode('LOGGED OUT'));
+}
+
+if ($mode === "POSTS_ADD") { // Add Post
+  $stmt = $link->prepare("INSERT INTO posts(post,boss) VALUES(?,?)");
+  $stmt->bind_param("si", $data['post'], $data['boss']);
+  $stmt->execute();
+  if ($stmt->error) exit(' failure');
+  $stmtR = $link->prepare("SELECT id,post,boss FROM posts WHERE id=(LAST_INSERT_ID())");
+  $stmtR->execute();
+  $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
+  print_r($mode . " success" . json_encode($getdata));
+  exit();
+}
+
+if ($mode === "POSTS_DLT") {
+  $stmt = $link->prepare("DELETE FROM `posts` WHERE id =?");
+  $stmt->bind_param("i", $data['id']);
+  $stmt->execute();
+  if ($stmt->error) exit(' failure');
   print_r($mode . " success" . json_encode($data));
   exit();
 }
 
-if ($mode === "DOCUMENTS_ACCESSLEVELS_MEMBERS") {
-  $stmt = $link->prepare("SELECT u.prid,u.title,u.fname,u.mname,u.lname,u.email,u.documents_accesslevels FROM __master_users as u, __master_documents_accesslevels as da WHERE da.id = u.documents_accesslevels AND u.documents_accesslevels = ?");
-  $stmt->bind_param("s", $data['documents_accesslevels']);
+if ($mode === "UPLOADPICTURE") { // Upload Profile Picture
+  $stmt = $link->prepare("UPDATE users SET picture=? WHERE prid =?");
+  $data['picture'] = base64_encode($data['picture']);
+  $stmt->bind_param("si", $data['picture'], $data['prid']);
   $stmt->execute();
-  $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-  if ($stmt->error) exit(' Failure');
-  print_r($mode . " success" . json_encode($res));
+  $bs = base64_decode($data['picture']);
+  if ($stmt->error) exit(' failure');
+  print_r($mode . " success" . json_encode($bs));
   exit();
+}
+
+// Attendance Coding ... Start
+
+if ($mode === "CLEARASSOCIATION") { // Connect with UI
+  $stmt = $link->prepare("DELETE FROM dataallassociation WHERE tagdata = ?");
+  $stmt->bind_param("s", $data['tagdata']);
+  $stmt->execute();
+  if ($stmt->error) exit('failure');
+  print_r($mode . "success" . json_encode("success"));
+  exit();
+}
+
+if ($mode === "GETCARDID") { // Connect with UI
+  $stmt = $link->prepare("SELECT device,tagid,tagdata FROM dataallassociation WHERE tagdata = ?");
+  $stmt->bind_param("s", $data['tagdata']);
+  $stmt->execute();
+  $resdt = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $dtdl = count($resdt);
+  if ($dtdl != 0) {
+    $stmt = $link->prepare("SELECT device,tagid,tagdata FROM dataallassociation WHERE tagdata = ?");
+    $stmt->bind_param("s", $data['tagdata']);
+    $stmt->execute();
+    $resdt = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    if ($stmt->error) exit($stmt->error);
+    print_r($mode . "success" . json_encode($resdt));
+    exit();
+  } elseif ($dtdl == 0) {
+    $stmtI = $link->prepare("INSERT INTO dataallassociation(tagdata) VALUES(?) ");
+    $stmtI->bind_param("s", $data['tagdata']);
+    $stmtI->execute();
+    if ($stmtI->error) exit($stmtI->error);
+    $stmtD = $link->prepare("SELECT tagid,device,tagdata FROM dataallassociation ORDER BY tagdata DESC LIMIT 1");
+    $stmtD->execute();
+    $resD = $stmtD->get_result()->fetch_all(MYSQLI_ASSOC);
+    if ($stmtD->error) exit("Something went wrong data not fetched");
+    print_r($mode . "success" . json_encode($resD));
+    exit();
+  }
 }
