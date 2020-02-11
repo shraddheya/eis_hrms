@@ -7,7 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { HierarchyComponent } from './hierarchy/hierarchy.component';
 import { HttpClientModule } from "@angular/common/http";
 import { AdminpageComponent } from './adminpage/adminpage.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { PaymentComponent } from './payment/payment.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
 import { CookieService } from "ngx-cookie-service";
@@ -30,6 +30,7 @@ const testVar = 'some value';
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule,
+    FormsModule
   ],
   providers: [ CookieService],
   bootstrap: [AppComponent]

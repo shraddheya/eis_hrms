@@ -7,7 +7,7 @@ export class session_cookies {
   }
 }
 export class sessionsend{
-  constructor(cookiesSession){
-    console.log(cookiesSession)
+  constructor(CookieService){
+
   }
 }
