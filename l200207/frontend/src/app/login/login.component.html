@@ -13,23 +13,24 @@
           </div>
           <div class="p-4">
             <div id="login">
-              <div class="md-form mb-5">
+              <form>
+                <div class="md-form mb-5">
                 <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
-                <input type="email" id="email" (keydown.enter)="checkusermail()" (input)="email=$event.target.value"
+                <input type="email"  (keydown.enter)="checkusermail()" (input)="email=$event.target.value"
                   class="form-control" mdbInput>
                 <label for="defaultForm-email">Email</label>
-              </div>
-              <div class="md-form mb-4">
+                </div>
+                <div class="md-form mb-4">
                 <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
-                <input type="password" id="passwords" (keydown.enter)="logincomponent('loginuser','')"
+                <input type="password" (keydown.enter)="logincomponent('loginuser','')"
                   (input)="password=$event.target.value" class="form-control" mdbInput>
                 <span id="password_viewhide">
                   <i class="fas fa-eye showtext" (click)="passwordView('text','password')"></i>
                   <i class="fas fa-eye-slash showpassword" (click)="passwordView('password','text')"></i>
                 </span>
                 <label for="defaultForm-pass">Password</label>
-              </div>
-              <div class="row p-4">
+                </div>
+                <div class="row p-4">
                 <div class="col-6 text-left">
                   <mdb-checkbox #checkbox (click)="logincomponent('remberme',checkbox)" [checked]="false"
                     [default]="true">
@@ -42,31 +43,32 @@
                     (click)="logincomponent('genratepassword','')">Genrate
                     Password</a>
                 </div>
-              </div>
+                </div>
+              </form>
             </div>
             <div id="Genrateotp">
               <p class="text-center font-weight-bold">Please verify your EmailId</p>
               <div class="md-form mb-5" id="Confirm_emailfield">
                 <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
-                <input type="email" (keydown.enter)="logincomponent('getOpt','')" id="defaultForm-email"
+                <input type="email" (keydown.enter)="logincomponent('getOpt','')" 
                   (input)="forgetpassword_email=$event.target.value" class="form-control" mdbInput>
                 <label for="">Email</label>
               </div>
               <div class="md-form mb-5" id="Login_otpinputfield">
                 <mdb-icon fas icon="key"></mdb-icon>
-                <input type="text" id="defaultForm_otp" class="form-control" mdbInput disabled>
+                <input type="text"  class="form-control" mdbInput disabled>
                 <label for="">OTP</label>
               </div>
               <div id="newpassword" class="p-4">
                 <div class="md-form p-2">
                   <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
-                  <input type="password" id="createpassword" (input)="createpassword=$event.target.value"
+                  <input type="password" (input)="createpassword=$event.target.value"
                     class="form-control" mdbInput>
                   <label for="">Create Password</label>
                 </div>
                 <div class="md-form p-2">
                   <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
-                  <input type="password" id="confirmpassword" (input)="confirmpassword=$event.target.value"
+                  <input type="password" (input)="confirmpassword=$event.target.value"
                     class="form-control" mdbInput>
                   <label for="">Confirm Password</label>
                 </div>
@@ -97,15 +99,15 @@
               <p class="text-center font-weight-bold">{{email}}</p>
               <div class="md-form p-2">
                 <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
-                <input type="password" id="gcreatepassword" (input)="gcreatepassword=$event.target.value"
+                <input type="password" (input)="gcreatepassword=$event.target.value"
                   class="form-control" mdbInput>
                 <label for="">Create Password</label>
               </div>
               <div class="md-form p-2">
                 <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
                 <input type="password" #idforgpassword name={{email}}
-                  (keydown.enter)="logincomponent('sendrequest_pass',idforgpassword.name)" id="gconfirmpassword"
-                  (input)="gconfirmpassword=$event.target.value" class="form-control" mdbInput>
+                  (keydown.enter)="logincomponent('sendrequest_pass',idforgpassword.name)" 
+                  (input)="gconfirmpassword_input=$event.target.value" class="form-control" mdbInput>
                 <label for="">Confirm Password</label>
               </div>
 

@@ -3,6 +3,7 @@ import { ModalDirective } from 'angular-bootstrap-md';
 import { HierarchyComponent } from 'src/app/hierarchy/hierarchy.component';
 import { PaymentComponent } from "src/app/payment/payment.component";
 import { server } from '../server';
+import { FormControl,FormGroup } from "@angular/forms";
 import { session_cookies } from "../cookies";
 declare var swal: any;
 @Component({
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
   createpassword;
   confirmpassword;
   gcreatepassword;
-  gconfirmpassword;
+  gconfirmpassword_input;
   HierarchyComponentObject = new HierarchyComponent();
   PaymentComponentObject = new PaymentComponent();
   sessionData = new session_cookies();
@@ -77,8 +78,8 @@ export class LoginComponent implements OnInit {
         $("#Genrateotp,#login,.loginfeature").hide();
         return
       case 'sendrequest_pass':
-        if (this.gcreatepassword == this.gconfirmpassword) var sendrequest_passObj = { email: input, password: this.gcreatepassword };
-        (this.gcreatepassword == this.gconfirmpassword) ? this.serverConnection.callUrl({ mode: "GENRATEPASSWORD", data: JSON.stringify(sendrequest_passObj) }, res => { this.responseData(res) }) : "";
+        if (this.gcreatepassword == this.gconfirmpassword_input) var sendrequest_passObj = { email: input, password: this.gcreatepassword };
+        (this.gcreatepassword == this.gconfirmpassword_input) ? this.serverConnection.callUrl({ mode: "GENRATEPASSWORD", data: JSON.stringify(sendrequest_passObj) }, res => { this.responseData(res) }) : "";
         return
     }
   }

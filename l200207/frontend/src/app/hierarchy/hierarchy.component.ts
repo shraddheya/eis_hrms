@@ -98,6 +98,7 @@ export class HierarchyComponent implements OnInit {
     this.message = $event
   }
   init(status = false, dataset, mail) {
+    console.log(dataset)
     this.AdminpageObject.ssidAdminpage = this.message
     globssid_tree = this.message
     versionmode = dataset.keyversion
@@ -114,6 +115,7 @@ export class HierarchyComponent implements OnInit {
       }
     })
     if (status == true) {
+      console.log(usrprid);
       this.serverConnection.callUrl({session_Id:globssid_tree, mode: "NOTIFICATION", data: JSON.stringify({ whom: usrprid }) }, res => { this.responseData(res) });
       $(".versionview").each((_, el) => { (el.id.substr(12) == versionmode) ? $(el).show() : $(el).hide() });
       (this.adminfeature >= 1) && (this.adminfeature <= 4) ? $("#adminbutton").show() : $("#adminbutton").hide()
@@ -558,8 +560,8 @@ export class HierarchyComponent implements OnInit {
         (response.record.length != 0) ? this.populateCalendarAttendance(response.other.data.prid, moment(`${response.other.data.year}-${response.other.data.month}`, 'YYYY-MM')) : "";
         return
       case 'notification':
-        (response.record == "Demo Version") ? versionmodecheck = "demo" : versionmodecheck = "pro";
-        if (response.record != "Demo Version") this.notification(response.record);
+        console.log(response)
+        this.notification(response.record);
         return
       case 'admindashboard':
         (response.record == "Demo Version") ? versionmodecheck = "demo" : versionmodecheck = "pro";
