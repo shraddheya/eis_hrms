@@ -1,4 +1,4 @@
-import { Component, Injectable,OnInit, ViewChild, Input } from '@angular/core';
+import { Component, Injectable,OnInit,AfterViewInit ,ViewChild, Input } from '@angular/core';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { CookieService } from "ngx-cookie-service";
 declare var $jit: any
@@ -9,6 +9,9 @@ import 'fullcalendar';
 import { AdminpageComponent } from '../adminpage/adminpage.component';
 import { PaymentComponent } from "../payment/payment.component";
 import { server } from '../server';
+import { LoginComponent } from '../login/login.component';
+import { AppModule } from '../app.module';
+import { parse } from 'querystring';
 declare var swal: any
 declare var require: any
 var selPost, hierarchytree,globssid_tree ,domAngular, rgraph, notificationlist, sal_info, total_gross, total_extra, versionmodecheck,
@@ -19,6 +22,10 @@ var selPost, hierarchytree,globssid_tree ,domAngular, rgraph, notificationlist, 
   styleUrls: ['./hierarchy.component.scss']
 })
 export class HierarchyComponent implements OnInit {
+  private myservice;
+  constructor(){
+    this.myservice = AppModule.injector.get(CookieService)
+  }
   imgname = require("src/assets/images/main.png");
   message;
   @ViewChild('addUsers', { static: true }) addUsers: ModalDirective;
@@ -61,6 +68,7 @@ export class HierarchyComponent implements OnInit {
   sendprid;
   yourmessage;
   chatinguser;
+  cookies_hierarchy; //Used for cookies
   addUserNode2GUI(user, mode, isPermanent = true) {
     switch (mode) {
       case 'addusers':
@@ -98,7 +106,7 @@ export class HierarchyComponent implements OnInit {
     this.message = $event
   }
   init(status = false, dataset, mail) {
-    console.log(dataset)
+    console.log("CookiesData Hierarchy:  ",JSON.parse(this.myservice.get("userlogin")))
     this.AdminpageObject.ssidAdminpage = this.message
     globssid_tree = this.message
     versionmode = dataset.keyversion
@@ -115,7 +123,6 @@ export class HierarchyComponent implements OnInit {
       }
     })
     if (status == true) {
-      console.log(usrprid);
       this.serverConnection.callUrl({session_Id:globssid_tree, mode: "NOTIFICATION", data: JSON.stringify({ whom: usrprid }) }, res => { this.responseData(res) });
       $(".versionview").each((_, el) => { (el.id.substr(12) == versionmode) ? $(el).show() : $(el).hide() });
       (this.adminfeature >= 1) && (this.adminfeature <= 4) ? $("#adminbutton").show() : $("#adminbutton").hide()

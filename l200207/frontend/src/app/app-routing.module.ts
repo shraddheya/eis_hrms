@@ -4,11 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { HierarchyComponent } from './hierarchy/hierarchy.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
 
-const routes: Routes = [
-  {path:'portal',component:LoginComponent},
-  {path:'portal',component:HierarchyComponent},
-  {path:'./',component:FrontpageComponent}
-];
+const routes: Routes = [];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

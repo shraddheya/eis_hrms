@@ -1,21 +1,23 @@
 import { Component, OnInit} from '@angular/core';
 import { LoginComponent } from "src/app/login/login.component";
 import { PaymentComponent } from "../payment/payment.component";
-// import { CookieService } from "ngx-cookie-service";
+import { CookieService } from "ngx-cookie-service";
+import { AppModule } from '../app.module';
 @Component({
   selector: 'app-frontpage',
   templateUrl: './frontpage.component.html',
   styleUrls: ['./frontpage.component.scss']
 })
 export class FrontpageComponent implements OnInit {
-  // constructor(private cookieService: CookieService){}
+  private myservice;
+  constructor(){
+    this.myservice = AppModule.injector.get(CookieService)
+  }
   logincObject = new LoginComponent();
   PaymentComponentObject = new PaymentComponent
   ngOnInit() {
     var object = {users:[{id:12,name:"sourabh"}]}
-    //this.cookieService.set('login',JSON.stringify(object))
-    // console.log(JSON.parse(this.cookieService.get('login')))
-    //this.cookiesResp.checkcookiesData("check",res=>{ this.sessionResponse(res)})
+    console.log("Json frontpage",JSON.parse(this.myservice.get("userlogin")))
   }
   sessionResponse(data){
 
