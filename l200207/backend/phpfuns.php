@@ -160,7 +160,7 @@ if ($mode === "UPDATE_USERS") { // Users Can Be Updates
   $stmt = $link->prepare("SELECT * FROM users where id = $idnew");
   $stmt->execute();
   $newUsr = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-  if ($stmt->error) exit(' failure');
+  if ($stmt->error) exit($stmt->error.' failure');
   print_r($mode . " success" . json_encode($data));
   exit();
 }
