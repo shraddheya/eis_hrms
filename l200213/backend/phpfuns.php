@@ -1,6 +1,6 @@
 <?php
 
-$mode = rtrim(filter_input(INPUT_POST, 'mode'), ',');
+$mode = filter_input(INPUT_POST, 'mode');
 $data = json_decode(filter_input(INPUT_POST, "data"), true);
 
 if($mode === "GETDATA"){
