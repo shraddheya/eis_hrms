@@ -9,12 +9,12 @@ export class server {
   //constructor() { this.http = AppModule.injector.get(HttpHeaderResponse)}
   callUrl = async (data2Post, next) => {
     $.ajax({
-      url: 'http://localhost/phpfuns.php',
       type: "post",
+      url: 'http://localhost/phpfuns.php',
+      crossDomain:true,
       xhrFields: {
         withCredentials: true, 
       },
-      //crossDomain:true,
       data: data2Post,
       success: (res, status) => {
         var idxFailure = res.indexOf("failure");
