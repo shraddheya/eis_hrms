@@ -1,21 +1,30 @@
-import { Component,Input ,OnInit, ViewChild, EventEmitter,Output } from '@angular/core';
+import { Component,Input ,OnInit, ViewChild, AfterViewInit,Inject ,EventEmitter,Output, Injectable } from '@angular/core';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { HierarchyComponent } from 'src/app/hierarchy/hierarchy.component';
 import { PaymentComponent } from "src/app/payment/payment.component";
 import { server } from '../server';
 import { FormControl,FormGroup } from "@angular/forms";
+import { CookieService } from "ngx-cookie-service";
+import * as $ from 'jquery';
+import { AppModule } from '../app.module';
 import { session_cookies } from "../cookies";
+//import { session_cookies } from "../cookies";
 declare var swal: any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-
+@Injectable()
 export class LoginComponent implements OnInit {
-  ssidResp: string = "Hello world";
-
-  @Output() ssidRespEvent = new EventEmitter<string>();
+  private myservice;
+  constructor(){
+    this.myservice = AppModule.injector.get(CookieService)
+    //this.myservice = session_cookies.injector.get(CookieService)
+  }
+  cookies_login; //Used for cookies
+  params
   email;
   password;
   forgetpassword_email;
@@ -25,13 +34,8 @@ export class LoginComponent implements OnInit {
   gconfirmpassword_input;
   HierarchyComponentObject = new HierarchyComponent();
   PaymentComponentObject = new PaymentComponent();
-  sessionData = new session_cookies();
   @ViewChild('frame', { static: true }) frame: ModalDirective;
   serverConnection = new server;
-  // ngAfterViewInit(){this.frame.show();}
-  // dismisModal(mode, key){
-  //   (key == "modal") ? this[mode].hide() : $("#" + mode).hide() 
-  // }
   showhidePanel(firstparam, secondparam) {
     $("#" + firstparam).show();
     $("#" + secondparam).hide();
@@ -44,8 +48,6 @@ export class LoginComponent implements OnInit {
       case 'loginuser':
         var ssid = btoa("SSID"+this.email+this.password)
         this.HierarchyComponentObject.message = ssid
-        // this.ssidResp = ssid
-        // this.ssidRespEvent.emit(this.ssidResp)
         var loginobj = { email: this.email, password: this.password }
         this.serverConnection.callUrl({ mode: "LOGIN", data: JSON.stringify(loginobj),session_Id:ssid}, res => { this.responseData(res) })
         return
@@ -83,6 +85,7 @@ export class LoginComponent implements OnInit {
         return
     }
   }
+
   responseData(response) {
     switch (response.mode) {
       case 'recordissue':
@@ -92,9 +95,12 @@ export class LoginComponent implements OnInit {
         swal(response.record, "", "error")
         return
       case 'login':
-        this.sessionData.setCookiesData(response.record,res=>{
-          console.log(res)
-        });
+        //cookies.set('logindatarecord',"sourabh") 
+        // this.sessionData.setCookiesData(response.record,res=>{
+        //   console.log(res)
+        // });
+        var data = JSON.stringify({name:"sourabh",address:[{office:"407/dfdf",home:"sdsdsd"}],experince:[{}]})
+        this.myservice.set("userlogin",data);
         (response.record != undefined) ? this.HierarchyComponentObject.init(true, response.record, response.other.data.email) : "";
         return
       case 'newusers':
@@ -118,8 +124,8 @@ export class LoginComponent implements OnInit {
         return
     }
   }
-  passwordView(format, input) {
-    $("#passwords").attr("type", format);
+  passwordView(format, input,showhide_event) {
+    $(showhide_event).attr("type", format);
     $(".show" + format).hide();
     $(".show" + input).show();
   }
