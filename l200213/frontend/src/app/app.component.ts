@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import * as $ from 'jquery';
-
+import {  } from "src/app/component1/component1.component";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,6 +7,7 @@ import * as $ from 'jquery';
 })
 export class AppComponent {
   title = 'frontend';
+
 }
 export function callUrl(p, next) {
   console.log(p);
