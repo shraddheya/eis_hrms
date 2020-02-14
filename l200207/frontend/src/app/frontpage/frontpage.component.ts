@@ -17,7 +17,6 @@ export class FrontpageComponent implements OnInit {
   PaymentComponentObject = new PaymentComponent
   ngOnInit() {
     var object = {users:[{id:12,name:"sourabh"}]}
-    console.log("Json frontpage",JSON.parse(this.myservice.get("userlogin")))
   }
   sessionResponse(data){
 
