@@ -40,8 +40,8 @@
               "node_modules/chart.js/dist/Chart.js",
               "node_modules/hammerjs/hammer.min.js",
               "src/assets/Jit-2.0.1/Jit/jit.js",
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/jquery-xhrfilter/jquery.xhrfilter.min.js"
+              "node_modules/jquery/dist/jquery.min.js"
+      
             ]
           },
           "configurations": {
