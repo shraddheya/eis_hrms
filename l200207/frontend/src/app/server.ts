@@ -5,22 +5,16 @@
 // tslint:disable no-unused-expression
 // tslint:disable max-line-length
 // tslint:disable whitespace
-import { HttpClient, HttpParams,HttpHeaderResponse } from '@angular/common/http';
-import { AppModule } from "src/app/app.module";
-import { NgModule, Injector } from '@angular/core';
-import { CookieService } from "ngx-cookie-service";
 export class server {
-  readonly ROOT_URL = 'https://jsonplaceholder.typeicode.com';
-  posts: any;
-  private http;
-  constructor() { this.http = CookieService }
   //constructor() { this.http = AppModule.injector.get(HttpHeaderResponse)}
   callUrl = async (data2Post, next) => {
     $.ajax({
-      type: "post",
       url: 'http://localhost/phpfuns.php',
+      type: "post",
+      xhrFields: {
+        withCredentials: true, 
+      },
       data: data2Post,
-      crossDomain: true,
       success: (res, status, jqXHR) => {
         this.getHeader(jqXHR,res=>{console.log(res)})
         var idxFailure = res.indexOf("failure");
