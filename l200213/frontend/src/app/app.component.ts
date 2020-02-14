@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,19 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontend';
+}
+export function callUrl(p, next) {
+  console.log(p);
+  $.ajax({
+    method: 'post',
+    url: 'http://localhost/phpfuns.php',
+    data: p,
+    xhrFields: {
+       withCredentials: true
+    },
+    success: (res, status, data) => {
+      next(data);
+    },
+    error:  (res, status, data) => { }
+  });
 }
