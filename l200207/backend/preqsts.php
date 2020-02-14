@@ -8,8 +8,8 @@ $dur = array(
 );
 
 $duration = ((($dur['days'] * 24 + $dur['hours']) * 60 + $dur['minutes']) * 60 + $dur['seconds'])*10000;
-header('Access-Control-Allow-Origin:localhost');
-// header ('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Origin:localhost:4201');
+header ('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
 error_reporting(E_ALL);
