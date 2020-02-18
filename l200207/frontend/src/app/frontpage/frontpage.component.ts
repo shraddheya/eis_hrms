@@ -16,7 +16,7 @@ export class FrontpageComponent implements OnInit {
   logincObject = new LoginComponent();
   PaymentComponentObject = new PaymentComponent
   ngOnInit() {
-    var object = {users:[{id:12,name:"sourabh"}]}
+    var object = {users: [{id: 12, name: "sourabh"}] }
   }
   sessionResponse(data){
 
@@ -32,5 +32,5 @@ export class FrontpageComponent implements OnInit {
     var dataobj = { mode: mode, data: input }
     this.PaymentComponentObject.requestdata(dataobj)
   }
-  
+
 }
