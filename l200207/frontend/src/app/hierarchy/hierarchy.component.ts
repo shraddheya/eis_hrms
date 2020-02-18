@@ -320,18 +320,19 @@ export class HierarchyComponent implements OnInit {
   hierarchyViewdata(data) {
     $("#editable").show();
     $("#viewmode,#cardAllot").hide();
-    if (data.picture != null) {
+    if (data.picture != null || data.picture != undefined) {
       if (data.picture != "") var profilepic = atob(data.picture);
       (data.picture != "") ? profilepic.startsWith("data") ? $("#usersDp").attr("src", profilepic) : "" : "";
     }
-    (profilepic == null) ? $("#usersDp").attr("src", "../../assets/images/main.png") : "";
+    (profilepic == null || profilepic == undefined) ? $("#usersDp").attr("src", "../../assets/images/main.png") : "";
     (data.id != usrprid) ? $("#updprofile").hide() : $("#updprofile").show();
     var correspondingAddShow = false;
     var permanentAddShow = false;
     $('.lblEditToggle').each((i, lbl) => {
       var val2Enter = data[lbl.id.substr(8)];
+      (val2Enter == 0||val2Enter == null||val2Enter == ""||val2Enter == undefined)?val2Enter = "":val2Enter;
       Object.keys(data).forEach(eld => {
-        if (eld == lbl.id.substr(8)) { (val2Enter == "") ? (eld == "mname") ? $("#" + lbl.id).hide() : $("#" + lbl.id).parent().hide() : ""; }
+        if (eld == lbl.id.substr(8)) { (val2Enter == "") ? (eld == "mname") ? $("#" + lbl.id).hide() : $("#" + lbl.id).parent().hide() : $("#" + lbl.id).parent().show(); }
       })
       var isValnull = val2Enter === null || val2Enter === undefined
       $(lbl).html(val2Enter);
@@ -346,6 +347,7 @@ export class HierarchyComponent implements OnInit {
     $("#editable").click(function () {
       $('.lblEditToggle').each((i, edit) => {
         var val2Enter = data[edit.id.substr(8)];
+       (val2Enter == 0||val2Enter == null||val2Enter == ""||val2Enter == undefined)?val2Enter = "":val2Enter;
         Object.keys(data).forEach(eld => {
           if (eld == edit.id.substr(8)) { (val2Enter == "") ? $("#" + edit.id).parent().show() : "" }
         })
@@ -367,7 +369,8 @@ export class HierarchyComponent implements OnInit {
     $("#viewmode").click(function () {
       $('.lblEditToggle').each((i, read) => {
         var val2Enter = data[read.id.substr(8)];
-        Object.keys(data).forEach(eld => {
+       (val2Enter == 0||val2Enter == null||val2Enter == ""||val2Enter == undefined)?val2Enter = "":val2Enter;
+       Object.keys(data).forEach(eld => {
           if (eld == read.id.substr(8)) { (val2Enter == "") ? $("#" + read.id).parent().hide() : "" }
         })
         read.setAttribute("contentEditable", "false");
@@ -386,7 +389,7 @@ export class HierarchyComponent implements OnInit {
         var userData = {}
         $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
         var i = 0; i++; userData["prid"] = (new Date).getTime() + i - 2678400;
-        this.serverConnection.callUrl({session_Id:globssid_tree, mode: "REGISTER", data: JSON.stringify(userData) }, res => {
+        this.serverConnection.callUrl({ mode: "REGISTER", data: JSON.stringify(userData) }, res => {
           this.responseData(res)
         })
         return
@@ -527,6 +530,7 @@ export class HierarchyComponent implements OnInit {
         swal(response.record, "", "error")
         return
       case 'register':
+        console.log(response.record)
         if(response.record != "Demo Version")
           response.record["id"] = response.record.prid;
         delete response.record["prid"];

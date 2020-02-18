@@ -26,12 +26,17 @@ export class server {
         this.responseJsonconvertor({ response: res, success: idxSuccess }, res => { responsedecode = res; });
         this.requestJsonconvertor(data2Post.data, res => { requestdecode = res; });
         var responseobject = { record: responsedecode, mode: data2Post.mode.toLowerCase(), other: { mode: data2Post.mode, data: requestdecode } };
+
         next(responseobject);
       },
       cache: false,
       error: (error) => { console.log(error);next({ record: "Connection Fail With Server", mode: "serverissue", other: "" }); },
     });
   }
+  // responseJsonconvertor = async (data, next) => { 
+  //   console.log(JSON.parse(data.response.substr(data.success + 7)))
+  //   next(JSON.parse(data.response.substr(data.success + 7))) 
+  // }; // responseDecode
   responseJsonconvertor = async (data, next) => { (data.success !== -1) ? next(JSON.parse(data.response.substr(data.success + 7))) : ""; }; // responseDecode
   requestJsonconvertor = async (data, next) => { (data !== undefined) ? next(JSON.parse(data)) : ""; };
 }
