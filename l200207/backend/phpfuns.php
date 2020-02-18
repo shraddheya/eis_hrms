@@ -260,7 +260,7 @@ if ($mode === "DOCUMENTS_ACCESSLEVELS_ADD") { // Add Document Accesslevels
   exit();
 }
 
-if ($mode === "DCUMENTS_ACCESSLEVELS_DLT") {
+if ($mode === "DOCUMENTS_ACCESSLEVELS_DLT") {
   $stmt = $link->prepare("DELETE FROM `documents_accesslevels` WHERE id =?");
   $stmt->bind_param("i", $data['id']);
   $stmt->execute();
