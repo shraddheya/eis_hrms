@@ -1,0 +1,9 @@
+version: '3'
+services:
+  phpserver:
+    build: .
+    image: shrad/php:7.4.2-apache-buster-mysqli
+    ports:
+      - 80:80
+    volumes:
+      - ../backend:/var/www/html
