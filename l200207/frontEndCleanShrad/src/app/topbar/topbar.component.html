@@ -1,0 +1,14 @@
+<div class="fixed-top bg-dark">
+  <mdb-navbar SideClass="navbar navbar-expand-sm navbar-dark" [containerInside]="false">
+    <mdb-navbar-brand><a class="navbar-brand" href="#home">HRMS</a></mdb-navbar-brand>
+    <links>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item" *ngFor="let butt of topBarElements">
+          <a class="nav-link waves-light" mdbWavesEffect [attr.href]="butt.href ? butt.href : null" (click)='butt.clickFun ? butt.clickFun() : null' *ngIf="butt.show">
+            <mdb-icon fas icon="{{butt.icon}}"></mdb-icon>{{butt.name}}<span class="sr-only"></span>
+          </a>
+        </li>
+      </ul>
+    </links>
+  </mdb-navbar>
+</div>
