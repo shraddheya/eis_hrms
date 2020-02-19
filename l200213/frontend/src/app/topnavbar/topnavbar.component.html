@@ -1,0 +1,24 @@
+<div class="fixed-top bg-dark">
+  <mdb-navbar SideClass="navbar navbar-expand-sm navbar-dark" [containerInside]="false">
+    <mdb-navbar-brand><a class="navbar-brand" href="#home">HRMS</a></mdb-navbar-brand>
+    <links>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item" *ngFor="let menue of ">
+          <a class="nav-link waves-light" href="#features" mdbWavesEffect>
+            <mdb-icon fas icon="ellipsis-v"></mdb-icon>Features<span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-light" href="#pricingplan" mdbWavesEffect>
+            <mdb-icon fas icon="hand-holding-usd"></mdb-icon>Pricing / Purchase
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-light" (click)="openlogin(frame)" mdbWavesEffect>
+            <mdb-icon fas icon="sign-in-alt"></mdb-icon> Sign In
+          </a>
+        </li>
+      </ul>
+    </links>
+  </mdb-navbar>
+</div>
