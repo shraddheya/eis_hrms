@@ -1,0 +1,20 @@
+.masterDiv{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: -17px; /* Increase/Decrease this value for cross-browser compatibility */
+    overflow-y: scroll;
+  }
+  .clicktop{
+    position: fixed;
+    bottom: 0.5em;
+    right: 0.5em;
+    font-size: 2.5em;
+  }
+  #demo_logincredentail{
+    position: fixed;
+    right: 0em;
+    bottom: 0em;
+  }
+  

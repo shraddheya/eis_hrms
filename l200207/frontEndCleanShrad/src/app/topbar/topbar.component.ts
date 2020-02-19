@@ -8,31 +8,32 @@ import { Router } from '@angular/router';
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss']
 })
-export class TopbarComponent implements OnInit {
 
+export class TopbarComponent implements OnInit {
+  check: string;
   constructor(private router: Router) { }
 
   topBarElements = [
     {
       name: 'Features',
       icon: 'ellipsis-v',
-      href: '#Features',
+      href: '#features',
       show: true
     }, {
-      name: 'Pricing/Purchase',
-      icon: 'ellipsis-v',
-      href: '#Pricing',
+      name: 'Pricing / Purchase',
+      icon: 'hand-holding-usd',
+      href: '#pricingplan',
       show: true
     }, {
       name: 'Sign In',
-      icon: 'ellipsis-v',
-      // clickFun: (_: any) => {this.clicked('showLoginModel'); },
-      clickFun: (_: any) => {this.callFunction('LOGIN'); },
+      icon: 'sign-in-alt',
+      clickFun: (_: any) => { this.clicked('showLoginModel'); },
+      // clickFun: (_: any) => {this.callFunction('LOGIN'); },
       show: true
     }, {
       name: 'Login',
       icon: 'ellipsis-v',
-      clickFun: (_: any) => {this.callFunction('LOGIN'); },
+      clickFun: (_: any) => { this.callFunction('LOGIN'); },
       show: false
     }
 
@@ -41,7 +42,7 @@ export class TopbarComponent implements OnInit {
   callFunction(mode: string) {
     switch (mode) {
       case 'LOGIN':
-        callUrl({mode, data: JSON.stringify({email: 'demo@edeitic.com', password: 'demo@edeitic.com'})}, (_: any) => this.router.navigate(['portal']));
+        callUrl({ mode, data: JSON.stringify({ email: 'demo@edeitic.com', password: 'demo@edeitic.com' }) }, (_: any) => this.router.navigate(['portal']));
         break;
 
       default:
@@ -53,7 +54,10 @@ export class TopbarComponent implements OnInit {
     console.log('clicked : ', mode);
     switch (mode) {
       case 'showLoginModel':
-        console.log(mode);
+        this.topBarElements.forEach(el => {
+          (el.name != "Sign In") ? el.show = false : el.show = true;
+        })
+        //console.log(mode);
         break;
       default:
         break;
@@ -61,5 +65,6 @@ export class TopbarComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 }
