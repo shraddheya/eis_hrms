@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
         var ssid = btoa("SSID"+this.email+this.password)
         this.HierarchyComponentObject.message = ssid
         var loginobj = { email: this.email, password: this.password }
-        this.serverConnection.callUrl({ mode: "LOGIN", data: JSON.stringify(loginobj),session_Id:ssid}, res => { this.responseData(res) })
+        this.serverConnection.callUrl({ mode: "LOGIN", data: JSON.stringify(loginobj)}, res => { this.responseData(res) })
         return
       case 'remberme':
         var savecred;
