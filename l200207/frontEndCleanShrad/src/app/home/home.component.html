@@ -1,0 +1,54 @@
+<div id="home">
+  <div class="masterDiv">
+    <app-topbar></app-topbar>
+    <section class="bg-white font-weight-bold" id="home" style="font-family:'Geneva'">
+      <div class="p-5">
+        <div class="p-5">
+          <mdb-carousel [animation]="'slide'" class="z-depth-3">
+            <mdb-carousel-item *ngFor="let imgName of ['baner', 'adminpanel']">
+              <img class="d-block w-100" src="../../assets/images/{{imgName}}.png">
+            </mdb-carousel-item>
+          </mdb-carousel>
+        </div>
+      </div>
+    </section>
+    <section class="bg-white" id="features">
+      <div class="p-1">
+        <div class="container my-5 p-3 z-depth-1">
+          <section class="dark-grey-text">
+            <h2 class="text-center font-weight-bold mb-4 pb-2">Features</h2>
+            <p class="text-center lead grey-text mx-auto mb-5">
+              Below features of HRMS will making your work easy
+            </p>
+            <div class="row">
+              <div class="col-md-6" *ngFor="let colL of featuresList">
+                <div class="row mb-3" *ngFor="let rowL of colL">
+                  <div class="col-2">
+                    <i class="fas fa-2x {{rowL.icon}} deep-dark-text"></i>
+                  </div>
+                  <div class="col-10">
+                    <h5 class="font-weight-bold mb-3">{{rowL.head}}</h5>
+                    <p class="grey-text">{{rowL.matter}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+    <section class="bg-white">
+      <div class="" id="demo_logincredentail">
+        <mdb-card class="z-depth-2">
+          <mdb-card-body>
+            <mdb-card-title>
+              <h5>Use below Cedentials for Demo</h5>
+            </mdb-card-title>
+            <mdb-card-text style="height:0.5em;" class="font-weight-bold">Username - demo@edeitic.com</mdb-card-text>
+            <mdb-card-text style="height:0.5em;" class="font-weight-bold">Password - demo@edeitic.com</mdb-card-text>
+          </mdb-card-body>
+        </mdb-card>
+      </div>
+    </section>
+  </div>
+</div>
