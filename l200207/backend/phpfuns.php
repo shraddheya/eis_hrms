@@ -46,7 +46,7 @@ if ($mode === "LOGIN") {
 
 
 if ($mode === "GETINITDATA") {
-  $link = mysqli_connect('db', 'root', 'ic@0001', $DBnm);
+  $link = mysqli_connect('db', 'root', 'ic@0001', $_SESSION["DBnm"]);
   if ($link->error) exit('error : ' . json_encode($link->error));
   $pridUsrMain = $_SESSION["user"]["prid"];
   $retArray = [];
