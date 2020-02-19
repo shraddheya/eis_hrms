@@ -18,14 +18,10 @@ if ($mode === "LOGIN") {
   if ($data["email"] === "demo@edeitic.com") {
     if ($data["password"] !== "demo@edeitic.com") exit('failure' . 'pelase enter the right password: demo@edeitic.com');
     $usrID = "" . $timeNow . str_replace('.', '', getCLIP());
-    // $usrPSS= strtoupper(md5($usrID));
     $DBnm = "eis_hrms_$usrID";
     $_SESSION["demoUsrID"] = $usrID;
     $_SESSION["user"] = array('prid' => 1560156094488);
     $_SESSION["DBnm"] = $DBnm;
-    // print_r("\nDBnm : $DBnm\n</br>");
-    // print_r("\nsession_save_path : ", session_save_path());
-    // print_r("\nsession_save_path : ", realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
     clearDemoDBs($link);
     $stmtCheckTableList = $link->prepare("SELECT `table_name` FROM `information_schema`.`tables` WHERE `table_schema` = 'eis_hrms_0demo';");
     $stmtCheckTableList->execute();
@@ -42,8 +38,14 @@ if ($mode === "LOGIN") {
     // $_SESSION["DBnm"] = null;
   }
   mysqli_close($link);
+  exit($mode.'success');
+} else {
+  if (session_status() === PHP_SESSION_NONE) session_start();
+  if(!isset($_SESSION['user'])) exit($mode.'failure'.'NOTLOGGEDIN');
+}
 
 
+if ($mode === "GETINITDATA") {
   $link = mysqli_connect('db', 'root', 'ic@0001', $DBnm);
   if ($link->error) exit('error : ' . json_encode($link->error));
   $pridUsrMain = $_SESSION["user"]["prid"];
