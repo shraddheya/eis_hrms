@@ -3,7 +3,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import { ModalDirective } from 'angular-bootstrap-md';
 //import { runInThisContext } from 'vm';
-export var checkLogin;
 declare var $jit: any;
 
 let rgraph: any;
@@ -15,6 +14,7 @@ let rgraph: any;
 })
 export class PortalComponent implements OnInit {
   @ViewChild('addUsers', { static: true }) addUsers: ModalDirective;
+  @ViewChild('hierachyView', { static: true }) hierachyView: ModalDirective;
   graphData: any;
   showTree: any;
   posts: any;
@@ -26,9 +26,43 @@ export class PortalComponent implements OnInit {
   selOfPost: any;
   selOfTitle: any;
   selOfPermision: any;
+  userRecordbody = [
+    { 
+      title:"Crud",
+      detail:[{
+        icon: 'pencil-alt',
+        href: '#features',
+        style:"nav-link waves-light text-dark",
+        show: true
+      },{
+        icon: 'eye',
+        href: '#features',
+        style:"nav-link waves-light text-dark",
+        show: false
+      },{
+        icon: 'trash',
+        href: '#features',
+        style:"nav-link waves-light text-dark",
+        show: true
+      }]
+    },    { 
+      title:"Crud",
+      detail:[{
+        icon: 'pencil-alt',
+        href: '#features',
+        style:"waves-light bg-dark text-white p-4",
+        show: true
+      },{
+        icon: 'eye',
+        href: '#features',
+        style:"waves-light bg-dark text-white  p-4",
+        show: true
+      }]
+    },
+  ]
   constructor() { }
 
-
+  
   initJIT() {
     rgraph = new $jit.RGraph({
       injectInto: 'hierarchy',
@@ -132,6 +166,7 @@ export class PortalComponent implements OnInit {
   }
   hierarchyViewdata(data) {
     console.log(data)
+    this.hierachyView.show()
   }
   clicked(mode) {
     switch (mode) {
@@ -141,6 +176,9 @@ export class PortalComponent implements OnInit {
         break;
       case 'dismissAddusermodal':
         this.addUsers.hide();
+        break;
+      case 'dismissRecordmodal':
+        this.hierachyView.hide();
         break;
       default:
         break;
@@ -167,7 +205,6 @@ export class PortalComponent implements OnInit {
       this.posts = resp.posts;
       this.users = resp.users;
       this.createDataTree(this.users);
-      checkLogin = true;
       console.log(resp);
     });
   }

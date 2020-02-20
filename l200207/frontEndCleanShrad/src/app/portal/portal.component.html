@@ -3,8 +3,8 @@
   <div id="hierarchy"></div>
 </section>
 <mdb-icon id="buttPlus" class="text-white" fas icon="plus-circle" (click)="clicked('addUser')"></mdb-icon>
-<div mdbModal #addUsers="mdbModal" [config]="{backdrop: 'static'}" class="modal fade left" id="frameModalAdduser"
-  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div mdbModal #addUsers="mdbModal" [config]="{backdrop: 'static'}" class="modal fade left" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center p-2 border border-white">
@@ -17,7 +17,8 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-4">
-            <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers('usrAdd_post')" id="usrAdd_post">
+            <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers('usrAdd_post')"
+              id="usrAdd_post">
               <option selected disabled>User Post</option>
               <option *ngFor="let postlist of selOfPost" value="{{postlist.id}}">{{postlist.name}}</option>
             </select>
@@ -178,8 +179,38 @@
       <div class="modal-footer d-flex justify-content-center border border-white">
         <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addUsers_click waves-light"
           (click)="mainupulationSend('addusers')" mdbWavesEffect>Create</button>
-        <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addreset_click waves-light" (click)="clicked('resetAddForm')"
-          mdbWavesEffect>Reset</button>
+        <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addreset_click waves-light"
+          (click)="clicked('resetAddForm')" mdbWavesEffect>Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal" id="frameModalTopHierarchy"
+  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center border border-white">
+        <h4 class="modal-title w-100 font-weight-bold">User Record</h4>
+        <button type="button" class="close pull-right hoverable" aria-label="Close"
+          (click)="clicked('dismissRecordmodal')">
+          <mdb-icon fas icon="backspace"></mdb-icon>
+        </button>
+      </div>
+      <div class="modal-body  border border-white">
+        <div class="row p-4">
+          <div class="col-4" *ngFor="let recordUser of userRecordbody">
+            <div class="row">
+            <div class="col-3" *ngFor="let corecordUser of recordUser.detail" style="font-size: 1.4em;">
+                <a class={{corecordUser.style}} mdbWavesEffect [attr.href]="corecordUser.href ? corecordUser.href : null"
+                  (click)='corecordUser.clickFun ? corecordUser.clickFun() : null' *ngIf="corecordUser.show">
+                  <mdb-icon fas icon="{{corecordUser.icon}}"></mdb-icon>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border border-white">
       </div>
     </div>
   </div>
