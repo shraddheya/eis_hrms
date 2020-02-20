@@ -4,15 +4,15 @@ import { ModalDirective } from "angular-bootstrap-md";
 import { callUrl } from '../ajaxes';
 import { Router } from '@angular/router';
 import $ from 'jquery';
+var checklogin;
+
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss']
 })
-
 export class TopbarComponent implements OnInit {
-  check   : string;
-  email   : string;
+  email: string;
   password: string;
   constructor(private router: Router) { }
   @ViewChild('loginmodal', { static: true }) loginmodal: ModalDirective
@@ -38,6 +38,11 @@ export class TopbarComponent implements OnInit {
       icon: 'ellipsis-v',
       clickFun: (_: any) => { this.callFunction('LOGIN'); },
       show: false
+    }, {
+      name: 'Menue',
+      icon: 'ellipsis-v',
+      clickFun: (_: any) => { this.clicked('menues'); },
+      show: false
     }
 
   ];
@@ -46,8 +51,8 @@ export class TopbarComponent implements OnInit {
     switch (mode) {
       case 'LOGIN':
         callUrl({ mode, data: JSON.stringify({ email: this.email, password: this.password }) }, (_: any) => this.router.navigate(['portal']));
+        checklogin = true
         break;
-
       default:
         break;
     }
@@ -56,24 +61,35 @@ export class TopbarComponent implements OnInit {
   clicked(mode: string) {
     switch (mode) {
       case 'showLoginModel':
-        this.loginmodal.show()
-        $(".modal-backdrop").hide()
-        //console.log(mode);
+        this.loginmodal.show();
+        $(".modal-backdrop").hide();
         break;
       case 'hideLoginModel':
-        this.loginmodal.hide()
+        this.loginmodal.hide();
+        break;
+      case 'menues':
+        console.log("Admin page");
         break;
       default:
         break;
     }
   }
-  passwordView(format, input,showhide_event) {
+  passwordView(format, input, showhide_event) {
     $(showhide_event).attr("type", format);
     $(".show" + format).hide();
     $(".show" + input).show();
   }
-  
-  ngOnInit() {
 
+  ngOnInit() {
+    checklogin = false
+    let checkurl: string = window.location.href.replace("http://localhost:4200/", "")
+    if (checkurl == "portal" || checkurl == "admin") {
+      this.topBarElements.forEach(el => {
+        (el.name == "Menue") ? el.show = true : el.show = false; 
+      });
+    }
+
+    console.log(checklogin)
+    //((checkurl == "potal")||(checkurl == "admin"))?(checklogin == false)?this.router.navigate(['']):this.router.navigate([checklogin]):"";
   }
 }

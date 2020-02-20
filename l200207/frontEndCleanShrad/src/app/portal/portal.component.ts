@@ -1,6 +1,7 @@
 // tslint:disable: curly
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { callUrl } from '../ajaxes';
+import { ModalDirective } from 'angular-bootstrap-md';
 //import { runInThisContext } from 'vm';
 
 declare var $jit: any;
@@ -13,7 +14,7 @@ let rgraph: any;
   styleUrls: ['./portal.component.scss']
 })
 export class PortalComponent implements OnInit {
-
+  @ViewChild('addUsers', { static: true }) addUsers: ModalDirective;
   graphData: any;
   showTree: any;
   posts: any;
@@ -66,7 +67,7 @@ export class PortalComponent implements OnInit {
             </div>`;
         hoverdiv.append(hovercontent);
         domElement.append(hoverdiv);
-        // domElement.onclick = _ => { this.hierarchyViewdata(node) }
+         domElement.onclick = _ => { this.hierarchyViewdata(node) }
          domElement.onmouseover = _ => { $('#info' + domElement.id).show() }
          domElement.onmouseout = _ => { $('#info' + domElement.id).hide() }
       },
@@ -111,6 +112,21 @@ export class PortalComponent implements OnInit {
     rgraph.compute('end');
     rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
   }
+  hierarchyViewdata(data) {
+    console.log(data)
+  }
+  clicked(mode){
+   switch(mode){
+     case 'addUser':
+       this.addUsers.show();
+       break;
+      case 'dismissAddusermodal':
+       this.addUsers.hide();
+       break;
+      default:
+        break;
+   }
+  }
   ngOnInit() {
     this.initJIT();
     callUrl({mode: 'GETINITDATA'}, (resp: any) => {
@@ -122,5 +138,4 @@ export class PortalComponent implements OnInit {
       console.log(resp);
     });
   }
-
 }
