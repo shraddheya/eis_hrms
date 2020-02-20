@@ -139,8 +139,7 @@ if ($mode === "REGISTER") { // Add Users Who have Permissions
   $stmtc->execute();
   $newcon = $stmtc->insert_id;
   if ($stmtc->error) exit($stmtc->error . ' Failure');
-  print_r($mode . " success" . json_encode($data));
-  exit();
+  exit($mode . " success" . json_encode($data));
 }
 
 if ($mode === "SALARYSLIP") { // Select Salart
