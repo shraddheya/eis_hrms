@@ -67,12 +67,29 @@ export class PortalComponent implements OnInit {
         hoverdiv.append(hovercontent);
         domElement.append(hoverdiv);
         // domElement.onclick = _ => { this.hierarchyViewdata(node) }
-        // domElement.onmouseover = _ => { $('#info' + domElement.id).show() }
-        // domElement.onmouseout = _ => { $('#info' + domElement.id).hide() }
+         domElement.onmouseover = _ => { $('#info' + domElement.id).show() }
+         domElement.onmouseout = _ => { $('#info' + domElement.id).hide() }
       },
+      onPlaceLabel: (domElement, node) => {
+        var style = domElement.style;
+        style.display = ''; style.cursor = 'pointer';
+        if (node._depth <= 1) {
+          style.fontSize = "1em";
+          style.color = "#FFFFFF";
+        } else if (node._depth == 2) {
+          style.fontSize = "1em";
+          style.color = "#FFFFFF";
+        } else {
+          style.display = 'block';
+          style.fontSize = "1em";
+          style.color = "#FFFFFF";
+        }
+        var left = parseInt(style.left);
+        var w = domElement.offsetWidth;
+        style.left = (left - w / 5) + 'px';
+      }
     });
   }
-
   createDataTree(dataset: any) { // legacy code to convert flat data to hirarechy
     const hashTable = Object.create(null);
     dataset.forEach((aData: any) => hashTable[aData.id] = { ...aData, children: [] });
