@@ -1,8 +1,9 @@
 // tslint:disable: max-line-length
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalDirective } from "angular-bootstrap-md";
 import { callUrl } from '../ajaxes';
 import { Router } from '@angular/router';
-
+import $ from 'jquery';
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
@@ -10,9 +11,11 @@ import { Router } from '@angular/router';
 })
 
 export class TopbarComponent implements OnInit {
-  check: string;
+  check   : string;
+  email   : string;
+  password: string;
   constructor(private router: Router) { }
-
+  @ViewChild('loginmodal', { static: true }) loginmodal: ModalDirective
   topBarElements = [
     {
       name: 'Features',
@@ -28,7 +31,7 @@ export class TopbarComponent implements OnInit {
       name: 'Sign In',
       icon: 'sign-in-alt',
       clickFun: (_: any) => { this.clicked('showLoginModel'); },
-      // clickFun: (_: any) => {this.callFunction('LOGIN'); },
+      //clickFun: (_: any) => {this.callFunction('LOGIN'); },
       show: true
     }, {
       name: 'Login',
@@ -42,7 +45,7 @@ export class TopbarComponent implements OnInit {
   callFunction(mode: string) {
     switch (mode) {
       case 'LOGIN':
-        callUrl({ mode, data: JSON.stringify({ email: 'demo@edeitic.com', password: 'demo@edeitic.com' }) }, (_: any) => this.router.navigate(['portal']));
+        callUrl({ mode, data: JSON.stringify({ email: this.email, password: this.password }) }, (_: any) => this.router.navigate(['portal']));
         break;
 
       default:
@@ -51,19 +54,25 @@ export class TopbarComponent implements OnInit {
   }
 
   clicked(mode: string) {
-    console.log('clicked : ', mode);
     switch (mode) {
       case 'showLoginModel':
-        this.topBarElements.forEach(el => {
-          (el.name != "Sign In") ? el.show = false : el.show = true;
-        })
+        this.loginmodal.show()
+        $(".modal-backdrop").hide()
         //console.log(mode);
+        break;
+      case 'hideLoginModel':
+        this.loginmodal.hide()
         break;
       default:
         break;
     }
   }
-
+  passwordView(format, input,showhide_event) {
+    $(showhide_event).attr("type", format);
+    $(".show" + format).hide();
+    $(".show" + input).show();
+  }
+  
   ngOnInit() {
 
   }
