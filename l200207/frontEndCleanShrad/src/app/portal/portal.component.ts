@@ -1,6 +1,8 @@
 // tslint:disable: curly
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { callUrl } from '../ajaxes';
+import { ModalDirective } from 'angular-bootstrap-md';
+//import { runInThisContext } from 'vm';
 
 declare var $jit: any;
 
@@ -12,10 +14,18 @@ let rgraph: any;
   styleUrls: ['./portal.component.scss']
 })
 export class PortalComponent implements OnInit {
-
+  @ViewChild('addUsers', { static: true }) addUsers: ModalDirective;
   graphData: any;
   showTree: any;
-
+  posts: any;
+  accesslevels: any;
+  users: any;
+  adduserBosslist = {show:false}
+  adduserAlldetail = {show:false}
+  selOfBoss: any;
+  selOfPost: any;
+  selOfTitle: any;
+  selOfPermision: any;
   constructor() { }
 
 
@@ -62,18 +72,48 @@ export class PortalComponent implements OnInit {
             </div>`;
         hoverdiv.append(hovercontent);
         domElement.append(hoverdiv);
-        // domElement.onclick = _ => { this.hierarchyViewdata(node) }
-        // domElement.onmouseover = _ => { $('#info' + domElement.id).show() }
-        // domElement.onmouseout = _ => { $('#info' + domElement.id).hide() }
+         domElement.onclick = _ => { this.hierarchyViewdata(node) }
+         domElement.onmouseover = _ => { $('#info' + domElement.id).show() }
+         domElement.onmouseout = _ => { $('#info' + domElement.id).hide() }
       },
+      onPlaceLabel: (domElement, node) => {
+        var style = domElement.style;
+        style.display = ''; style.cursor = 'pointer';
+        if (node._depth <= 1) {
+          style.fontSize = "1em";
+          style.color = "#FFFFFF";
+        } else if (node._depth == 2) {
+          style.fontSize = "1em";
+          style.color = "#FFFFFF";
+        } else {
+          style.display = 'block';
+          style.fontSize = "1em";
+          style.color = "#FFFFFF";
+        }
+        var left = parseInt(style.left);
+        var w = domElement.offsetWidth;
+        style.left = (left - w / 5) + 'px';
+      }
     });
   }
-
-  createDataTree(dataset) { // legacy code to convert flat data to hirarechy
+  changeIps_addGUIusers(mode) {
+    switch (mode) {
+      case "usrAdd_post":
+        this.selOfBoss = this.users;
+        this.selOfTitle = ["Mr","Mrs","Ms"];
+        this.selOfPermision = [{name:"All Permission",value:"1"},{name:"Read, Add, Update",value:"2"},{name:"Only Read",value:"3"},]
+        this.adduserBosslist.show = true;
+        return;
+      case "usrAdd_boss":
+        this.adduserAlldetail.show = true;
+        return;
+    }
+  }
+  createDataTree(dataset: any) { // legacy code to convert flat data to hirarechy
     const hashTable = Object.create(null);
-    dataset.forEach(aData => hashTable[aData.id] = { ...aData, children: [] });
+    dataset.forEach((aData: any) => hashTable[aData.id] = { ...aData, children: [] });
     const dataTree = [];
-    dataset.forEach(aData => {
+    dataset.forEach((aData: any) => {
       (aData.boss) ? hashTable[aData.boss].children.push(hashTable[aData.id]) : dataTree.push(hashTable[aData.id]);
     });
     dataTree.forEach(obj => { this.showTree = obj; });
@@ -90,13 +130,43 @@ export class PortalComponent implements OnInit {
     rgraph.compute('end');
     rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
   }
+  hierarchyViewdata(data) {
+    console.log(data)
+  }
+  clicked(mode){
+   switch(mode){
+     case 'addUser':
+       this.addUsers.show();
+       this.selOfPost = this.posts
+       break;
+      case 'dismissAddusermodal':
+       this.addUsers.hide();
+       break;
+      default:
+        break;
+   }
+  }
+  mainupulationSend(mode) {
+    switch (mode) {
+      case ('addusers'):
+        var userData = {}
+        $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
+        var i = 0; i++; userData["prid"] = (new Date).getTime() + i - 2678400;
+        callUrl({ mode: "REGISTER", data: JSON.stringify(userData) }, res => {
+          console.log(res)
+        })
+        return
+      }
+  }
   ngOnInit() {
     this.initJIT();
-    callUrl({mode: 'GETINITDATA'}, (resp: string) => {
+    callUrl({mode: 'GETINITDATA'}, (resp: any) => {
       resp = JSON.parse(resp);
-      // this.createDataTree(resp)
+      this.accesslevels = resp.accesslevels;
+      this.posts = resp.posts;
+      this.users = resp.users;
+      this.createDataTree(this.users);
       console.log(resp);
     });
   }
-
 }
