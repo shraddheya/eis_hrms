@@ -4,8 +4,7 @@ import { ModalDirective } from "angular-bootstrap-md";
 import { callUrl } from '../ajaxes';
 import { Router } from '@angular/router';
 import $ from 'jquery';
-var checklogin;
-
+var check;
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
@@ -50,8 +49,10 @@ export class TopbarComponent implements OnInit {
   callFunction(mode: string) {
     switch (mode) {
       case 'LOGIN':
-        callUrl({ mode, data: JSON.stringify({ email: this.email, password: this.password }) }, (_: any) => this.router.navigate(['portal']));
-        checklogin = true
+        callUrl({ mode, data: JSON.stringify({ email: this.email, password: this.password }) }, (_: any) => {
+          this.router.navigate(['portal'])
+          check = true;
+        });
         break;
       default:
         break;
@@ -81,15 +82,18 @@ export class TopbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    checklogin = false
     let checkurl: string = window.location.href.replace("http://localhost:4200/", "")
     if (checkurl == "portal" || checkurl == "admin") {
-      this.topBarElements.forEach(el => {
-        (el.name == "Menue") ? el.show = true : el.show = false; 
-      });
+      //console.log(check)
+      //if(check == true){
+        this.topBarElements.forEach(el => {
+          (el.name == "Menue") ? el.show = true : el.show = false; 
+        });
+      // }
+      // else{
+      //   this.router.navigate(['']);
+      // }
     }
-
-    console.log(checklogin)
     //((checkurl == "potal")||(checkurl == "admin"))?(checklogin == false)?this.router.navigate(['']):this.router.navigate([checklogin]):"";
   }
 }

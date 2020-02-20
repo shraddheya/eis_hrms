@@ -20,7 +20,12 @@ export class PortalComponent implements OnInit {
   posts: any;
   accesslevels: any;
   users: any;
-
+  adduserBosslist = {show:false}
+  adduserAlldetail = {show:false}
+  selOfBoss: any;
+  selOfPost: any;
+  selOfTitle: any;
+  selOfPermision: any;
   constructor() { }
 
 
@@ -91,6 +96,19 @@ export class PortalComponent implements OnInit {
       }
     });
   }
+  changeIps_addGUIusers(mode) {
+    switch (mode) {
+      case "usrAdd_post":
+        this.selOfBoss = this.users;
+        this.selOfTitle = ["Mr","Mrs","Ms"];
+        this.selOfPermision = [{name:"All Permission",value:"1"},{name:"Read, Add, Update",value:"2"},{name:"Only Read",value:"3"},]
+        this.adduserBosslist.show = true;
+        return;
+      case "usrAdd_boss":
+        this.adduserAlldetail.show = true;
+        return;
+    }
+  }
   createDataTree(dataset: any) { // legacy code to convert flat data to hirarechy
     const hashTable = Object.create(null);
     dataset.forEach((aData: any) => hashTable[aData.id] = { ...aData, children: [] });
@@ -119,6 +137,7 @@ export class PortalComponent implements OnInit {
    switch(mode){
      case 'addUser':
        this.addUsers.show();
+       this.selOfPost = this.posts
        break;
       case 'dismissAddusermodal':
        this.addUsers.hide();
@@ -126,6 +145,18 @@ export class PortalComponent implements OnInit {
       default:
         break;
    }
+  }
+  mainupulationSend(mode) {
+    switch (mode) {
+      case ('addusers'):
+        var userData = {}
+        $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
+        var i = 0; i++; userData["prid"] = (new Date).getTime() + i - 2678400;
+        callUrl({ mode: "REGISTER", data: JSON.stringify(userData) }, res => {
+          console.log(res)
+        })
+        return
+      }
   }
   ngOnInit() {
     this.initJIT();

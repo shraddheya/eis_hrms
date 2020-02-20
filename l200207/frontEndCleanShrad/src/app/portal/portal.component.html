@@ -17,27 +17,25 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-4">
-            <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers(usrAdd)" id="usrAdd_post"
-              #usrAdd>
+            <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers('usrAdd_post')" id="usrAdd_post">
               <option selected disabled>User Post</option>
               <option *ngFor="let postlist of selOfPost" value="{{postlist.id}}">{{postlist.name}}</option>
             </select>
           </div>
-          <div class="col-4" id="report_select">
-            <select class="inputusers form-control" (click)="changeIps_addGUIusers(usrAdd1)" id="usrAdd_boss" #usrAdd1>
+          <div class="col-4" *ngIf="adduserBosslist.show">
+            <select class="inputusers form-control" (click)="changeIps_addGUIusers('usrAdd_boss')" id="usrAdd_boss">
               <option selected disabled>Reporting Officer</option>
               <option *ngFor="let bosslist of selOfBoss" value="{{bosslist.id}}">{{bosslist.fname}}</option>
             </select>
           </div>
-          <div class="col-4" id="titles_select">
-            <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers(usrAdd2)" id="usrAdd_title"
-              #usrAdd2>
+          <div class="col-4" *ngIf="adduserAlldetail.show">
+            <select class="inputusers form-control mb-3" id="usrAdd_title">
               <option selected disabled>Title</option>
               <option *ngFor="let title of selOfTitle" value="{{title}}">{{title}}</option>
             </select>
           </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="adduserAlldetail.show">
           <div class="col-4">
             <div class="md-form addUserinput_Sh">
               <input mdbInput type="text" class="inputusers form-control" id="usrAdd_fname" placeholder="Firstname*">
@@ -58,7 +56,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="adduserAlldetail.show">
           <div class="col-4">
             <div class="md-form addUserinput_Sh">
               <input mdbInput type="text" class="inputusers form-control" id="usrAdd_contactno"
@@ -74,10 +72,10 @@
           </div>
         </div>
 
-        <span class="address font-weight-bold" id="address_parmanent">
+        <span class="address font-weight-bold" id="address_parmanent" *ngIf="adduserAlldetail.show">
           Parmanent Address
         </span>
-        <div class="row">
+        <div class="row" *ngIf="adduserAlldetail.show">
           <div class="col-4">
             <div class="md-form addUserinput_Sh">
               <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_houseno"
@@ -120,10 +118,10 @@
           </div>
         </div>
 
-        <span class="address font-weight-bold" id="address_corresponding">
+        <span class="address font-weight-bold" id="address_corresponding" *ngIf="adduserAlldetail.show">
           Corresponding Address
         </span>
-        <div class="row">
+        <div class="row" *ngIf="adduserAlldetail.show">
           <div class="col-4">
             <div class="md-form addUserinput_Sh">
               <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_houseno"
@@ -166,7 +164,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="adduserAlldetail.show">
           <div class="col-4 addUserinput_Sh">
             <select class="inputusers form-control mb-3" id="usrAdd_permission">
               <option selected disabled>Permission</option>
@@ -178,9 +176,9 @@
         <!-- Default form contact -->
       </div>
       <div class="modal-footer d-flex justify-content-center border border-white">
-        <button mdbBtn type="button" color="dark" class="addUsers_click waves-light"
+        <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addUsers_click waves-light"
           (click)="mainupulationSend('addusers')" mdbWavesEffect>Create</button>
-        <button mdbBtn type="button" color="dark" class="addreset_click waves-light" (click)="clicked('resetAddForm')"
+        <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addreset_click waves-light" (click)="clicked('resetAddForm')"
           mdbWavesEffect>Reset</button>
       </div>
     </div>
