@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import { ModalDirective } from 'angular-bootstrap-md';
 //import { runInThisContext } from 'vm';
-
+export var checkLogin;
 declare var $jit: any;
 
 let rgraph: any;
@@ -20,8 +20,8 @@ export class PortalComponent implements OnInit {
   posts: any;
   accesslevels: any;
   users: any;
-  adduserBosslist = {show:false}
-  adduserAlldetail = {show:false}
+  adduserBosslist = { show: false }
+  adduserAlldetail = { show: false }
   selOfBoss: any;
   selOfPost: any;
   selOfTitle: any;
@@ -37,7 +37,7 @@ export class PortalComponent implements OnInit {
       Node: { color: '#FFFFFF' },
       Edge: { color: '#C0C0C0', lineWidth: 1.4, spline: false },
       onCreateLabel: (domElement, node) => {
-        domElement.innerHTML = node.fname +  + (node.mname ? node.mname + ' ' : '') + '  ' + node.lname;
+        domElement.innerHTML = node.fname + + (node.mname ? node.mname + ' ' : '') + '  ' + node.lname;
         domElement.name = 'tooltip';
         domElement.className = 'show';
         const hoverdiv = document.createElement('div');
@@ -72,9 +72,9 @@ export class PortalComponent implements OnInit {
             </div>`;
         hoverdiv.append(hovercontent);
         domElement.append(hoverdiv);
-         domElement.onclick = _ => { this.hierarchyViewdata(node) }
-         domElement.onmouseover = _ => { $('#info' + domElement.id).show() }
-         domElement.onmouseout = _ => { $('#info' + domElement.id).hide() }
+        domElement.onclick = _ => { this.hierarchyViewdata(node) }
+        domElement.onmouseover = _ => { $('#info' + domElement.id).show() }
+        domElement.onmouseout = _ => { $('#info' + domElement.id).hide() }
       },
       onPlaceLabel: (domElement, node) => {
         var style = domElement.style;
@@ -100,8 +100,8 @@ export class PortalComponent implements OnInit {
     switch (mode) {
       case "usrAdd_post":
         this.selOfBoss = this.users;
-        this.selOfTitle = ["Mr","Mrs","Ms"];
-        this.selOfPermision = [{name:"All Permission",value:"1"},{name:"Read, Add, Update",value:"2"},{name:"Only Read",value:"3"},]
+        this.selOfTitle = ["Mr", "Mrs", "Ms"];
+        this.selOfPermision = [{ name: "All Permission", value: "1" }, { name: "Read, Add, Update", value: "2" }, { name: "Only Read", value: "3" },]
         this.adduserBosslist.show = true;
         return;
       case "usrAdd_boss":
@@ -133,18 +133,18 @@ export class PortalComponent implements OnInit {
   hierarchyViewdata(data) {
     console.log(data)
   }
-  clicked(mode){
-   switch(mode){
-     case 'addUser':
-       this.addUsers.show();
-       this.selOfPost = this.posts
-       break;
+  clicked(mode) {
+    switch (mode) {
+      case 'addUser':
+        this.addUsers.show();
+        this.selOfPost = this.posts
+        break;
       case 'dismissAddusermodal':
-       this.addUsers.hide();
-       break;
+        this.addUsers.hide();
+        break;
       default:
         break;
-   }
+    }
   }
   mainupulationSend(mode) {
     switch (mode) {
@@ -152,20 +152,22 @@ export class PortalComponent implements OnInit {
         var userData = {}
         $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
         var i = 0; i++; userData["prid"] = (new Date).getTime() + i - 2678400;
-        callUrl({ mode: "REGISTER", data: JSON.stringify(userData) }, res => {
-          console.log(res)
+        callUrl({ mode: "REGISTER", data: JSON.stringify(userData) }, (resp: any) => {
+          resp = JSON.parse(resp)
+          console.log(resp)
         })
         return
-      }
+    }
   }
   ngOnInit() {
     this.initJIT();
-    callUrl({mode: 'GETINITDATA'}, (resp: any) => {
+    callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
       resp = JSON.parse(resp);
       this.accesslevels = resp.accesslevels;
       this.posts = resp.posts;
       this.users = resp.users;
       this.createDataTree(this.users);
+      checkLogin = true;
       console.log(resp);
     });
   }

@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from "angular-bootstrap-md";
 import { callUrl } from '../ajaxes';
 import { Router } from '@angular/router';
+import { checkLogin } from "src/app/portal/portal.component";
 import $ from 'jquery';
 var check;
 @Component({
@@ -89,6 +90,7 @@ export class TopbarComponent implements OnInit {
         this.topBarElements.forEach(el => {
           (el.name == "Menue") ? el.show = true : el.show = false; 
         });
+        console.log(checkLogin !=true)
       // }
       // else{
       //   this.router.navigate(['']);
