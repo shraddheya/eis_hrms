@@ -9,13 +9,17 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { FormsModule } from '@angular/forms';
 import { TopbarComponent } from './topbar/topbar.component';
 import { PortalComponent } from './portal/portal.component';
+import { AdminComponent } from './admin/admin.component';
+import { Four04Component } from './four04/four04.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     TopbarComponent,
-    PortalComponent
+    PortalComponent,
+    AdminComponent,
+    Four04Component
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 // tslint:disable: curly
 import { Component, OnInit } from '@angular/core';
 import { callUrl } from '../ajaxes';
+import { runInThisContext } from 'vm';
 
 declare var $jit: any;
 
@@ -15,6 +16,9 @@ export class PortalComponent implements OnInit {
 
   graphData: any;
   showTree: any;
+  posts: any;
+  accesslevels: any;
+  users: any;
 
   constructor() { }
 
@@ -69,11 +73,11 @@ export class PortalComponent implements OnInit {
     });
   }
 
-  createDataTree(dataset) { // legacy code to convert flat data to hirarechy
+  createDataTree(dataset: any) { // legacy code to convert flat data to hirarechy
     const hashTable = Object.create(null);
-    dataset.forEach(aData => hashTable[aData.id] = { ...aData, children: [] });
+    dataset.forEach((aData: any) => hashTable[aData.id] = { ...aData, children: [] });
     const dataTree = [];
-    dataset.forEach(aData => {
+    dataset.forEach((aData: any) => {
       (aData.boss) ? hashTable[aData.boss].children.push(hashTable[aData.id]) : dataTree.push(hashTable[aData.id]);
     });
     dataTree.forEach(obj => { this.showTree = obj; });
@@ -92,9 +96,12 @@ export class PortalComponent implements OnInit {
   }
   ngOnInit() {
     this.initJIT();
-    callUrl({mode: 'GETINITDATA'}, (resp: string) => {
+    callUrl({mode: 'GETINITDATA'}, (resp: any) => {
       resp = JSON.parse(resp);
-      // this.createDataTree(resp)
+      this.accesslevels = resp.accesslevels;
+      this.posts = resp.posts;
+      this.users = resp.users;
+      this.createDataTree(this.users);
       console.log(resp);
     });
   }
