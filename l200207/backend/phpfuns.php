@@ -117,7 +117,7 @@ if ($mode === "GETINITDATA") {
   exit($mode . "success" . json_encode($UsrData));
 } else {
   if (session_status() == PHP_SESSION_NONE) session_start();
-  print_r("session : " . json_encode($_SESSION) . "\n");
+  // print_r("session : " . json_encode($_SESSION) . "\n");
   $link = mysqli_connect('db', 'root', 'ic@0001', $_SESSION["DBnm"]);
 }
 
@@ -129,8 +129,9 @@ if ($mode === "ISLOGGEDIN") { // Check Is-Login-?
 }
 
 if ($mode === "REGISTER") { // Add Users Who have Permissions
+  // print_r($data);
   $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-  $stmt->bind_param('issssssisssssisssssi', $data['prid'], $data["title"], $data["fname"], $data["mname"], $data["lname"], $data["email"], $data["contactno"], $data['post'], $data["address_c_houseno"], $data["address_c_area"], $data["address_c_city"], $data["address_c_state"], $data["address_c_country"], $data["address_c_pincode"], $data["address_p_houseno"], $data["address_p_area"], $data["address_p_city"], $data["address_p_state"], $data["address_p_country"], $data["address_p_pincode"]);
+  $stmt->bind_param('ssssssiisssssisssssi', $data["prid"], $data["title"], $data["fname"], $data["mname"], $data["lname"], $data["email"], $data["contactno"], $data["post"], $data["address_c_houseno"], $data["address_c_area"], $data["address_c_city"], $data["address_c_state"], $data["address_c_country"], $data["address_c_pincode"], $data["address_p_houseno"], $data["address_p_area"], $data["address_p_city"], $data["address_p_state"], $data["address_p_country"], $data["address_p_pincode"]);
   $stmt->execute();
   if ($stmt->error) exit($stmt->error . " failure ");
   $stmtc = $link->prepare("INSERT INTO connections(prid1,prid2,connection)VALUES(?,?,'Boss')");

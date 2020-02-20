@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS `connections` (
 -- Dumping structure for table eis_hrms__0master.dataallassociation
 CREATE TABLE IF NOT EXISTS `dataallassociation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `device` int(13) NOT NULL,
-  `tagid` varchar(12) NOT NULL,
+  `device` int(13) DEFAULT 0 NOT NULL,
+  `tagid` varchar(12) DEFAULT '' NOT NULL,
   `tagdata` varchar(64) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -180,8 +180,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `lname` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `change_password` tinyint(1) NOT NULL,
-  `change_password_link` varchar(255) NOT NULL,
+  `change_password` varchar(255) DEFAULT '' NOT NULL,
+  `change_password_link` varchar(255) DEFAULT '' NOT NULL,
   `post` int(11) NOT NULL,
   `contactno` bigint(20) NOT NULL,
   `address_c_houseno` varchar(255) DEFAULT NULL,
@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `current_salary` int(11) DEFAULT NULL,
   `picture` blob DEFAULT NULL,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
-  `updatedAt` datetime NOT NULL,
+  `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -248,8 +248,8 @@ CREATE TABLE IF NOT EXISTS `connections` (
 -- Dumping structure for table eis_hrms_0demo.dataallassociation
 CREATE TABLE IF NOT EXISTS `dataallassociation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `device` int(13) NOT NULL,
-  `tagid` varchar(12) NOT NULL,
+  `device` int(13) DEFAULT 0 NOT NULL,
+  `tagid` varchar(12) DEFAULT '' NOT NULL,
   `tagdata` varchar(64) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -384,8 +384,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `lname` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `change_password` tinyint(1) NOT NULL,
-  `change_password_link` varchar(255) NOT NULL,
+  `change_password` varchar(255) DEFAULT '' NOT NULL,
+  `change_password_link` varchar(255) DEFAULT '' NOT NULL,
   `post` int(11) NOT NULL,
   `contactno` bigint(20) NOT NULL,
   `address_c_houseno` varchar(255) DEFAULT NULL,
@@ -408,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `current_salary` int(11) DEFAULT NULL,
   `picture` blob DEFAULT NULL,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
-  `updatedAt` datetime NOT NULL,
+  `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
