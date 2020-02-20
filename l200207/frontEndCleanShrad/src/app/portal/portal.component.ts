@@ -94,7 +94,7 @@ export class PortalComponent implements OnInit {
     this.initJIT();
     callUrl({mode: 'GETINITDATA'}, (resp: string) => {
       resp = JSON.parse(resp);
-      //this.createDataTree(resp)
+      // this.createDataTree(resp)
       console.log(resp);
     });
   }
