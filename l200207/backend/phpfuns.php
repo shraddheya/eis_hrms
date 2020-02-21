@@ -44,7 +44,6 @@ if ($mode === "LOGIN") {
   if(!isset($_SESSION['user'])) exit($mode.'failure'.'NOTLOGGEDIN');
 }
 
-
 if ($mode === "GETINITDATA") {
   $link = mysqli_connect('db', 'root', 'ic@0001', $_SESSION["DBnm"]);
   if ($link->error) exit('error : ' . json_encode($link->error));
@@ -133,13 +132,13 @@ if ($mode === "REGISTER") { // Add Users Who have Permissions
   $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
   $stmt->bind_param('ssssssiisssssisssssi', $data["prid"], $data["title"], $data["fname"], $data["mname"], $data["lname"], $data["email"], $data["contactno"], $data["post"], $data["address_c_houseno"], $data["address_c_area"], $data["address_c_city"], $data["address_c_state"], $data["address_c_country"], $data["address_c_pincode"], $data["address_p_houseno"], $data["address_p_area"], $data["address_p_city"], $data["address_p_state"], $data["address_p_country"], $data["address_p_pincode"]);
   $stmt->execute();
-  if ($stmt->error) exit($stmt->error . " failure ");
+  if ($stmt->error) exit($stmt->error . "failure ");
   $stmtc = $link->prepare("INSERT INTO connections(prid1,prid2,connection)VALUES(?,?,'Boss')");
   $stmtc->bind_param('ii', $data['prid'], $data['boss']);
   $stmtc->execute();
   $newcon = $stmtc->insert_id;
   if ($stmtc->error) exit($stmtc->error . ' Failure');
-  exit($mode . " success" . json_encode($data));
+  exit($mode . "success" . json_encode($data));
 }
 
 if ($mode === "SALARYSLIP") { // Select Salart
@@ -149,7 +148,7 @@ if ($mode === "SALARYSLIP") { // Select Salart
   $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
   print_r($res);
   if ($stmt->error) exit($stmt->error . ' Failure');
-  print_r($mode . " success" . json_encode($res));
+  print_r($mode . "success" . json_encode($res));
   exit();
 }
 
@@ -163,7 +162,7 @@ if ($mode === "UPDATE_USERS") { // Users Can Be Updates
   $stmt->execute();
   $newUsr = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
   if ($stmt->error) exit($stmt->error.' failure');
-  print_r($mode . " success" . json_encode($data));
+  print_r($mode . "success" . json_encode($data));
   exit();
 }
 
@@ -173,7 +172,7 @@ if ($mode === "NOTIFICATION") { // Send Notification Who LoggedIn
   $stmt->execute();
   $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
   if ($stmt->error) exit($stmt->error . ' failure');
-  print_r($mode . " success" . json_encode($result));
+  print_r($mode . "success" . json_encode($result));
   exit;
 }
 
@@ -186,7 +185,7 @@ if ($mode === "ACCESSLEVELS_ADD") {
   $stmtR = $link->prepare("SELECT id,`name`,inid,outid FROM accesslevels WHERE id=(LAST_INSERT_ID())");
   $stmtR->execute();
   $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
-  print_r($mode . " success" . json_encode($getdata));
+  print_r($mode . "success" . json_encode($getdata));
   exit();
 }
 
@@ -226,15 +225,15 @@ if ($mode === "ADMINDASHBOARD") { // Sending All Tables
   $stmt->execute();
   $UsrData["Users"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
   if ($stmt->error) exit(' failure');
-  exit($mode . " success" . json_encode($UsrData));
+  exit($mode . "success" . json_encode($UsrData));
 }
 
 if ($mode === "CURRENT_SALARY") {
   $stmt = $link->prepare("UPDATE users SET current_salary = ? WHERE prid =?");
   $stmt->bind_param("ii", $data['current_salary'], $data['prid']);
   $stmt->execute();
-  if ($stmt->error) exit($stmt->error . " Failure");
-  print_r($mode . " success" . json_encode($data));
+  if ($stmt->error) exit($stmt->error . "Failure");
+  print_r($mode . "success" . json_encode($data));
   exit();
 }
 
@@ -245,7 +244,7 @@ if ($mode === "DELETE_USERS") { // Delete Users
     $stmt->bind_param("i", $data['prid']);
     $stmt->execute();
     if ($stmt->error) exit(' failure');
-    print_r($mode . " success" . json_encode($data));
+    print_r($mode . "success" . json_encode($data));
     exit();
   }
 }
@@ -258,7 +257,7 @@ if ($mode === "DOCUMENTS_ACCESSLEVELS_ADD") { // Add Document Accesslevels
   $stmtR = $link->prepare("SELECT id,name FROM documents_accesslevels WHERE id=(LAST_INSERT_ID())");
   $stmtR->execute();
   $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
-  print_r($mode . " success" . json_encode($getdata));
+  print_r($mode . "success" . json_encode($getdata));
   exit();
 }
 
@@ -267,7 +266,7 @@ if ($mode === "DOCUMENTS_ACCESSLEVELS_DLT") {
   $stmt->bind_param("i", $data['id']);
   $stmt->execute();
   if ($stmt->error) exit(' failure');
-  print_r($mode . " success" . json_encode($data));
+  print_r($mode . "success" . json_encode($data));
   exit();
 }
 
@@ -276,7 +275,7 @@ if ($mode === "ACCESSLEVELS_DLT") {
   $stmt->bind_param("i", $data['id']);
   $stmt->execute();
   if ($stmt->error) exit(' failure');
-  print_r($mode . " success" . json_encode($data));
+  print_r($mode . "success" . json_encode($data));
   exit();
 }
 
@@ -290,7 +289,7 @@ if ($mode === "GETATTENDANCE") { // Get Attendance If have Permissions
   $attend = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
   if ($stmt->error) exit($stmt->error);
   $stmt->close();
-  print_r($mode . " success" . json_encode($attend));
+  print_r($mode . "success" . json_encode($attend));
   exit();
 }
 
@@ -309,7 +308,7 @@ if ($mode === "POSTS_ADD") { // Add Post
   $stmtR = $link->prepare("SELECT id,post,boss FROM posts WHERE id=(LAST_INSERT_ID())");
   $stmtR->execute();
   $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
-  print_r($mode . " success" . json_encode($getdata));
+  print_r($mode . "success" . json_encode($getdata));
   exit();
 }
 
@@ -318,7 +317,7 @@ if ($mode === "POSTS_DLT") {
   $stmt->bind_param("i", $data['id']);
   $stmt->execute();
   if ($stmt->error) exit(' failure');
-  print_r($mode . " success" . json_encode($data));
+  print_r($mode . "success" . json_encode($data));
   exit();
 }
 
@@ -329,7 +328,7 @@ if ($mode === "UPLOADPICTURE") { // Upload Profile Picture
   $stmt->execute();
   $bs = base64_decode($data['picture']);
   if ($stmt->error) exit(' failure');
-  print_r($mode . " success" . json_encode($bs));
+  print_r($mode . "success" . json_encode($bs));
   exit();
 }
 
