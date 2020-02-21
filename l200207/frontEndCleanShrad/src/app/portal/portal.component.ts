@@ -47,20 +47,16 @@ export class PortalComponent implements OnInit {
         show: true
       }]
     }, {
-      title: "Crud",
+      title: "Buttons",
       detail: [{
-        icon: 'pencil-alt',
-        href: '#features',
-        style: "waves-light bg-dark text-white p-4",
-        show: true
-      }, {
-        icon: 'eye',
-        href: '#features',
-        style: "waves-light bg-dark text-white  p-4",
+        icon: 'id-card',
+        href: '',
+        style: "waves-light rounded mb-0 h1 text-center z-depth-2 bg-dark text-white px-4 py-1",
         show: true
       }]
     },
   ]
+  
   constructor() { }
 
   addUserNode2GUI(user, mode, isPermanent = true) {

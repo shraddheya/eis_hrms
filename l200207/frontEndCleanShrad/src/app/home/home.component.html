@@ -74,8 +74,20 @@
             <mdb-card-title>
               <h5>Use below Cedentials for Demo</h5>
             </mdb-card-title>
-            <mdb-card-text style="height:0.5em;" class="font-weight-bold">Username - demo@edeitic.com</mdb-card-text>
-            <mdb-card-text style="height:0.5em;" class="font-weight-bold">Password - demo@edeitic.com</mdb-card-text>
+            <mdb-card-text style="height:0.5em;" class="font-weight-bold">
+              Username - 
+              <span #inputUn (click)="copyInputcredential(inputUn)">
+                demo@edeitic.com
+              </span>
+              <mdb-icon far icon="clone" class="p-1"></mdb-icon>
+            </mdb-card-text>
+            <mdb-card-text style="height:0.5em;" class="font-weight-bold">
+              Password - 
+              <span #inputPw (click)="copyInputcredential(inputPw)">
+                demo@edeitic.com
+              </span>
+              <mdb-icon far icon="clone" class="p-1"></mdb-icon>
+            </mdb-card-text>
           </mdb-card-body>
         </mdb-card>
       </div>
