@@ -84,15 +84,17 @@ export class TopbarComponent implements OnInit {
   ngOnInit() {
     let checkurl: string = window.location.href.replace("http://localhost:4200/", "")
     if (checkurl == "portal" || checkurl == "admin") {
-      //console.log(check)
-      //if(check == true){
+      var check = localStorage.getItem("checklogin")
+      console.log(check)
+      if((check == null)||(check == "false")){
+        this.router.navigate([''])
+      }
+      if(check == "true"){
+        this.router.navigate([checkurl])
         this.topBarElements.forEach(el => {
-          (el.name == "Menue") ? el.show = true : el.show = false; 
+          (el.name == "Menue") ? el.show = true : el.show = false;
         });
-      // }
-      // else{
-      //   this.router.navigate(['']);
-      // }
+      }
     }
     //((checkurl == "potal")||(checkurl == "admin"))?(checklogin == false)?this.router.navigate(['']):this.router.navigate([checklogin]):"";
   }

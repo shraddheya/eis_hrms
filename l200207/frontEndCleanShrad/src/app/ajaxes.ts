@@ -13,9 +13,8 @@ export  async function callUrl(data2Post, next) {
       if (idxSuccess > -1 || idxFailure > -1) {
         next(res.substr(idxSuccess + data2Post.mode.length + 7));
       } else {
-
       }
     },
-    error:  (res, status, data) => { }
+    error:  (res, status, data) => { console.log(res) }
   });
 }
