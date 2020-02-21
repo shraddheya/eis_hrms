@@ -200,12 +200,12 @@ export class PortalComponent implements OnInit {
   ngOnInit() {
     this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
-      resp = JSON.parse(resp);
+      resp = JSON.parse(resp)
       this.accesslevels = resp.accesslevels;
       this.posts = resp.posts;
       this.users = resp.users;
       this.createDataTree(this.users);
-      console.log(resp);
+      localStorage.setItem("checklogin","true")
     });
   }
 }
