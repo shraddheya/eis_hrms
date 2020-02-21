@@ -26,50 +26,64 @@ export class PortalComponent implements OnInit {
   selOfPost: any;
   selOfTitle: any;
   selOfPermision: any;
+  clickedUserid: any;
   userRecordbody = [
-    { 
-      title:"Crud",
-      detail:[{
+    {
+      title: "Crud",
+      detail: [{
         icon: 'pencil-alt',
-        href: '#features',
-        style:"nav-link waves-light text-dark",
+        href: '',
+        style: "nav-link waves-light text-dark",
         show: true
-      },{
+      }, {
         icon: 'eye',
-        href: '#features',
-        style:"nav-link waves-light text-dark",
+        href: '',
+        style: "nav-link waves-light text-dark",
         show: false
-      },{
+      }, {
         icon: 'trash',
-        href: '#features',
-        style:"nav-link waves-light text-dark",
+        clickFun: (_: any) => { this.mainupulationSend('deleteRecord')},
+        style: "nav-link waves-light text-dark",
         show: true
       }]
-    },    { 
-      title:"Crud",
-      detail:[{
+    }, {
+      title: "Crud",
+      detail: [{
         icon: 'pencil-alt',
         href: '#features',
-        style:"waves-light bg-dark text-white p-4",
+        style: "waves-light bg-dark text-white p-4",
         show: true
-      },{
+      }, {
         icon: 'eye',
         href: '#features',
-        style:"waves-light bg-dark text-white  p-4",
+        style: "waves-light bg-dark text-white  p-4",
         show: true
       }]
     },
   ]
   constructor() { }
 
-  
+  addUserNode2GUI(user, mode, isPermanent = true) {
+    switch (mode) {
+      case 'addusers':
+        this.addUsers.hide();
+        this.users.push(user);
+        this.createDataTree(this.users);
+        break;
+      case 'deleteusers':
+        this.hierachyView.hide();
+        this.users.forEach(function (item, index, object) { (item.id == user.prid) ? object.splice(index, 1) : "" });
+        this.createDataTree(this.users);
+        break;
+    }
+  }
   initJIT() {
     rgraph = new $jit.RGraph({
       injectInto: 'hierarchy',
       background: { CanvasStyles: { strokeStyle: '#ccc' } },
       Navigation: { enable: true, panning: true, zooming: 7 },
       Node: { color: '#FFFFFF' },
-      Edge: { color: '#C0C0C0', lineWidth: 1.4, spline: false },
+      Edge: { color: '#C0C0C0', lineWidth: 1, spline: true },
       onCreateLabel: (domElement, node) => {
         domElement.innerHTML = node.fname + + (node.mname ? node.mname + ' ' : '') + '  ' + node.lname;
         domElement.name = 'tooltip';
@@ -114,19 +128,19 @@ export class PortalComponent implements OnInit {
         var style = domElement.style;
         style.display = ''; style.cursor = 'pointer';
         if (node._depth <= 1) {
-          style.fontSize = "1em";
+          style.fontSize = "1.2em";
           style.color = "#FFFFFF";
         } else if (node._depth == 2) {
-          style.fontSize = "1em";
+          style.fontSize = "1.2em";
           style.color = "#FFFFFF";
         } else {
           style.display = 'block';
-          style.fontSize = "1em";
+          style.fontSize = "1.2em";
           style.color = "#FFFFFF";
         }
         var left = parseInt(style.left);
         var w = domElement.offsetWidth;
-        style.left = (left - w / 5) + 'px';
+        style.left = (left - w / 7) + 'px';
       }
     });
   }
@@ -165,8 +179,8 @@ export class PortalComponent implements OnInit {
     rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
   }
   hierarchyViewdata(data) {
-    console.log(data)
-    this.hierachyView.show()
+    this.clickedUserid = data.id;
+    this.hierachyView.show();
   }
   clicked(mode) {
     switch (mode) {
@@ -191,10 +205,17 @@ export class PortalComponent implements OnInit {
         $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
         var i = 0; i++; userData["prid"] = (new Date).getTime() + i - 2678400;
         callUrl({ mode: "REGISTER", data: JSON.stringify(userData) }, (resp: any) => {
-          resp = JSON.parse(resp)
-          console.log(resp)
+          resp = JSON.parse(resp);
+          resp["id"] = resp.prid;
+          delete resp["prid"];
+          this.addUserNode2GUI(resp, "addusers");
         })
         return
+      case ('deleteRecord'):
+        callUrl({mode:"DELETE_USERS", data: JSON.stringify({prid: this.clickedUserid})},(resp: any)=>{
+          this.addUserNode2GUI(JSON.parse(resp), "deleteusers")
+        })
+        return;
     }
   }
   ngOnInit() {
@@ -205,7 +226,7 @@ export class PortalComponent implements OnInit {
       this.posts = resp.posts;
       this.users = resp.users;
       this.createDataTree(this.users);
-      localStorage.setItem("checklogin","true")
+      localStorage.setItem("checklogin", "true")
     });
   }
 }
