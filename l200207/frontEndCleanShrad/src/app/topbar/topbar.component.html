@@ -3,12 +3,31 @@
     <mdb-navbar-brand><a class="navbar-brand" href="#home">HRMS</a></mdb-navbar-brand>
     <links>
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" *ngFor="let butt of topBarElements">
-          <a class="nav-link waves-light" mdbWavesEffect [attr.href]="butt.href ? butt.href : null"
-            (click)='butt.clickFun ? butt.clickFun() : null' *ngIf="butt.show">
-            <mdb-icon fas icon="{{butt.icon}}"></mdb-icon>{{butt.name}}<span class="sr-only"></span>
-          </a>
-        </li>
+        <div class="btn-group" mdbDropdown>
+          <li class="nav-item" *ngFor="let butt of topBarElements">
+            <a class={{butt.class}} mdbDropdownToggle mdbWavesEffect [attr.href]="butt.href ? butt.href : null"
+              (click)='butt.clickFun ? butt.clickFun() : null' *ngIf="butt.show">
+              <mdb-icon fas icon="{{butt.icon}}"></mdb-icon>{{butt.name}}<span class="sr-only"></span>
+            </a>
+          </li>
+          <div class="dropdown-menu dropdown-primary pl-0 pr-4">
+            <ul>
+              <li style="text-decoration: none;list-style-type: none;" *ngFor="let menudrop of portalmenuDropdown">
+                <a class="dropdown-item" style="font-size: 1.6em;" (click)='menudrop.clickFun ? menudrop.clickFun() : null'>
+                  <mdb-icon fas icon="{{menudrop.icon}}"></mdb-icon>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- <li class="nav-item">
+          <div class="btn-group" mdbDropdown>
+            <a mdbDropdownToggle class="dropdown-toggle  waves-light" mdbWavesEffect>
+               Menu 
+            </a>
+     
+          </div>
+        </li> -->
       </ul>
     </links>
   </mdb-navbar>
@@ -25,18 +44,16 @@
         <div class="modal-body">
           <div class="md-form mb-5">
             <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
-            <input type="email" (input)="email=$event.target.value"
-              class="form-control" mdbInput>
+            <input type="email" (input)="email=$event.target.value" class="form-control" mdbInput>
             <label for="defaultForm-email">Email</label>
           </div>
           <div class="md-form mb-4">
             <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
-            <input type="password" 
-              (input)="password=$event.target.value" (keydown.enter)="callFunction('LOGIN')" #showhide_event class="form-control" mdbInput>
+            <input type="password" (input)="password=$event.target.value" (keydown.enter)="callFunction('LOGIN')"
+              #showhide_event class="form-control" mdbInput>
             <span id="password_viewhide">
               <i class="fas fa-eye showtext" (click)="passwordView('text','password',showhide_event)"></i>
-              <i class="fas fa-eye-slash showpassword"
-                (click)="passwordView('password','text',showhide_event)"></i>
+              <i class="fas fa-eye-slash showpassword" (click)="passwordView('password','text',showhide_event)"></i>
             </span>
             <label for="defaultForm-pass">Password</label>
           </div>
@@ -44,7 +61,8 @@
             Password?</a>
         </div>
         <div class="modal-footer">
-          <button type="button" mdbBtn color="dark" (click)="callFunction('LOGIN')" class="relative waves-light" mdbWavesEffect>Login</button>
+          <button type="button" mdbBtn color="dark" (click)="callFunction('LOGIN')" class="relative waves-light"
+            mdbWavesEffect>Login</button>
         </div>
       </div>
     </div>

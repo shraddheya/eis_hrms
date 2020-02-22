@@ -18,33 +18,51 @@ export class TopbarComponent implements OnInit {
   topBarElements = [
     {
       name: 'Features',
+      class: 'nav-link waves-light',
       icon: 'ellipsis-v',
       href: '#features',
       show: true
     }, {
       name: 'Pricing / Purchase',
+      class: 'nav-link waves-light',
       icon: 'hand-holding-usd',
       href: '#pricingplan',
       show: true
     }, {
       name: 'Sign In',
       icon: 'sign-in-alt',
+      class: 'nav-link waves-light',
       clickFun: (_: any) => { this.clicked('showLoginModel'); },
       //clickFun: (_: any) => {this.callFunction('LOGIN'); },
       show: true
     }, {
       name: 'Login',
+      class: 'nav-link waves-light',
       icon: 'ellipsis-v',
       clickFun: (_: any) => { this.callFunction('LOGIN'); },
       show: false
     }, {
+      dropdown: '',
+      class: 'dropdown-toggle nav-link waves-light',
       name: 'Menue',
       icon: 'ellipsis-v',
-      clickFun: (_: any) => { this.clicked('menues'); },
+      //clickFun: (_: any) => { this.clicked('menues'); },
       show: false
-    }
-
+    },//Backtoportal
+    {
+      class: 'nav-link waves-light',
+      name: 'Backtoportal',
+      icon: 'arrow-left',
+      clickFun: (_: any) => { this.clicked('backtoportal'); },
+      show: false
+    },
   ];
+  portalmenuDropdown = [
+    { icon: "bell", clickFun: (_: any) => { this.clicked('notification') }, show: true },
+    { icon: "user-shield", clickFun: (_: any) => { this.clicked('adminpanel') }, show: true },
+    { icon: "cog", clickFun: (_: any) => { this.clicked('setting') }, show: true },
+    { icon: "sign-out-alt", clickFun: (_: any) => { this.clicked('logout') }, show: true },
+  ]
 
   callFunction(mode: string) {
     switch (mode) {
@@ -71,6 +89,16 @@ export class TopbarComponent implements OnInit {
       case 'menues':
         console.log("Admin page");
         break;
+      case 'adminpanel':
+        this.router.navigate(['admin'])
+        break;
+      case 'backtoportal':
+        this.router.navigate(['portal'])
+        break;
+      case 'logout':
+        this.router.navigate(['']);
+        localStorage.setItem("checklogin","false")
+        break;
       default:
         break;
     }
@@ -85,14 +113,14 @@ export class TopbarComponent implements OnInit {
     let checkurl: string = window.location.href.replace("http://localhost:4200/", "")
     if (checkurl == "portal" || checkurl == "admin") {
       var check = localStorage.getItem("checklogin")
-      console.log(check)
-      if((check == null)||(check == "false")){
+      if ((check == null) || (check == "false")) {
         this.router.navigate([''])
       }
-      if(check == "true"){
+      if (check == "true") {
         this.router.navigate([checkurl])
         this.topBarElements.forEach(el => {
-          (el.name == "Menue") ? el.show = true : el.show = false;
+          (checkurl == "portal")?(el.name == "Menue") ? el.show = true : el.show = false:"";
+          (checkurl == "admin")?(el.name == "Backtoportal") ? el.show = true : el.show = false:"";
         });
       }
     }

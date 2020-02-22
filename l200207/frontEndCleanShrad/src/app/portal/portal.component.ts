@@ -27,36 +27,51 @@ export class PortalComponent implements OnInit {
   selOfTitle: any;
   selOfPermision: any;
   clickedUserid: any;
+  checkcardRecord: any;
   userRecordbody = [
     {
       title: "Crud",
       detail: [{
+        name: "edit",
         icon: 'pencil-alt',
-        href: '',
+        clickFun: (_: any) => { this.clicked('editRecord') },
         style: "nav-link waves-light text-dark",
         show: true
       }, {
+        name: "view",
         icon: 'eye',
-        href: '',
+        clickFun: (_: any) => { this.clicked('viewRecord') },
         style: "nav-link waves-light text-dark",
         show: false
       }, {
+        name: "delete",
         icon: 'trash',
-        clickFun: (_: any) => { this.mainupulationSend('deleteRecord')},
+        clickFun: (_: any) => { this.callFunction('deleteRecord') },
         style: "nav-link waves-light text-dark",
         show: true
       }]
     }, {
       title: "Buttons",
       detail: [{
+        name: "cardbutton",
         icon: 'id-card',
-        href: '',
+        clickFun: (_: any) => { this.callFunction('cardallot') },
         style: "waves-light rounded mb-0 h1 text-center z-depth-2 bg-dark text-white px-4 py-1",
         show: true
-      }]
+      }, {
+        name: "cardimage",
+        img: '../../assets/images/cardscan2.gif',
+        style: "px-5 py-4",
+        show: false
+      },]
     },
+  ];
+  userDetails = [
+    {title:"",detail:[{title:"",value:""}]},
+    {title:"Basic Detail",detail:[{title:"",value:""}]},
+    {title:"Permanent Address",detail:[{title:"",value:""}]},
+    {title:"Corresponding Address",detail:[{title:"",value:""}]}
   ]
-  
   constructor() { }
 
   addUserNode2GUI(user, mode, isPermanent = true) {
@@ -175,8 +190,10 @@ export class PortalComponent implements OnInit {
     rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
   }
   hierarchyViewdata(data) {
-    this.clickedUserid = data.id;
-    this.hierachyView.show();
+    Object.keys(this.users[0]).forEach(el => {
+      
+    })
+   this.hierachyView.show();
   }
   clicked(mode) {
     switch (mode) {
@@ -190,13 +207,45 @@ export class PortalComponent implements OnInit {
       case 'dismissRecordmodal':
         this.hierachyView.hide();
         break;
+      case 'editRecord':
+        this.userRecordbody.forEach(parel => {
+          (parel.title == "Crud") ? parel.detail.forEach(carel => {
+            (carel.name == "view") ? carel.show = true : carel.show = false;
+            (carel.name == "delete") ? carel.show = true : "";
+          }) : "";
+        })
+        break;
+      case 'viewRecord':
+        this.userRecordbody.forEach(parel => {
+          (parel.title == "Crud") ? parel.detail.forEach(carel => {
+            (carel.name == "edit") ? carel.show = true : carel.show = false;
+            (carel.name == "delete") ? carel.show = true : "";
+          }) : "";
+        })
+        break;
+      case 'allotimgLoad':
+        this.userRecordbody.forEach(parel => { (parel.title == "Buttons") ? parel.detail.forEach(carel => { (carel.name == "cardimage") ? (this.checkcardRecord.tagid == "") ? carel.show = true : carel.show = false : "" }) : ""; })
+        break;
       default:
         break;
     }
   }
-  mainupulationSend(mode) {
+  callFunction(mode) {
+    var requestObj = JSON.stringify({ tagdata: this.clickedUserid })
     switch (mode) {
-      case ('addusers'):
+      case 'cardallot':
+        callUrl({ mode: "CLEARASSOCIATION", data: requestObj }, (resp: any) => {
+          (resp == '"success"') ? callUrl({ mode: "GETCARDID", data: requestObj }, (resps: any) => { this.objectToarray(resps, "fromCardallot") }) : "";
+        })
+        break;
+      case 'getcardid':
+        if (this.checkcardRecord.tagid == "") callUrl({ mode: "GETCARDID", data: requestObj }, (resp: any) => { this.objectToarray(resp, "fromCardallot") })
+        this.clicked("allotimgLoad");
+        break;
+      case 'deleteRecord':
+        callUrl({ mode: "DELETE_USERS", data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => { this.addUserNode2GUI(JSON.parse(resp), "deleteusers") })
+        break;
+      case 'addusers':
         var userData = {}
         $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
         var i = 0; i++; userData["prid"] = (new Date).getTime() + i - 2678400;
@@ -206,12 +255,17 @@ export class PortalComponent implements OnInit {
           delete resp["prid"];
           this.addUserNode2GUI(resp, "addusers");
         })
-        return
-      case ('deleteRecord'):
-        callUrl({mode:"DELETE_USERS", data: JSON.stringify({prid: this.clickedUserid})},(resp: any)=>{
-          this.addUserNode2GUI(JSON.parse(resp), "deleteusers")
-        })
-        return;
+        break;
+    }
+  }
+  objectToarray(input, mode) {
+    switch (mode) {
+      case 'fromCardallot':
+        var obj;
+        JSON.parse(input).forEach(el => { obj = el })
+        this.checkcardRecord = obj;
+        this.callFunction("getcardid");
+        break;
     }
   }
   ngOnInit() {
