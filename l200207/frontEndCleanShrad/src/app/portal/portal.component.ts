@@ -67,10 +67,10 @@ export class PortalComponent implements OnInit {
     },
   ];
   userDetails = [
-    {title:"",detail:[{title:"",value:""}]},
-    {title:"Basic Detail",detail:[{title:"",value:""}]},
-    {title:"Permanent Address",detail:[{title:"",value:""}]},
-    {title:"Corresponding Address",detail:[{title:"",value:""}]}
+    { title: "", detail: [], show: false },
+    { title: "Basic Detail", detail: [] , show: true},
+    { title: "Permanent Address", detail: [] , show: true},
+    { title: "Corresponding Address", detail: [] , show: true}
   ]
   constructor() { }
 
@@ -190,10 +190,15 @@ export class PortalComponent implements OnInit {
     rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
   }
   hierarchyViewdata(data) {
-    Object.keys(this.users[0]).forEach(el => {
-      
+    var recordObject = {}
+    this.users[0]["boss"] = data.boss
+    Object.keys(this.users[0]).forEach(el => { recordObject[el] = data[el] })
+    this.userDetails.forEach(clickel => {
+      if (clickel.title == "") {
+        clickel.detail.push({ title: "prid", value: data.id }, { title: "boss", value: data.boss })
+      }
     })
-   this.hierachyView.show();
+    this.hierachyView.show();
   }
   clicked(mode) {
     switch (mode) {

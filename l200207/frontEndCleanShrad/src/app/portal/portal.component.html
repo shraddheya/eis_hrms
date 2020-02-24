@@ -216,10 +216,12 @@
               </div>
             </div>
           </div>
-          <div class="row p-4" *ngFor="let recordlist of userDetails">
-            <div class="col-4 p-4" *ngFor="let crecordlist of recordlist.detail">
-              <mdb-icon fas icon=""></mdb-icon>&nbsp;
-              <label class="p-4" required *ngFor="let label of crecordlist.value"></label>&nbsp;
+          <div *ngFor="let recordlist of userDetails">
+            <div class="row p-4">
+              <div class="col-4 p-4" *ngFor="let crecordlist of recordlist.detail">
+                  <mdb-icon fas icon=""></mdb-icon>&nbsp;
+                  <label class="p-4" required *ngFor="let label of crecordlist.value"></label>&nbsp;
+              </div>
             </div>
           </div>
         </div>

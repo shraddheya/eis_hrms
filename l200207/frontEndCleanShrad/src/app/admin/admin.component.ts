@@ -76,7 +76,7 @@ export class AdminComponent implements OnInit {
             title: "Documents_accesslevels",
             show: true,
             data: resp.Documents_accesslevels,
-            inputfield: [{ name: "name", clickFun: (_: any) => { this.callFunction('manualyadd_Documents_accesslevels') } }]
+            inputfield: [{ name: "name", clickFun: (_: any) => { this.callFunction('manuallyadd_Documents_accesslevels') } }]
           },
         },
       ]
@@ -111,8 +111,9 @@ export class AdminComponent implements OnInit {
         var postinput = $("#fid_Posts_post").val()
         if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ post: postinput }) }, (resp: any) => {
           var resp = JSON.parse(resp);
-          resp["data"] = resp.post
-          this.exportadminpagedata.forEach(el => { if (el.manual.title == "Posts") this.adminpagedata.Posts.push(resp) })
+          console.log(resp)
+          // resp["data"] = resp.post;
+          // console.log(resp)
         })
         return;
       case 'manuallyadd_Accesslevels':
@@ -125,8 +126,11 @@ export class AdminComponent implements OnInit {
 
         // })
         return;
-      case 'manualyadd_Documents_accesslevels':
-
+      case 'manuallyadd_Documents_accesslevels':
+        var docinput = $("#fid_Documents_accesslevels_name").val();
+        if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ name: docinput })},(resp=>{
+          console.log(resp)
+        }))
         return;
     }
   }
