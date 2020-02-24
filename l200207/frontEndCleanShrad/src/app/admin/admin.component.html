@@ -1,8 +1,53 @@
 <app-topbar></app-topbar>
 <div id="compbackground" class="bg-dark p-5">
-  <div class="row p-4"> 
-    <div class="col-4 text-white" *ngFor="let userdata of exportadminpagedata">
-      <p class="text-center"><mdb-icon fas icon="{{userdata.icon}}"></mdb-icon> {{userdata.title}}</p>
+  <div class="row p-4">
+    <div class="col-lg-4 col-xs-12 text-white" *ngFor="let userdata of exportadminpagedata">
+      <p class="text-center">
+        <mdb-icon fas icon="{{userdata.icon}}"></mdb-icon> {{userdata.title}}
+        <button *ngIf="userdata.default" size="sm" class="btn btn-dark text-white border border-white" (click)='userdata.clickFun ? userdata.clickFun() : null'>Default</button>
+      </p>
+      <div *ngIf="userdata.default" class="z-depth-3">
+        <div *ngIf="userdata.default.show">
+          <div class="text-right p-3" style="font-size: 1em;">
+            <mdb-icon fas icon="{{userdata.default.backicon}}"
+              (click)='userdata.default.clickFun ? userdata.default.clickFun() : null'></mdb-icon>
+          </div>
+          <div class="scrollbar p-0 m-0">
+            <div class="overflow text-white text-left p-2 m-3" *ngFor="let defaultpost of userdata.default.data.record">
+              <div class="row">
+                <div class="col-8 text-left">{{defaultpost}}</div>
+                <div class="col-4 text-right">
+                  <a class="p-3" (click)='userdata.default.clickFun ? userdata.default.clickFun() : null'>
+                    <mdb-icon fas icon="{{userdata.default.addicon}}"></mdb-icon>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="z-depth-3" *ngIf="userdata.manual.show">
+        <div class="p-3 text-center">Add {{userdata.title}}</div>
+        <div class="row p-3">
+          <div class="col-12 col-xs-12" *ngFor="let fieldname of userdata.manual.inputfield">
+            <input mdbInput type="text" placeholder={{fieldname.name}}
+              (keydown.enter)='fieldname.clickFun ? fieldname.clickFun() : null' class="form-control"
+              name = {{userdata.manual.title}} id=fid_{{userdata.manual.title}}_{{fieldname.name}} >
+          </div>
+          <div class="scrollbar m-4">
+            <div *ngFor="let manual of userdata.manual.data" class="overflow text-white font-weight-bold">
+              <div class="row p-3 text-center">
+                <div class="col-3 ml-1 text-white">{{manual.data}}</div>
+                <div class="col-3 ml-1 text-white">{{manual.inid}}</div>
+                <div class="col-3 ml-1 text-white">{{manual.outid}}</div>
+                <div class="col-2 ml-1 text-white">
+                  <mdb-icon fas icon="{{userdata.manual.removeicon}}"></mdb-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
