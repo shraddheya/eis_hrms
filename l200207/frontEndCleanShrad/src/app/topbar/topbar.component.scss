@@ -10,3 +10,10 @@
     right:0em;
     font-size: 1.4em;
   }
+  .modal-open .modal {
+    width: 2px;
+    margin: 0 auto;
+}
+.modal-backdrop {
+  display: none !important;
+}

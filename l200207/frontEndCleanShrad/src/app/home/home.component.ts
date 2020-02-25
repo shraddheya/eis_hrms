@@ -65,8 +65,11 @@ export class HomeComponent implements OnInit {
       matter:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     }
   ];
-
+  copyInputcredential(inputElement){
+    //inputElement.select();
+    document.execCommand('copy');
+    // inputElement.setSelectionRange(0, 0);
+  }
   ngOnInit() {
-      
   }
 }

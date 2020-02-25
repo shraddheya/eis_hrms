@@ -1,216 +1,232 @@
 <app-topbar></app-topbar>
-<section id="backgroundRGraph" class="bg-dark">
-  <div id="hierarchy"></div>
-</section>
-<mdb-icon id="buttPlus" class="text-white" fas icon="plus-circle" (click)="clicked('addUser')"></mdb-icon>
-<div mdbModal #addUsers="mdbModal" [config]="{backdrop: 'static'}" class="modal fade left" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center p-2 border border-white">
-        <h4 class="modal-title w-100 font-weight-bold">Add Users</h4>
-        <button type="button" class="close pull-right hoverable" aria-label="Close"
-          (click)="clicked('dismissAddusermodal')">
-          <mdb-icon fas icon="backspace"></mdb-icon>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-4">
-            <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers('usrAdd_post')"
-              id="usrAdd_post">
-              <option selected disabled>User Post</option>
-              <option *ngFor="let postlist of selOfPost" value="{{postlist.id}}">{{postlist.name}}</option>
-            </select>
-          </div>
-          <div class="col-4" *ngIf="adduserBosslist.show">
-            <select class="inputusers form-control" (click)="changeIps_addGUIusers('usrAdd_boss')" id="usrAdd_boss">
-              <option selected disabled>Reporting Officer</option>
-              <option *ngFor="let bosslist of selOfBoss" value="{{bosslist.id}}">{{bosslist.fname}}</option>
-            </select>
-          </div>
-          <div class="col-4" *ngIf="adduserAlldetail.show">
-            <select class="inputusers form-control mb-3" id="usrAdd_title">
-              <option selected disabled>Title</option>
-              <option *ngFor="let title of selOfTitle" value="{{title}}">{{title}}</option>
-            </select>
-          </div>
+<div class="masterDiv">
+  <section id="backgroundRGraph" class="bg-dark">
+    <div id="hierarchy"></div>
+  </section>
+  <mdb-icon id="buttPlus" class="text-white" fas icon="plus-circle" (click)="clicked('addUser')"></mdb-icon>
+  <div mdbModal #addUsers="mdbModal" [config]="{backdrop: 'static'}" class="modal fade left" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center p-2 border border-white">
+          <h4 class="modal-title w-100 font-weight-bold">Add Users</h4>
+          <button type="button" class="close pull-right hoverable" aria-label="Close"
+            (click)="clicked('dismissAddusermodal')">
+            <mdb-icon fas icon="backspace"></mdb-icon>
+          </button>
         </div>
-        <div class="row" *ngIf="adduserAlldetail.show">
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_fname" placeholder="Firstname*">
-              <label for="form1" class="">Firstname</label>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-4">
+              <select class="inputusers form-control mb-3" (click)="changeIps_addGUIusers('usrAdd_post')"
+                id="usrAdd_post">
+                <option selected disabled>User Post</option>
+                <option *ngFor="let postlist of selOfPost" value="{{postlist.id}}">{{postlist.name}}</option>
+              </select>
+            </div>
+            <div class="col-4" *ngIf="adduserBosslist.show">
+              <select class="inputusers form-control" (click)="changeIps_addGUIusers('usrAdd_boss')" id="usrAdd_boss">
+                <option selected disabled>Reporting Officer</option>
+                <option *ngFor="let bosslist of selOfBoss" value="{{bosslist.id}}">{{bosslist.fname}}</option>
+              </select>
+            </div>
+            <div class="col-4" *ngIf="adduserAlldetail.show">
+              <select class="inputusers form-control mb-3" id="usrAdd_title">
+                <option selected disabled>Title</option>
+                <option *ngFor="let title of selOfTitle" value="{{title}}">{{title}}</option>
+              </select>
             </div>
           </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_mname" placeholder="Middlename">
-              <label for="form1" class="">Middle name</label>
+          <div class="row" *ngIf="adduserAlldetail.show">
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_fname" placeholder="Firstname*">
+                <label for="form1" class="">Firstname</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_mname" placeholder="Middlename">
+                <label for="form1" class="">Middle name</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_lname" placeholder="Lastname*">
+                <label for="form1" class="">Lastname</label>
+              </div>
             </div>
           </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_lname" placeholder="Lastname*">
-              <label for="form1" class="">Lastname</label>
-            </div>
-          </div>
-        </div>
 
-        <div class="row" *ngIf="adduserAlldetail.show">
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_contactno"
-                placeholder="Contactnumber*">
-              <label for="form1" class="">Contact Number</label>
+          <div class="row" *ngIf="adduserAlldetail.show">
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_contactno"
+                  placeholder="Contactnumber*">
+                <label for="form1" class="">Contact Number</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="email" class="inputusers form-control" id="usrAdd_email" placeholder="Email*">
+                <label for="form1" class="">Email</label>
+              </div>
             </div>
           </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="email" class="inputusers form-control" id="usrAdd_email" placeholder="Email*">
-              <label for="form1" class="">Email</label>
-            </div>
-          </div>
-        </div>
 
-        <span class="address font-weight-bold" id="address_parmanent" *ngIf="adduserAlldetail.show">
-          Parmanent Address
-        </span>
-        <div class="row" *ngIf="adduserAlldetail.show">
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_houseno"
-                placeholder="House Number">
-              <label for="form1" class="">House Number</label>
+          <span class="address font-weight-bold" id="address_parmanent" *ngIf="adduserAlldetail.show">
+            Parmanent Address
+          </span>
+          <div class="row" *ngIf="adduserAlldetail.show">
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_houseno"
+                  placeholder="House Number">
+                <label for="form1" class="">House Number</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_area"
+                  placeholder="Area">
+                <label for="form1" class="">Area</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_city"
+                  placeholder="City">
+                <label for="form1" class="">City</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_state"
+                  placeholder="State">
+                <label for="form1" class="">State</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_country"
+                  placeholder="Country">
+                <label for="form1" class="">Country</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_pincode"
+                  placeholder="Pincode">
+                <label for="form1" class="">Pincode</label>
+              </div>
             </div>
           </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_area" placeholder="Area">
-              <label for="form1" class="">Area</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_city" placeholder="City">
-              <label for="form1" class="">City</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_state"
-                placeholder="State">
-              <label for="form1" class="">State</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_country"
-                placeholder="Country">
-              <label for="form1" class="">Country</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_p_pincode"
-                placeholder="Pincode">
-              <label for="form1" class="">Pincode</label>
-            </div>
-          </div>
-        </div>
 
-        <span class="address font-weight-bold" id="address_corresponding" *ngIf="adduserAlldetail.show">
-          Corresponding Address
-        </span>
-        <div class="row" *ngIf="adduserAlldetail.show">
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_houseno"
-                placeholder="House Number">
-              <label for="form1" class="">House Number</label>
+          <span class="address font-weight-bold" id="address_corresponding" *ngIf="adduserAlldetail.show">
+            Corresponding Address
+          </span>
+          <div class="row" *ngIf="adduserAlldetail.show">
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_houseno"
+                  placeholder="House Number">
+                <label for="form1" class="">House Number</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_area"
+                  placeholder="Area">
+                <label for="form1" class="">Area</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_city"
+                  placeholder="City">
+                <label for="form1" class="">City</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_state"
+                  placeholder="State">
+                <label for="form1" class="">State</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_country"
+                  placeholder="Country">
+                <label for="form1" class="">Country</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="md-form addUserinput_Sh">
+                <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_pincode"
+                  placeholder="Pincode">
+                <label for="form1" class="">Pincode</label>
+              </div>
             </div>
           </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_area" placeholder="Area">
-              <label for="form1" class="">Area</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_city" placeholder="City">
-              <label for="form1" class="">City</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_state"
-                placeholder="State">
-              <label for="form1" class="">State</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_country"
-                placeholder="Country">
-              <label for="form1" class="">Country</label>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="md-form addUserinput_Sh">
-              <input mdbInput type="text" class="inputusers form-control" id="usrAdd_address_c_pincode"
-                placeholder="Pincode">
-              <label for="form1" class="">Pincode</label>
-            </div>
-          </div>
-        </div>
 
-        <div class="row" *ngIf="adduserAlldetail.show">
-          <div class="col-4 addUserinput_Sh">
-            <select class="inputusers form-control mb-3" id="usrAdd_permission">
-              <option selected disabled>Permission</option>
-              <option *ngFor="let addpermitlist of selOfPermision" value="{{addpermitlist.value}}">
-                {{addpermitlist.name}}</option>
-            </select>
+          <div class="row" *ngIf="adduserAlldetail.show">
+            <div class="col-4 addUserinput_Sh">
+              <select class="inputusers form-control mb-3" id="usrAdd_permission">
+                <option selected disabled>Permission</option>
+                <option *ngFor="let addpermitlist of selOfPermision" value="{{addpermitlist.value}}">
+                  {{addpermitlist.name}}</option>
+              </select>
+            </div>
           </div>
+          <!-- Default form contact -->
         </div>
-        <!-- Default form contact -->
-      </div>
-      <div class="modal-footer d-flex justify-content-center border border-white">
-        <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addUsers_click waves-light"
-          (click)="mainupulationSend('addusers')" mdbWavesEffect>Create</button>
-        <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addreset_click waves-light"
-          (click)="clicked('resetAddForm')" mdbWavesEffect>Reset</button>
+        <div class="modal-footer d-flex justify-content-center border border-white">
+          <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addUsers_click waves-light"
+            (click)="callFunction('addusers')" mdbWavesEffect>Create</button>
+          <button *ngIf="adduserAlldetail.show" mdbBtn type="button" color="dark" class="addreset_click waves-light"
+            (click)="clicked('resetAddForm')" mdbWavesEffect>Reset</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal" id="frameModalTopHierarchy"
-  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center border border-white">
-        <h4 class="modal-title w-100 font-weight-bold">User Record</h4>
-        <button type="button" class="close pull-right hoverable" aria-label="Close"
-          (click)="clicked('dismissRecordmodal')">
-          <mdb-icon fas icon="backspace"></mdb-icon>
-        </button>
-      </div>
-      <div class="modal-body  border border-white">
-        <div class="row p-4">
-          <div class="col-4" *ngFor="let recordUser of userRecordbody">
-            <div class="row">
-            <div class="col-3" *ngFor="let corecordUser of recordUser.detail" style="font-size: 1.4em;">
-                <a class={{corecordUser.style}} mdbWavesEffect [attr.href]="corecordUser.href ? corecordUser.href : null"
-                  (click)='corecordUser.clickFun ? corecordUser.clickFun() : null' *ngIf="corecordUser.show">
-                  <mdb-icon fas icon="{{corecordUser.icon}}"></mdb-icon>
-                </a>
+  <div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal" id="frameModalTopHierarchy"
+    tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center border border-white">
+          <h4 class="modal-title w-100 font-weight-bold">User Record</h4>
+          <button type="button" class="close pull-right hoverable" aria-label="Close"
+            (click)="clicked('dismissRecordmodal')">
+            <mdb-icon fas icon="backspace"></mdb-icon>
+          </button>
+        </div>
+        <div class="modal-body  border border-white">
+          <div class="row p-4">
+            <div class="col-4" *ngFor="let recordUser of userRecordbody">
+              <div class="row">
+                <div class="col-4" *ngFor="let corecordUser of recordUser.detail" style="font-size: 1.4em;">
+                  <a class={{corecordUser.style}} mdbWavesEffect
+                    [attr.href]="corecordUser.href ? corecordUser.href : null"
+                    (click)='corecordUser.clickFun ? corecordUser.clickFun() : null' *ngIf="corecordUser.show">
+                    <mdb-icon fas icon="{{corecordUser.icon}}"></mdb-icon>
+                    <img alt="" *ngIf="corecordUser.img" src={{corecordUser.img}} style="height:8em;width:8em;top:0em">
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngFor="let recordlist of userDetails">
+            <div class="row p-4">
+              <div class="col-4 p-4" *ngFor="let crecordlist of recordlist.detail">
+                  <mdb-icon fas icon=""></mdb-icon>&nbsp;
+                  <label class="p-4" required *ngFor="let label of crecordlist.value"></label>&nbsp;
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer border border-white">
+        <div class="modal-footer border border-white">
+        </div>
       </div>
     </div>
   </div>
