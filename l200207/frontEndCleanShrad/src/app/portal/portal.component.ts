@@ -73,26 +73,8 @@ export class PortalComponent implements OnInit {
         style: "waves-light rounded mb-0 h3 text-center z-depth-2 bg-dark text-white px-4 py-1",
         show: true
       },]
-    },{
-      title: "calendarmenu",
-      detail: [{
-        name: "form",
-        icon: 'calendar-times',
-        clickFun: (_: any) => { this.clicked('hidecalendar') },
-        style: "waves-light text-white bg-dark h3 z-depth-2 p-2",
-        show:false
-      },
-      {
-        name: "calandaricon",
-        icon: 'calendar-alt',
-        clickFun: (_: any) => { this.clicked('showcalendar') },
-        style: "waves-light text-white bg-dark h3 z-depth-2 p-2",
-        show: true
-      }]
-    }
-  ];
-  userDetails = { data: [{ title: "Basic Detail", detail: [], show: true }, { title: "Permanent Address", detail: [], show: true }, { title: "Corresponding Address", detail: [], show: true }], show: true }
-  calendarUI = {show: false }
+    }];
+  userDetails = { data: [{ title: "Basic Detail", detail: [], show: true }, { title: "Permanent Address", detail: [], show: true }, { title: "Corresponding Address", detail: [], show: true }]}
   constructor() { }
   ngOnInit() {
     this.initJIT();
@@ -303,14 +285,6 @@ export class PortalComponent implements OnInit {
         break;
       case 'allotimgLoad':
         this.userRecordbody.forEach(parel => { (parel.title == "Buttons") ? parel.detail.forEach(carel => { (carel.name == "cardimage") ? (this.checkcardRecord.tagid == "") ? carel.show = true : carel.show = false : "" }) : ""; })
-        break;
-      case 'showcalendar':
-        this.userDetails.show = false;
-        this.calendarUI.show = true;
-        break;
-      case 'hidecalendar':
-        this.userDetails.show = true;
-        this.calendarUI.show = false;
         break;
       default:
         break;

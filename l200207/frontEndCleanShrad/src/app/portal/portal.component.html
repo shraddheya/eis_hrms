@@ -190,7 +190,7 @@
       </div>
     </div>
   </div>
-  <div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal" id="frameModalTopHierarchy"
+  <div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal" style="overflow-x: hidden;overflow-y: auto;"
     tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
@@ -217,7 +217,7 @@
               </div>
             </div>
           </div>
-          <div *ngIf="userDetails.show">
+          <div>
             <div *ngFor="let recordlist of userDetails.data" style="font-size:1.2em;">
               <p class=" font-weight-bold" *ngIf="recordlist.show">{{recordlist.title}}</p>
               <div class="row p-2" *ngIf="recordlist.show">
@@ -231,11 +231,7 @@
               </div>
             </div>
           </div>
-          <div *ngIf="calendarUI.show">
-            <div id="calendar">
-              
-            </div>
-          </div>
+          <div id="calendar"></div>
         </div>
         <div class="modal-footer border border-white">
           <button class="update btn btn-dark form-group" *ngIf="editabel"
