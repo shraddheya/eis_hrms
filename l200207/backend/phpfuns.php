@@ -370,3 +370,24 @@ if ($mode === "GETCARDID") { // Connect with UI
     exit();
   }
 }
+
+if ($mode === "REG_ATT") { //http://5th1n62/HRMS-PROJ/back-end/phpfuns.php?mode=REG_ATT&data=<tagIDxxxx>@@@<deviceIDxxxx>@@@in@@@<tagDATAxxxx>
+  $data = explode('@@@', $data);
+  // print_r($data);
+  // echo  "<br>";
+  if (count($data) != 4) four04("4 inputs required");
+  $stmt     = $link->prepare("SELECT tagid FROM dataallassociation WHERE tagid = ? AND tagdata = ?");
+  $stmt->bind_param("ss", $data[0], $data[3]);
+  $stmt->execute();
+  $rows     = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  // print_r($data[1]);
+  // $stmt->close();
+  if (!$rows) exit("=@Failure");
+  $stmt     = $link->prepare("INSERT INTO attendance (prid, mode, device) values (?, ?, ?)");
+  $stmt->bind_param("isi", $data[3], $data[2], $data[1]);
+  $stmt->execute();
+  $stmt->close();
+  // echo json_encode(true);
+  print_r("=@Success");
+  exit();
+}
