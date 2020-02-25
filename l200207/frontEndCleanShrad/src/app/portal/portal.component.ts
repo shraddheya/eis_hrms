@@ -74,7 +74,7 @@ export class PortalComponent implements OnInit {
         show: true
       },]
     }];
-  userDetails = { data: [{ title: "Basic Detail", detail: [], show: true }, { title: "Permanent Address", detail: [], show: true }, { title: "Corresponding Address", detail: [], show: true }]}
+  userDetails = { data: [{ title: "Basic Detail", detail: [], show: true }, { title: "Permanent Address", detail: [], show: true }, { title: "Corresponding Address", detail: [], show: true }] }
   constructor() { }
   ngOnInit() {
     this.initJIT();
@@ -116,7 +116,7 @@ export class PortalComponent implements OnInit {
     rgraph = new $jit.RGraph({
       injectInto: 'hierarchy',
       background: { CanvasStyles: { strokeStyle: '#ccc' } },
-      Navigation: { enable: true, panning: true, zooming: 7 },
+      Navigation: { enable: true, panning: false, zooming: 6 },
       Node: { color: '#FFFFFF' },
       Edge: { color: '#C0C0C0', lineWidth: 1, spline: true },
       onCreateLabel: (domElement, node) => {
@@ -218,39 +218,34 @@ export class PortalComponent implements OnInit {
   hierarchyViewdata(data) {
     this.clickedUserid = data.id;
     this.rootUserid = data.boss;
-    this.userRecordbody.forEach(urel => {
-      urel.detail.forEach(udel => {
-        if (udel.name == "salaryslip") {
-          (data.current_salary == undefined) ? udel.title = "0" : udel.title = data.current_salary
-        }
-      })
-    })
+    this.userRecordbody.forEach(urel => { urel.detail.forEach(udel => { (udel.name == "salaryslip") ? (data.current_salary == undefined) ? udel.title = "0" : udel.title = data.current_salary : "" }) })
     this.userDetails.data.forEach(el => { el.detail = [] })
     this.users[0]["boss"] = data.boss
     this.userDetails.data.forEach(clickel => {
       if (clickel.title == "Basic Detail") {
-        clickel.detail.push({ title: "name", record: [{ key: "title", value: data.title }, { key: "fname", value: data.fname }, { key: "mname", value: data.mname }, { key: "lname", value: data.lname },], icon: "user" })
-        clickel.detail.push({ title: "contactno", record: [{ key: "contactno", value: data.contactno }], icon: "mobile-alt" })
-        clickel.detail.push({ title: "email", record: [{ key: "email", value: data.email }], icon: "envelope" })
+        clickel.detail.push({ title: "name", record: [{ key: "title", value: data.title }, { key: "fname", value: data.fname }, { key: "mname", value: data.mname }, { key: "lname", value: data.lname },], icon: "user", show: "true" })
+        clickel.detail.push({ title: "email", record: [{ key: "email", value: data.email }], icon: "envelope", show: (data.email == undefined || data.email == 0) ? false : true })
+        clickel.detail.push({ title: "contactno", record: [{ key: "contactno", value: data.contactno }], icon: "phone", show: (data.contactno == undefined || data.email == 0) ? false : true })
       }
-      if (clickel.title == "Permanent Address") {
-        clickel.detail.push({ title: "address_p_houseno", record: [{ key: "address_p_houseno", value: data.address_p_houseno }], icon: "home" })
-        clickel.detail.push({ title: "address_p_area", record: [{ key: "address_p_area", value: data.address_p_area }], icon: "road" })
-        clickel.detail.push({ title: "address_p_city", record: [{ key: "address_p_city", value: data.address_p_city }], icon: "city" })
-        clickel.detail.push({ title: "address_p_state", record: [{ key: "address_p_state", value: data.address_p_state }], icon: "flag" })
-        clickel.detail.push({ title: "address_p_country", record: [{ key: "address_p_country", value: data.address_p_country }], icon: "globe" })
-        clickel.detail.push({ title: "address_p_pincode", record: [{ key: "address_p_pincode", value: data.address_p_pincode }], icon: "keyboard" })
-      }
-      if (clickel.title == "Corresponding Address") {
-        clickel.detail.push({ title: "address_c_houseno", record: [{ key: "address_c_houseno", value: data.address_c_houseno }], icon: "home" })
-        clickel.detail.push({ title: "address_c_area", record: [{ key: "address_c_area", value: data.address_c_area }], icon: "road" })
-        clickel.detail.push({ title: "address_c_city", record: [{ key: "address_c_city", value: data.address_c_city }], icon: "city" })
-        clickel.detail.push({ title: "address_c_state", record: [{ key: "address_c_state", value: data.address_c_state }], icon: "flag" })
-        clickel.detail.push({ title: "address_c_country", record: [{ key: "address_c_country", value: data.address_c_country }], icon: "globe" })
-        clickel.detail.push({ title: "address_c_pincode", record: [{ key: "address_c_pincode", value: data.address_c_pincode }], icon: "keyboard" })
-      }
+      if (clickel.title == "Permanent Address") Object.keys(data).forEach(el => { (el.startsWith("address_p")) ? clickel.detail.push({ title: el, record: [{ key: el, value: data[el] }], icon: el.substr(10), show: (data[el] == undefined || data[el] == 0) ? false : true }) : "" })
+      if (clickel.title == "Corresponding Address") Object.keys(data).forEach(el => { (el.startsWith("address_c")) ? clickel.detail.push({ title: el, record: [{ key: el, value: data[el] }], icon: el.substr(10), show: (data[el] == undefined || data[el] == 0) ? false : true }) : "" })
     })
     this.populateCalendarAttendance(data.id)
+
+    // Testing code making icon
+    var testObj = {}
+    Object.keys(data).forEach(test => { testObj[test] = { value: data[test], icon: "" } })
+    Object.keys(testObj).forEach(test1 => { 
+      (test1.endsWith("houseno") ? testObj[test1].icon = "home" : ""); 
+      (test1.endsWith("area") ? testObj[test1].icon = "road" : ""); 
+      (test1.endsWith("city") ? testObj[test1].icon = "city" : ""); 
+      (test1.endsWith("state") ? testObj[test1].icon = "flag" : ""); 
+      (test1.endsWith("country") ? testObj[test1].icon = "globe" : ""); 
+      (test1.endsWith("pincode") ? testObj[test1].icon = "home" : ""); 
+    })
+    console.log(testObj)
+    // Testing code making icon
+    
     this.hierachyView.show();
   }
   clicked(mode) {
@@ -340,7 +335,7 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  populateCalendarAttendance(prid, dataInterest = moment()){
+  populateCalendarAttendance(prid, dataInterest = moment()) {
     console.log(prid, dataInterest)
     $('#calendar').fullCalendar({
       defaultDate: moment().format('YYYY-MM-DD'),
