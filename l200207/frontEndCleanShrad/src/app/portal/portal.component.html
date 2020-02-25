@@ -1,5 +1,5 @@
-<app-topbar></app-topbar>
 <div class="masterDiv">
+  <app-topbar></app-topbar>
   <section id="backgroundRGraph" class="bg-dark">
     <div id="hierarchy"></div>
   </section>
@@ -205,27 +205,41 @@
           <div class="row p-4">
             <div class="col-4" *ngFor="let recordUser of userRecordbody">
               <div class="row">
-                <div class="col-4" *ngFor="let corecordUser of recordUser.detail" style="font-size: 1.4em;">
+                <div class="col-4 p-2" *ngFor="let corecordUser of recordUser.detail">
                   <a class={{corecordUser.style}} mdbWavesEffect
                     [attr.href]="corecordUser.href ? corecordUser.href : null"
                     (click)='corecordUser.clickFun ? corecordUser.clickFun() : null' *ngIf="corecordUser.show">
                     <mdb-icon fas icon="{{corecordUser.icon}}"></mdb-icon>
+                    <span>{{corecordUser.title}}</span>
                     <img alt="" *ngIf="corecordUser.img" src={{corecordUser.img}} style="height:8em;width:8em;top:0em">
                   </a>
                 </div>
               </div>
             </div>
           </div>
-          <div *ngFor="let recordlist of userDetails">
-            <div class="row p-4">
-              <div class="col-4 p-4" *ngFor="let crecordlist of recordlist.detail">
-                  <mdb-icon fas icon=""></mdb-icon>&nbsp;
-                  <label class="p-4" required *ngFor="let label of crecordlist.value"></label>&nbsp;
+          <div *ngIf="userDetails.show">
+            <div *ngFor="let recordlist of userDetails.data" style="font-size:1.2em;">
+              <p class=" font-weight-bold" *ngIf="recordlist.show">{{recordlist.title}}</p>
+              <div class="row p-2" *ngIf="recordlist.show">
+                <div class="col-4 p-4" *ngFor="let crecordlist of recordlist.detail">
+                  <mdb-icon fas icon={{crecordlist.icon}}></mdb-icon>&nbsp;
+                  <label class="ml-2" [attr.contentEditable]=editabel required
+                    *ngFor="let labelel of crecordlist.record">
+                    <span class="updatedetail" id={{labelel.key}}>{{labelel.value}}</span>
+                  </label>&nbsp;&nbsp;
+                </div>
               </div>
+            </div>
+          </div>
+          <div *ngIf="calendarUI.show">
+            <div id="calendar">
+              
             </div>
           </div>
         </div>
         <div class="modal-footer border border-white">
+          <button class="update btn btn-dark form-group" *ngIf="editabel"
+            (click)="callFunction('updateData')">Update</button>
         </div>
       </div>
     </div>
