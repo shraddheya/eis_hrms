@@ -242,6 +242,8 @@ export class PortalComponent implements OnInit {
       (test1.endsWith("state") ? testObj[test1].icon = "flag" : ""); 
       (test1.endsWith("country") ? testObj[test1].icon = "globe" : ""); 
       (test1.endsWith("pincode") ? testObj[test1].icon = "home" : ""); 
+      
+      
     })
     console.log(testObj)
     // Testing code making icon
