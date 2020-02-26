@@ -83,7 +83,7 @@ export class PortalComponent implements OnInit {
       { title: "User Detail", detail: [] },
       { title: "Grossincome", detail: [] },
       { title: "Extraincome", detail: [] },
-      { title: "Totalicome", total: "" },
+      { title: "Totalicome", total: 0 },
       { title: "salary_permit", detail: [] }],
     show: true
   }
@@ -352,29 +352,28 @@ export class PortalComponent implements OnInit {
           var salary_json = JSON.parse(resp)
           if (salary_json.length == 0) this.salaryslipJson.show = false
           salary_json.forEach(el => { salaryObj = el });
-
+          //code for userdetail
           var userarray: any = [{ key: "fname", value: "Firstname" }, { key: "lname", value: "Lastname" }, { key: "createdAt", value: "Date of Joining" }]
           this.users.forEach(usel => { if (usel.id == salaryObj.prid) this.salaryslipJson.data.forEach(wrel => { userarray.forEach(nel => { (wrel.title == "User Detail") ? wrel.detail.push({ head: nel.value, value: usel[nel.key] }) : "" }) }) })
-
+          //code for display gross icome and calculation
           var grossincome: any = ['basic_salary', 'hra', 'ta', 'da', 'overtime', 'bonus', 'house_rent'];
           var calculategross = 0;
           grossincome.forEach(addel => { calculategross = calculategross + salaryObj[addel] })
           salaryObj["grossincome"] = calculategross;
           grossincome.push("grossincome")
           grossincome.forEach(grossel => { this.salaryslipJson.data.forEach(wrel => { if (wrel.title == "Grossincome") wrel.detail.push({ head: grossel, value: salaryObj[grossel] }) }) })
-
+          //code for display extra icome and calculation
           var extraInList = ['medical', 'telephone_internet', 'other'];
           var calculate_extra = 0;
           extraInList.forEach(eil => { calculate_extra = calculate_extra + salaryObj[eil] })
           salaryObj["extraincome"] = calculate_extra
           extraInList.push("extraincome")
           this.salaryslipJson.data.forEach(wrsj => { if (wrsj.title == "Extraincome") extraInList.forEach(exel => { wrsj.detail.push({ head: exel, value: salaryObj[exel] }) }) })
-
-          this.salaryslipJson.data.forEach(gtel=>{
-            if(gtel.title == "Totalicome"){
-              
-            }
-          })
+          // code for grand total
+          this.salaryslipJson.data.forEach(gtel => { if (gtel.title == "Totalicome") gtel.total = calculategross + calculate_extra })
+          // code for display permission officer Id
+          var salaryslipPermit = ['prepared_by', 'check_by', 'authorised_by'];
+          this.salaryslipJson.data.forEach(elpo => { if (elpo.title == "salary_permit") salaryslipPermit.forEach(spel => { elpo.detail.push({ head: spel, value: salaryObj[spel] }) }) })
           console.log(this.salaryslipJson)
         })
         break;
