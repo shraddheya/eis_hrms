@@ -5,7 +5,8 @@ import { ModalDirective } from 'angular-bootstrap-md';
 import * as moment from 'moment';
 import * as $ from 'jquery';
 import 'fullcalendar';
-
+import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
+declare var swal: any
 declare var $jit: any;
 let rgraph: any;
 @Component({
@@ -16,6 +17,7 @@ let rgraph: any;
 export class PortalComponent implements OnInit {
   @ViewChild('addUsers', { static: true }) addUsers: ModalDirective;
   @ViewChild('hierachyView', { static: true }) hierachyView: ModalDirective;
+  @ViewChild('salaryslip', { static: true }) salaryslip: ModalDirective;
   graphData: any;
   showTree: any;
   posts: any;
@@ -31,6 +33,8 @@ export class PortalComponent implements OnInit {
   rootUserid: any;
   checkcardRecord: any;
   editabel: any;
+  jitNodeData: any;
+  attendancedata: any = [];
   userRecordbody = [
     {
       title: "Crud",
@@ -69,11 +73,20 @@ export class PortalComponent implements OnInit {
       }, {
         name: "salaryslip",
         title: "0",
-        clickFun: (_: any) => { this.callFunction('cardallot') },
-        style: "waves-light rounded mb-0 h3 text-center z-depth-2 bg-dark text-white px-4 py-1",
+        clickFun: (_: any) => { this.clicked('salaryslipclick') },
+        style: "waves-light rounded mb-0 h6 text-center z-depth-2 bg-dark text-white p-3",
         show: true
       },]
     }];
+  salaryslipJson = {
+    data: [
+      { title: "User Detail", detail: [] },
+      { title: "Grossincome", detail: [] },
+      { title: "Extraincome", detail: [] },
+      { title: "Totalicome", total: "" },
+      { title: "salary_permit", detail: [] }],
+    show: true
+  }
   userDetails = { data: [{ title: "Basic Detail", detail: [], show: true }, { title: "Permanent Address", detail: [], show: true }, { title: "Corresponding Address", detail: [], show: true }] }
   constructor() { }
   ngOnInit() {
@@ -116,9 +129,9 @@ export class PortalComponent implements OnInit {
     rgraph = new $jit.RGraph({
       injectInto: 'hierarchy',
       background: { CanvasStyles: { strokeStyle: '#ccc' } },
-      Navigation: { enable: true, panning: false, zooming: 6 },
+      Navigation: { enable: true, panning: true, zooming: 6 },
       Node: { color: '#FFFFFF' },
-      Edge: { color: '#C0C0C0', lineWidth: 1, spline: true },
+      Edge: { color: '#C0C0C0', lineWidth: 1, spline: false },
       onCreateLabel: (domElement, node) => {
         //domElement.innerHTML = node.fname + + (node.mname ? node.mname + ' ' : '') + '  ' + node.lname;
         domElement.innerHTML = node.fname + " " + node.lname;
@@ -216,39 +229,35 @@ export class PortalComponent implements OnInit {
     rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
   }
   hierarchyViewdata(data) {
+    this.jitNodeData = data
     this.clickedUserid = data.id;
     this.rootUserid = data.boss;
     this.userRecordbody.forEach(urel => { urel.detail.forEach(udel => { (udel.name == "salaryslip") ? (data.current_salary == undefined) ? udel.title = "0" : udel.title = data.current_salary : "" }) })
+    var clickedData: any = {};
+    this.users[0]["boss"] = data.boss;
+    Object.keys(this.users[0]).forEach(el => { clickedData[el] = { value: data[el], icon: "" } })
+    var recordArrray = [{ key: "houseno", icon: "home" }, { key: "area", icon: "road" }, { key: "city", icon: "city" }, { key: "state", icon: "flag" }, { key: "country", icon: "globe" }, { key: "pincode", icon: "keyboard" }]
+    recordArrray.forEach(makeedit => { Object.keys(clickedData).forEach(test1 => { (test1.endsWith(makeedit.key) ? clickedData[test1].icon = makeedit.icon : "") }) })
     this.userDetails.data.forEach(el => { el.detail = [] })
-    this.users[0]["boss"] = data.boss
     this.userDetails.data.forEach(clickel => {
       if (clickel.title == "Basic Detail") {
-        clickel.detail.push({ title: "name", record: [{ key: "title", value: data.title }, { key: "fname", value: data.fname }, { key: "mname", value: data.mname }, { key: "lname", value: data.lname },], icon: "user", show: "true" })
-        clickel.detail.push({ title: "email", record: [{ key: "email", value: data.email }], icon: "envelope", show: (data.email == undefined || data.email == 0) ? false : true })
-        clickel.detail.push({ title: "contactno", record: [{ key: "contactno", value: data.contactno }], icon: "phone", show: (data.contactno == undefined || data.email == 0) ? false : true })
+        clickel.detail.push({ title: "name", record: [{ key: "title", value: clickedData.title.value }, { key: "fname", value: clickedData.fname.value }, { key: "mname", value: clickedData.mname.value }, { key: "lname", value: clickedData.lname.value },], icon: "user", show: "true" })
+        clickel.detail.push({ title: "email", record: [{ key: "email", value: clickedData.mail.value }], icon: "envelope", show: (clickedData.mail.value == undefined || clickedData.mail.value == 0) ? false : true })
+        clickel.detail.push({ title: "contactno", record: [{ key: "contactno", value: clickedData.contactno.value }], icon: "phone", show: (clickedData.contactno.value == undefined || clickedData.contactno.value == 0) ? false : true })
       }
-      if (clickel.title == "Permanent Address") Object.keys(data).forEach(el => { (el.startsWith("address_p")) ? clickel.detail.push({ title: el, record: [{ key: el, value: data[el] }], icon: el.substr(10), show: (data[el] == undefined || data[el] == 0) ? false : true }) : "" })
-      if (clickel.title == "Corresponding Address") Object.keys(data).forEach(el => { (el.startsWith("address_c")) ? clickel.detail.push({ title: el, record: [{ key: el, value: data[el] }], icon: el.substr(10), show: (data[el] == undefined || data[el] == 0) ? false : true }) : "" })
+      if (clickel.title == "Permanent Address") Object.keys(clickedData).forEach(el => { (el.startsWith("address_p")) ? clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0) ? false : true }) : "" })
+      if (clickel.title == "Corresponding Address") Object.keys(clickedData).forEach(el => { (el.startsWith("address_c")) ? clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0) ? false : true }) : "" })
     })
-    this.populateCalendarAttendance(data.id)
-
-    // Testing code making icon
-    var testObj = {}
-    Object.keys(data).forEach(test => { testObj[test] = { value: data[test], icon: "" } })
-    Object.keys(testObj).forEach(test1 => { 
-      (test1.endsWith("houseno") ? testObj[test1].icon = "home" : ""); 
-      (test1.endsWith("area") ? testObj[test1].icon = "road" : ""); 
-      (test1.endsWith("city") ? testObj[test1].icon = "city" : ""); 
-      (test1.endsWith("state") ? testObj[test1].icon = "flag" : ""); 
-      (test1.endsWith("country") ? testObj[test1].icon = "globe" : ""); 
-      (test1.endsWith("pincode") ? testObj[test1].icon = "home" : ""); 
-      
-      
-    })
-    console.log(testObj)
-    // Testing code making icon
-    
+    var checkobj: any = { address_p: [], address_c: [] };
+    Object.keys(clickedData).forEach(el => {
+      (el.startsWith("address_p")) ? (clickedData[el].value == undefined) ? checkobj.address_p.push(clickedData[el].value) : "" : "";
+      (el.startsWith("address_c")) ? (clickedData[el].value == undefined) ? checkobj.address_c.push(clickedData[el].value) : "" : ""
+    });
+    (checkobj.address_p.length >= 5) ? this.userDetails.data.forEach(apel => { (apel.title == "Permanent Address") ? apel.show = false : "" }) : "";
+    (checkobj.address_c.length >= 5) ? this.userDetails.data.forEach(acel => { (acel.title == "Corresponding Address") ? acel.show = false : "" }) : "";
     this.hierachyView.show();
+    this.populateCalendarAttendance(data.id)
+    this.callFunction("salaryslip_request");
   }
   clicked(mode) {
     switch (mode) {
@@ -270,6 +279,10 @@ export class PortalComponent implements OnInit {
           }) : "";
         })
         this.editabel = true;
+        this.userDetails.data.forEach(el => {
+          el.show = true;
+          el.detail.forEach(coel => { coel.show = true })
+        });
         break;
       case 'viewRecord':
         this.userRecordbody.forEach(parel => {
@@ -279,9 +292,16 @@ export class PortalComponent implements OnInit {
           }) : "";
         })
         this.editabel = false;
+        this.hierarchyViewdata(this.jitNodeData)
         break;
       case 'allotimgLoad':
         this.userRecordbody.forEach(parel => { (parel.title == "Buttons") ? parel.detail.forEach(carel => { (carel.name == "cardimage") ? (this.checkcardRecord.tagid == "") ? carel.show = true : carel.show = false : "" }) : ""; })
+        break;
+      case 'salaryslipclick':
+        (this.salaryslipJson.show == true) ? this.salaryslip.show() : swal("Salary Not found", "", "info");
+        break;
+      case 'salmodaldismiss':
+        this.salaryslip.hide();
         break;
       default:
         break;
@@ -325,6 +345,39 @@ export class PortalComponent implements OnInit {
           this.addUserNode2GUI(resp, "updateuser");
         })
         break;
+      case 'salaryslip_request':
+        callUrl({ mode: "SALARYSLIP", data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
+          this.salaryslipJson.data.forEach(salJson => { salJson.detail = [] })
+          var salaryObj: any = {}
+          var salary_json = JSON.parse(resp)
+          if (salary_json.length == 0) this.salaryslipJson.show = false
+          salary_json.forEach(el => { salaryObj = el });
+
+          var userarray: any = [{ key: "fname", value: "Firstname" }, { key: "lname", value: "Lastname" }, { key: "createdAt", value: "Date of Joining" }]
+          this.users.forEach(usel => { if (usel.id == salaryObj.prid) this.salaryslipJson.data.forEach(wrel => { userarray.forEach(nel => { (wrel.title == "User Detail") ? wrel.detail.push({ head: nel.value, value: usel[nel.key] }) : "" }) }) })
+
+          var grossincome: any = ['basic_salary', 'hra', 'ta', 'da', 'overtime', 'bonus', 'house_rent'];
+          var calculategross = 0;
+          grossincome.forEach(addel => { calculategross = calculategross + salaryObj[addel] })
+          salaryObj["grossincome"] = calculategross;
+          grossincome.push("grossincome")
+          grossincome.forEach(grossel => { this.salaryslipJson.data.forEach(wrel => { if (wrel.title == "Grossincome") wrel.detail.push({ head: grossel, value: salaryObj[grossel] }) }) })
+
+          var extraInList = ['medical', 'telephone_internet', 'other'];
+          var calculate_extra = 0;
+          extraInList.forEach(eil => { calculate_extra = calculate_extra + salaryObj[eil] })
+          salaryObj["extraincome"] = calculate_extra
+          extraInList.push("extraincome")
+          this.salaryslipJson.data.forEach(wrsj => { if (wrsj.title == "Extraincome") extraInList.forEach(exel => { wrsj.detail.push({ head: exel, value: salaryObj[exel] }) }) })
+
+          this.salaryslipJson.data.forEach(gtel=>{
+            if(gtel.title == "Totalicome"){
+              
+            }
+          })
+          console.log(this.salaryslipJson)
+        })
+        break;
     }
   }
   objectToarray(input, mode) {
@@ -337,16 +390,57 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  populateCalendarAttendance(prid, dataInterest = moment()) {
-    console.log(prid, dataInterest)
-    $('#calendar').fullCalendar({
-      defaultDate: moment().format('YYYY-MM-DD'),
-      editable: true,
-      eventLimit: false,
-      viewRender: (view, event) => {
-        var moments = $('#calendar').fullCalendar('getDate');
-        var data = moments.format();
-      }
+  populateCalendarAttendance(prid) {
+    var dataInterest = moment()
+    var month = dataInterest.month();
+    var year = dataInterest.year();
+    var attendance_Interest = [];
+    var prid = prid;
+    var workinghours;
+    this.attendancedata.forEach(d => {
+      var dt = moment(d.createdAt, 'YYYY-MM-DD HH:mm:SS');
+      ((prid == d.prid) && (month === dt.month()) && (year === dt.year())) ? attendance_Interest.push(d) : "";
     })
+    if (attendance_Interest.length == 0) {
+      callUrl({ mode: "GETATTENDANCE", data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
+        this.attendancedata = JSON.parse(resp);
+        //this.populateCalendarAttendance(prid)
+      })
+    }
+    else {
+      console.log("working")
+      $('#calendar').fullCalendar({
+        defaultDate: moment().format('YYYY-MM-DD'),
+        editable: true,
+        eventLimit: false,
+        viewRender: (view, event) => {
+          var moments = $('#calendar').fullCalendar('getDate');
+          var data = moments.format();
+        }
+      })
+      var eventsCurrent = [];
+      var intAtt = attendance_Interest.sort((a, b) => { return a.createdAt - b.createdAt })
+      for (var idx = 0; idx < intAtt.length; idx++) {
+        var atUnixTime = moment(intAtt[idx].createdAt, 'YYYY-MM-DD HH:mm:SS').unix()
+        if (intAtt[idx].mode === 'OUT') {
+          var idxIn = idx;
+          var evt = { end: moment.unix(atUnixTime).format('YYYY-MM-DD HH:mm:SS') }
+          while (idxIn-- > 0) {
+            var possEnd = moment(intAtt[idxIn].createdAt, 'YYYY-MM-DD HH:mm:SS').format('YYYY-MM-DD HH:mm:SS');
+            (intAtt[idxIn].mode === 'IN') ? evt["start"] = possEnd : evt.end = possEnd;
+            if (intAtt[idxIn].mode === 'IN') break;
+          }
+          eventsCurrent.push(evt)
+        }
+      }
+      eventsCurrent.forEach(pushtime => {
+        var startTime = moment(pushtime.start, 'YYYY-MM-DD HH:mm:SS');
+        var endTime = moment(pushtime.end, 'YYYY-MM-DD HH:mm:SS');
+        workinghours = endTime.diff(startTime, 'hours');
+        pushtime["title"] = (workinghours + 1) + " hrs";
+      })
+      $('#calendar').fullCalendar('removeEvents');
+      $('#calendar').fullCalendar('addEventSource', eventsCurrent);
+    }
   }
 }
