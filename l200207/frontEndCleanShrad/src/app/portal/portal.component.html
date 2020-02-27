@@ -3,7 +3,7 @@
   <section id="backgroundRGraph" class="bg-dark">
     <div id="hierarchy"></div>
   </section>
-  <mdb-icon id="buttPlus" class="text-white" fas icon="plus-circle" (click)="clicked('addUser')"></mdb-icon>
+  <mdb-icon  *ngIf="addButton" class="text-white buttPlus" fas icon="plus-circle" (click)="clicked('addUser')"></mdb-icon>
   <div mdbModal #addUsers="mdbModal" [config]="{backdrop: 'static'}" class="modal fade left" tabindex="-1" role="dialog"
     aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -248,7 +248,8 @@
             (click)="clicked('salmodaldismiss')"></mdb-icon>
         </div>
         <div class="modal-body">
-          <div *ngFor="let salarydata of salaryslipJson.data">
+          <div #printslip>
+            <div *ngFor="let salarydata of salaryslipJson.data">
             <div class="p-3 font-weight-bold border border-light">
               <p>{{salarydata.title}} - <span *ngIf="salarydata.total">{{salarydata.total}}</span></p>
             </div>
@@ -258,9 +259,11 @@
                 <td>{{codata.value}}</td>
               </tr>
             </table>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-lg btn-dark text-white" (click)="clicked('printsalaryslip')">Print Slip</button>
         </div>
       </div>
     </div>

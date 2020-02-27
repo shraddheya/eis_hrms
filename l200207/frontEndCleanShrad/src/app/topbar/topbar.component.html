@@ -13,7 +13,7 @@
           <div class="dropdown-menu dropdown-primary pl-0 pr-4">
             <ul>
               <li style="text-decoration: none;list-style-type: none;" *ngFor="let menudrop of portalmenuDropdown">
-                <a class="dropdown-item" style="font-size: 1.6em;" (click)='menudrop.clickFun ? menudrop.clickFun() : null'>
+                <a *ngIf="menudrop.show" class="dropdown-item" style="font-size: 1.6em;" (click)='menudrop.clickFun ? menudrop.clickFun() : null'>
                   <mdb-icon fas icon="{{menudrop.icon}}"></mdb-icon>
                 </a>
               </li>
