@@ -301,11 +301,11 @@ if ($mode === "LOGOUT") { // Users Logout Mode
 }
 
 if ($mode === "POSTS_ADD") { // Add Post
-  $stmt = $link->prepare("INSERT INTO posts(post,boss) VALUES(?,?)");
+  $stmt = $link->prepare("INSERT INTO `name` as posts(post,boss) VALUES(?,?)");
   $stmt->bind_param("si", $data['post'], $data['boss']);
   $stmt->execute();
   if ($stmt->error) exit(' failure');
-  $stmtR = $link->prepare("SELECT id,post,boss FROM posts WHERE id=(LAST_INSERT_ID())");
+  $stmtR = $link->prepare("SELECT id, `name` as post,boss FROM posts WHERE id=(LAST_INSERT_ID())");
   $stmtR->execute();
   $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
   print_r($mode . "success" . json_encode($getdata));
