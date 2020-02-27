@@ -3,17 +3,15 @@
   <section id="backgroundRGraph" class="bg-dark">
     <div id="hierarchy"></div>
   </section>
-  <mdb-icon id="buttPlus" class="text-white" fas icon="plus-circle" (click)="clicked('addUser')"></mdb-icon>
+  <mdb-icon  *ngIf="addButton" class="text-white buttPlus" fas icon="plus-circle" (click)="clicked('addUser')"></mdb-icon>
   <div mdbModal #addUsers="mdbModal" [config]="{backdrop: 'static'}" class="modal fade left" tabindex="-1" role="dialog"
     aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header text-center p-2 border border-white">
+          <mdb-icon fas icon="chevron-left" (click)="clicked('dismissAddusermodal')" style="font-size: 1.7em;"
+            class="text-left hoverable" (click)="clicked('dismissRecordmodal')"></mdb-icon>
           <h4 class="modal-title w-100 font-weight-bold">Add Users</h4>
-          <button type="button" class="close pull-right hoverable" aria-label="Close"
-            (click)="clicked('dismissAddusermodal')">
-            <mdb-icon fas icon="backspace"></mdb-icon>
-          </button>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -190,16 +188,15 @@
       </div>
     </div>
   </div>
-  <div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal" id="frameModalTopHierarchy"
-    tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal"
+    style="overflow-x: hidden;overflow-y: auto;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header text-center border border-white">
-          <h4 class="modal-title w-100 font-weight-bold">User Record</h4>
-          <button type="button" class="close pull-right hoverable" aria-label="Close"
-            (click)="clicked('dismissRecordmodal')">
-            <mdb-icon fas icon="backspace"></mdb-icon>
-          </button>
+        <div class="modal-header border border-white">
+          <mdb-icon fas icon="chevron-left" class="text-left hoverable" (click)="clicked('dismissRecordmodal')"
+            style="font-size: 1.7em;"></mdb-icon>
+          <h4 class="modal-title w-100 font-weight-bold text-center">User Record</h4>
         </div>
         <div class="modal-body  border border-white">
           <div class="row p-4">
@@ -217,25 +214,23 @@
               </div>
             </div>
           </div>
-          <div *ngIf="userDetails.show">
+          <div>
             <div *ngFor="let recordlist of userDetails.data" style="font-size:1.2em;">
               <p class=" font-weight-bold" *ngIf="recordlist.show">{{recordlist.title}}</p>
               <div class="row p-2" *ngIf="recordlist.show">
                 <div class="col-4 p-4" *ngFor="let crecordlist of recordlist.detail">
-                  <mdb-icon fas icon={{crecordlist.icon}}></mdb-icon>&nbsp;
-                  <label class="ml-2" [attr.contentEditable]=editabel required
-                    *ngFor="let labelel of crecordlist.record">
-                    <span class="updatedetail" id={{labelel.key}}>{{labelel.value}}</span>
-                  </label>&nbsp;&nbsp;
+                  <div *ngIf="crecordlist.show">
+                    <mdb-icon fas icon={{crecordlist.icon}}></mdb-icon>&nbsp;
+                    <label class="ml-2" [attr.contentEditable]=editabel required
+                      *ngFor="let labelel of crecordlist.record">
+                      <span class="updatedetail" id={{labelel.key}}>{{labelel.value}}</span>
+                    </label>&nbsp;&nbsp;
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div *ngIf="calendarUI.show">
-            <div id="calendar">
-              
-            </div>
-          </div>
+          <div id="calendar"></div>
         </div>
         <div class="modal-footer border border-white">
           <button class="update btn btn-dark form-group" *ngIf="editabel"
@@ -244,4 +239,32 @@
       </div>
     </div>
   </div>
-</div>
+  <div mdbModal #salaryslip="mdbModal" [config]="{backdrop: 'static'}" class="modal fade" tabindex="-1" role="dialog"
+  style="overflow-x: hidden;overflow-y: auto;" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <mdb-icon fas icon="chevron-left" class="text-left hoverable" style="font-size: 1.7em;"
+            (click)="clicked('salmodaldismiss')"></mdb-icon>
+        </div>
+        <div class="modal-body">
+          <div #printslip>
+            <div *ngFor="let salarydata of salaryslipJson.data">
+            <div class="p-3 font-weight-bold border border-light">
+              <p>{{salarydata.title}} - <span *ngIf="salarydata.total">{{salarydata.total}}</span></p>
+            </div>
+            <table mdbTable bordered="true" class="sal_table">
+              <tr *ngFor="let codata of salarydata.detail">
+                <th class="font-weight-bold">{{codata.head}}</th>
+                <td>{{codata.value}}</td>
+              </tr>
+            </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-lg btn-dark text-white" (click)="clicked('printsalaryslip')">Print Slip</button>
+        </div>
+      </div>
+    </div>
+  </div>
