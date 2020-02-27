@@ -101,11 +101,10 @@ export class AdminComponent implements OnInit {
     }
   }
   callFunction(mode) {
-    var requestMode = mode.substr(12).toUpperCase();
     switch (mode) {
       case 'manuallyadd_Posts':
         var postinput = $("#fid_Posts_post").val()
-        if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ post: postinput }) }, (resp: any) => {
+        if (postinput != "") callUrl({ mode: "POSTS_ADD", data: JSON.stringify({ post: postinput }) }, (resp: any) => {
           var resp = JSON.parse(resp);
           console.log(resp)
         })
@@ -122,7 +121,7 @@ export class AdminComponent implements OnInit {
         return;
       case 'manuallyadd_Documents_accesslevels':
         var docinput = $("#fid_Documents_accesslevels_name").val();
-        if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ name: docinput }) }, (resp => {
+        if (postinput != "") callUrl({ mode: "DOCUMENTS_ACCESSLEVELS_ADD", data: JSON.stringify({ name: docinput }) }, (resp => {
           console.log(resp)
         }))
         return;
