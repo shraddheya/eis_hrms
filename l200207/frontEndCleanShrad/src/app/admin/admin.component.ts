@@ -15,10 +15,6 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
     callUrl({ mode: "ADMINDASHBOARD" }, (resp: any) => {
       var resp = JSON.parse(resp);
-      // console.log(resp)
-      // resp.Posts.forEach(postel => { postel["data"] = postel.post });
-      // resp.Accesslevels.forEach(dorrel => { dorrel["data"] = dorrel.name });
-      // resp.Documents_accesslevels.forEach(docel => { docel["data"] = docel.name });
       this.adminpagedata = resp;
       this.exportadminpagedata = [
         {
