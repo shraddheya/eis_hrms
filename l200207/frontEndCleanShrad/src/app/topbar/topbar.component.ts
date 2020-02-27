@@ -98,7 +98,7 @@ export class TopbarComponent implements OnInit {
         break;
       case 'logout':
         this.router.navigate(['']);
-        localStorage.setItem("checklogin","false")
+        localStorage.setItem("checklogin", "false")
         break;
       default:
         break;
@@ -120,11 +120,10 @@ export class TopbarComponent implements OnInit {
       if (check == "true") {
         this.router.navigate([checkurl])
         this.topBarElements.forEach(el => {
-          (checkurl == "portal")?(el.name == "Menue") ? el.show = true : el.show = false:"";
-          (checkurl == "admin")?(el.name == "Backtoportal") ? el.show = true : el.show = false:"";
+          (checkurl == "portal") ? (el.name == "Menue") ? el.show = true : el.show = false : "";
+          (checkurl == "admin") ? (el.name == "Backtoportal") ? el.show = true : el.show = false : "";
         });
       }
     }
-    //((checkurl == "potal")||(checkurl == "admin"))?(checklogin == false)?this.router.navigate(['']):this.router.navigate([checklogin]):"";
-  }
+   }
 }
