@@ -28,7 +28,7 @@ if ($mode === "LOGIN") {
     if ($stmtCheckTableList->error) exit(' Failure');
     $stmtCheckTableListR = $stmtCheckTableList->get_result();
     $createDBQ = "CREATE DATABASE IF NOT EXISTS `$DBnm`;";
-    while ($tblNm = $stmtCheckTableListR->fetch_array(MYSQLI_NUM)) $createDBQ = $createDBQ . "\nCREATE TABLE IF NOT EXISTS `$DBnm`.`$tblNm[0]` AS SELECT * FROM `eis_hrms_0demo`.`$tblNm[0]`;";
+    while ($tblNm = $stmtCheckTableListR->fetch_array(MYSQLI_NUM)) $createDBQ = $createDBQ . "\nCREATE TABLE IF NOT EXISTS `$DBnm`.`$tblNm[0]` LIKE `eis_hrms_0demo`.`$tblNm[0]`;";
     $link->multi_query($createDBQ);
   } else {
     $_SESSION["demoUsrID"] = null;
