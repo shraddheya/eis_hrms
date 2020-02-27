@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { callUrl } from '../ajaxes';
 import $ from 'jquery';
 @Component({
@@ -10,7 +9,7 @@ import $ from 'jquery';
 export class AdminComponent implements OnInit {
   adminpagedata: any;
   exportadminpagedata: any;
-  constructor(private router: Router) { }
+  constructor() { }
 
   ngOnInit() {
     callUrl({ mode: "ADMINDASHBOARD" }, (resp: any) => {
@@ -27,7 +26,7 @@ export class AdminComponent implements OnInit {
             clickFun: (_: any) => { this.showhideDefault('default_hide_Posts') },
             show: false,
             data: {
-              clickFun: (_: any) => { this.clicked('hide_defaultdocaccess') },
+              clickFun: (_: any) => { this.clicked('') },
               record: ["Master"]
             },
           },
@@ -36,7 +35,7 @@ export class AdminComponent implements OnInit {
             removeicon: "minus-circle",
             show: true,
             data: resp.Posts,
-            inputfield: [{ name: "post", clickFun: (_: any) => { this.callFunction('manuallyadd_Posts') }, }]
+            inputfield: [{ name: "post", clickFun: (_: any) => { this.callFunction('manuallyadd_Posts') } }]
           },
         },
         {
@@ -109,23 +108,21 @@ export class AdminComponent implements OnInit {
         if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ post: postinput }) }, (resp: any) => {
           var resp = JSON.parse(resp);
           console.log(resp)
-          // resp["data"] = resp.post;
-          // console.log(resp)
         })
         return;
       case 'manuallyadd_Accesslevels':
-        var sendObj = {};
-        ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val() })
-        Object.values(sendObj).forEach(chkel => {
-          (chkel == "") ? "" : "";
-        })
+        // var sendObj = {};
+        // ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val() })
+        // Object.values(sendObj).forEach(chkel => {
+        //   (chkel == "") ? "" : "";
+        // })
         // callUrl({ mode: requestMode, data: JSON.stringify(sendObj) }, (resp: any) => {
 
         // })
         return;
       case 'manuallyadd_Documents_accesslevels':
         var docinput = $("#fid_Documents_accesslevels_name").val();
-        if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ name: docinput })},(resp=>{
+        if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ name: docinput }) }, (resp => {
           console.log(resp)
         }))
         return;
