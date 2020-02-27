@@ -2,6 +2,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from "angular-bootstrap-md";
 import { callUrl } from '../ajaxes';
+
 import { Router } from '@angular/router';
 import $ from 'jquery';
 var check;

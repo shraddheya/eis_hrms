@@ -1,11 +1,10 @@
 // tslint:disable: curly
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import { ModalDirective } from 'angular-bootstrap-md';
 import * as moment from 'moment';
 import * as $ from 'jquery';
 import 'fullcalendar';
-import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
 declare var swal: any
 declare var $jit: any;
 let rgraph: any;
@@ -18,6 +17,7 @@ export class PortalComponent implements OnInit {
   @ViewChild('addUsers', { static: true }) addUsers: ModalDirective;
   @ViewChild('hierachyView', { static: true }) hierachyView: ModalDirective;
   @ViewChild('salaryslip', { static: true }) salaryslip: ModalDirective;
+  @ViewChild('printslip', { static: true }) private printslip: ElementRef;
   graphData: any;
   showTree: any;
   posts: any;
@@ -35,6 +35,7 @@ export class PortalComponent implements OnInit {
   editabel: any;
   jitNodeData: any;
   attendancedata: any = [];
+  addButton: any = false;
   userRecordbody = [
     {
       title: "Crud",
@@ -43,7 +44,7 @@ export class PortalComponent implements OnInit {
         icon: 'pencil-alt',
         clickFun: (_: any) => { this.clicked('editRecord') },
         style: "nav-link waves-light text-dark h3",
-        show: true
+        show: false
       }, {
         name: "view",
         icon: 'eye',
@@ -55,7 +56,7 @@ export class PortalComponent implements OnInit {
         icon: 'trash',
         clickFun: (_: any) => { this.callFunction('deleteRecord') },
         style: "nav-link waves-light text-dark h3",
-        show: true
+        show: false
       }]
     }, {
       title: "Buttons",
@@ -90,12 +91,24 @@ export class PortalComponent implements OnInit {
   userDetails = { data: [{ title: "Basic Detail", detail: [], show: true }, { title: "Permanent Address", detail: [], show: true }, { title: "Corresponding Address", detail: [], show: true }] }
   constructor() { }
   ngOnInit() {
-    this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
       resp = JSON.parse(resp)
       this.accesslevels = resp.accesslevels;
       this.posts = resp.posts;
       this.users = resp.users;
+      var permission: any = { operation: "Crud", data: [{ type: 1, value: ["edit", "delete"], show: true }, { type: 2, value: ["edit"], show: true }, { type: 3, show: false }] }
+      this.users.forEach(permit => {
+        if (!permit.boss) {
+          permission.data.forEach(perel => {
+            if (permit.permissions == perel.type) {
+              this.addButton = perel.show;
+              this.userRecordbody.forEach(crdel => { if (crdel.title == permission.operation) { crdel.detail.forEach(stel => { perel.value.forEach(valel => { if (stel.name == valel) stel.show = perel.show }) }) } })
+            }
+          })
+        }
+        if ((permit.post >= 1) && (permit.post <= 3)) { }
+      })
+      this.initJIT();
       this.createDataTree(this.users);
       localStorage.setItem("checklogin", "true")
     });
@@ -214,7 +227,6 @@ export class PortalComponent implements OnInit {
       (aData.boss) ? hashTable[aData.boss].children.push(hashTable[aData.id]) : dataTree.push(hashTable[aData.id]);
     });
     dataTree.forEach(obj => { this.showTree = obj; });
-    console.log(this.showTree)
     this.reloadGraph(this.showTree);
   }
   reloadGraph(d: any = null) {
@@ -303,6 +315,14 @@ export class PortalComponent implements OnInit {
       case 'salmodaldismiss':
         this.salaryslip.hide();
         break;
+      case 'printsalaryslip':
+        var printsal_info = this.printslip.nativeElement.innerHTML;
+        var orignal_content = document.body.innerHTML;
+        document.body.innerHTML = printsal_info;
+        window.print();
+        document.body.innerHTML = orignal_content;
+        window.location.reload();
+        break;
       default:
         break;
     }
@@ -389,57 +409,47 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  populateCalendarAttendance(prid) {
-    var dataInterest = moment()
-    var month = dataInterest.month();
-    var year = dataInterest.year();
-    var attendance_Interest = [];
-    var prid = prid;
-    var workinghours;
-    this.attendancedata.forEach(d => {
-      var dt = moment(d.createdAt, 'YYYY-MM-DD HH:mm:SS');
-      ((prid == d.prid) && (month === dt.month()) && (year === dt.year())) ? attendance_Interest.push(d) : "";
-    })
-    if (attendance_Interest.length == 0) {
-      callUrl({ mode: "GETATTENDANCE", data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
-        this.attendancedata = JSON.parse(resp);
-        //this.populateCalendarAttendance(prid)
-      })
-    }
-    else {
-      console.log("working")
-      $('#calendar').fullCalendar({
-        defaultDate: moment().format('YYYY-MM-DD'),
-        editable: true,
-        eventLimit: false,
-        viewRender: (view, event) => {
-          var moments = $('#calendar').fullCalendar('getDate');
-          var data = moments.format();
-        }
-      })
-      var eventsCurrent = [];
-      var intAtt = attendance_Interest.sort((a, b) => { return a.createdAt - b.createdAt })
-      for (var idx = 0; idx < intAtt.length; idx++) {
-        var atUnixTime = moment(intAtt[idx].createdAt, 'YYYY-MM-DD HH:mm:SS').unix()
-        if (intAtt[idx].mode === 'OUT') {
-          var idxIn = idx;
-          var evt = { end: moment.unix(atUnixTime).format('YYYY-MM-DD HH:mm:SS') }
-          while (idxIn-- > 0) {
-            var possEnd = moment(intAtt[idxIn].createdAt, 'YYYY-MM-DD HH:mm:SS').format('YYYY-MM-DD HH:mm:SS');
-            (intAtt[idxIn].mode === 'IN') ? evt["start"] = possEnd : evt.end = possEnd;
-            if (intAtt[idxIn].mode === 'IN') break;
-          }
-          eventsCurrent.push(evt)
-        }
+  populateCalendarAttendance(prid, dataInterest = moment()) {
+    callUrl({ mode: "GETATTENDANCE", data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
+      var attendance = JSON.parse(resp)
+      var workinghours;
+      if (attendance.length == 0) {
+        swal("Attendance Not Found", "", "info")
       }
-      eventsCurrent.forEach(pushtime => {
-        var startTime = moment(pushtime.start, 'YYYY-MM-DD HH:mm:SS');
-        var endTime = moment(pushtime.end, 'YYYY-MM-DD HH:mm:SS');
-        workinghours = endTime.diff(startTime, 'hours');
-        pushtime["title"] = (workinghours + 1) + " hrs";
-      })
-      $('#calendar').fullCalendar('removeEvents');
-      $('#calendar').fullCalendar('addEventSource', eventsCurrent);
-    }
+      else {
+        $('#calendar').fullCalendar({
+          defaultDate: moment().format('YYYY-MM-DD'),
+          editable: true,
+          eventLimit: false,
+          viewRender: (view, event) => {
+            var moments = $('#calendar').fullCalendar('getDate');
+            var data = moments.format();
+          }
+        })
+        var eventsCurrent = [];
+        var intAtt = attendance.sort((a, b) => {return a.createdAt - b.createdAt })
+        for (var idx = 0; idx < intAtt.length; idx++) {
+          var atUnixTime = moment(intAtt[idx].createdAt, 'YYYY-MM-DD HH:mm:SS').unix()
+          if (intAtt[idx].mode === 'OUT') {
+            var idxIn = idx;
+            var evt = { end: moment.unix(atUnixTime).format('YYYY-MM-DD HH:mm:SS') }
+            while (idxIn-- > 0) {
+              var possEnd = moment(intAtt[idxIn].createdAt, 'YYYY-MM-DD HH:mm:SS').format('YYYY-MM-DD HH:mm:SS');
+              (intAtt[idxIn].mode === 'IN') ? evt["start"] = possEnd : evt.end = possEnd;
+              if (intAtt[idxIn].mode === 'IN') break;
+            }
+            eventsCurrent.push(evt)
+          }
+        }
+        eventsCurrent.forEach(pushtime => {
+          var startTime = moment(pushtime.start, 'YYYY-MM-DD HH:mm:SS');
+          var endTime = moment(pushtime.end, 'YYYY-MM-DD HH:mm:SS');
+          workinghours = endTime.diff(startTime, 'hours');
+          pushtime["title"] = (workinghours + 1) + " hrs";
+        })
+        $('#calendar').fullCalendar('removeEvents');
+        $('#calendar').fullCalendar('addEventSource', eventsCurrent);
+      }
+    })
   }
 }
