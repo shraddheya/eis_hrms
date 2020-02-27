@@ -13,7 +13,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     callUrl({ mode: "ADMINDASHBOARD" }, (resp: any) => {
-      var resp = JSON.parse(resp);
+      resp = JSON.parse(resp)
       this.adminpagedata = resp;
       this.exportadminpagedata = [
         {
@@ -105,24 +105,23 @@ export class AdminComponent implements OnInit {
       case 'manuallyadd_Posts':
         var postinput = $("#fid_Posts_post").val()
         if (postinput != "") callUrl({ mode: "POSTS_ADD", data: JSON.stringify({ post: postinput }) }, (resp: any) => {
-          var resp = JSON.parse(resp);
-          console.log(resp)
+          resp = JSON.parse(resp)
+          //this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Posts") addpel.manual.data.push(resp) })
         })
         return;
       case 'manuallyadd_Accesslevels':
-        // var sendObj = {};
-        // ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val() })
-        // Object.values(sendObj).forEach(chkel => {
-        //   (chkel == "") ? "" : "";
-        // })
-        // callUrl({ mode: requestMode, data: JSON.stringify(sendObj) }, (resp: any) => {
-
-        // })
+        var sendObj = {};
+        ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val() })
+        callUrl({ mode: "ACCESSLEVELS_ADD", data: JSON.stringify(sendObj) }, (resp: any) => {
+          resp = JSON.parse(resp)
+          //this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Dooraccess") addpel.manual.data.push(resp) })
+        })
         return;
       case 'manuallyadd_Documents_accesslevels':
         var docinput = $("#fid_Documents_accesslevels_name").val();
         if (postinput != "") callUrl({ mode: "DOCUMENTS_ACCESSLEVELS_ADD", data: JSON.stringify({ name: docinput }) }, (resp => {
-          console.log(resp)
+          resp = JSON.parse(resp)
+          //this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Docaccess") addpel.manual.data.push(resp) })
         }))
         return;
     }

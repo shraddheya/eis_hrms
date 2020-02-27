@@ -91,6 +91,7 @@ export class PortalComponent implements OnInit {
   userDetails = { data: [{ title: "Basic Detail", detail: [], show: true }, { title: "Permanent Address", detail: [], show: true }, { title: "Corresponding Address", detail: [], show: true }] }
   constructor() { }
   ngOnInit() {
+    this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
       resp = JSON.parse(resp)
       this.accesslevels = resp.accesslevels;
@@ -108,7 +109,6 @@ export class PortalComponent implements OnInit {
         }
         if ((permit.post >= 1) && (permit.post <= 3)) { }
       })
-      this.initJIT();
       this.createDataTree(this.users);
       localStorage.setItem("checklogin", "true")
     });
@@ -332,11 +332,12 @@ export class PortalComponent implements OnInit {
     switch (mode) {
       case 'cardallot':
         callUrl({ mode: "CLEARASSOCIATION", data: requestObj }, (resp: any) => {
-          (resp == '"success"') ? callUrl({ mode: "GETCARDID", data: requestObj }, (resps: any) => { this.objectToarray(resps, "fromCardallot") }) : "";
+          resp = JSON.parse(resp)
+          (resp == '"success"') ? callUrl({ mode: "GETCARDID", data: requestObj }, (resps: any) => { this.objectToarray(JSON.parse(resps), "fromCardallot") }) : "";
         })
         break;
       case 'getcardid':
-        if (this.checkcardRecord.tagid == "") callUrl({ mode: "GETCARDID", data: requestObj }, (resp: any) => { this.objectToarray(resp, "fromCardallot") })
+        if (this.checkcardRecord.tagid == "") callUrl({ mode: "GETCARDID", data: requestObj }, (resp: any) => { this.objectToarray(JSON.parse(resp), "fromCardallot") })
         this.clicked("allotimgLoad");
         break;
       case 'deleteRecord':
@@ -347,7 +348,7 @@ export class PortalComponent implements OnInit {
         $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
         var i = 0; i++; userData["prid"] = (new Date).getTime() + i - 2678400;
         callUrl({ mode: "REGISTER", data: JSON.stringify(userData) }, (resp: any) => {
-          resp = JSON.parse(resp);
+          resp = JSON.parse(resp)
           resp["id"] = resp.prid;
           delete resp["prid"];
           this.addUserNode2GUI(resp, "addusers");
@@ -359,7 +360,7 @@ export class PortalComponent implements OnInit {
         updObj["prid"] = this.clickedUserid;
         updObj["boss"] = this.rootUserid;
         callUrl({ mode: "UPDATE_USERS", data: JSON.stringify(updObj) }, (resp: any) => {
-          resp = JSON.parse(resp);
+          resp = JSON.parse(resp)
           resp.id = resp.prid;
           delete resp["prid"];
           this.addUserNode2GUI(resp, "updateuser");
@@ -367,9 +368,10 @@ export class PortalComponent implements OnInit {
         break;
       case 'salaryslip_request':
         callUrl({ mode: "SALARYSLIP", data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
+          resp = JSON.parse(resp)
           this.salaryslipJson.data.forEach(salJson => { salJson.detail = [] })
           var salaryObj: any = {}
-          var salary_json = JSON.parse(resp)
+          var salary_json = resp
           if (salary_json.length == 0) this.salaryslipJson.show = false
           salary_json.forEach(el => { salaryObj = el });
           //code for userdetail
@@ -403,7 +405,7 @@ export class PortalComponent implements OnInit {
     switch (mode) {
       case 'fromCardallot':
         var obj;
-        JSON.parse(input).forEach(el => { obj = el })
+        input.forEach(el => { obj = el })
         this.checkcardRecord = obj;
         this.callFunction("getcardid");
         break;
@@ -411,7 +413,7 @@ export class PortalComponent implements OnInit {
   }
   populateCalendarAttendance(prid, dataInterest = moment()) {
     callUrl({ mode: "GETATTENDANCE", data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
-      var attendance = JSON.parse(resp)
+      var attendance = resp
       var workinghours;
       if (attendance.length == 0) {
         swal("Attendance Not Found", "", "info")
