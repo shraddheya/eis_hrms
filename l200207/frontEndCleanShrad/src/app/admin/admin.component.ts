@@ -105,23 +105,27 @@ export class AdminComponent implements OnInit {
       case 'manuallyadd_Posts':
         var postinput = $("#fid_Posts_post").val()
         if (postinput != "") callUrl({ mode: "POSTS_ADD", data: JSON.stringify({ post: postinput }) }, (resp: any) => {
-          resp = JSON.parse(resp)
-          //this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Posts") addpel.manual.data.push(resp) })
+          var respobj: any = {};
+          JSON.parse(resp).forEach(el => { respobj = el })
+          respobj["name"] = respobj.post;
+          this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Posts") addpel.manual.data.push(respobj) })
         })
         return;
       case 'manuallyadd_Accesslevels':
         var sendObj = {};
         ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val() })
         callUrl({ mode: "ACCESSLEVELS_ADD", data: JSON.stringify(sendObj) }, (resp: any) => {
-          resp = JSON.parse(resp)
-          //this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Dooraccess") addpel.manual.data.push(resp) })
+          var respobj = {};
+          JSON.parse(resp).forEach(el => { respobj = el })
+          this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Dooraccess") addpel.manual.data.push(respobj) })
         })
         return;
       case 'manuallyadd_Documents_accesslevels':
         var docinput = $("#fid_Documents_accesslevels_name").val();
         if (postinput != "") callUrl({ mode: "DOCUMENTS_ACCESSLEVELS_ADD", data: JSON.stringify({ name: docinput }) }, (resp => {
-          resp = JSON.parse(resp)
-          //this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Docaccess") addpel.manual.data.push(resp) })
+          var respobj = {};
+          JSON.parse(resp).forEach(el => { respobj = el })
+          this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Docaccess") addpel.manual.data.push(respobj) })
         }))
         return;
     }
