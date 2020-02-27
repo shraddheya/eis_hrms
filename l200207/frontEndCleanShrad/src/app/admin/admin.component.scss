@@ -1,5 +1,12 @@
 #compbackground{position: absolute;height: 100%;width: 100%;}
-//#hierarchy{height: 100%;width: 100%;} 
+.masterDiv{
+    position: absolute;
+    top: 5em;
+    bottom: -17px;
+    left: 0;
+    right: -17px; /* Increase/Decrease this value for cross-browser compatibility */
+    overflow-y: scroll;
+  }
 .scrollbar::-webkit-scrollbar {
     width:0.2em
 }

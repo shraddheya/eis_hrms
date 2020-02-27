@@ -1,6 +1,7 @@
 <app-topbar></app-topbar>
 <div id="compbackground" class="bg-dark p-5">
-  <div class="row p-4">
+  <div class="masterDiv">
+    <div class="row p-4">
     <div class="col-lg-4 col-xs-12 text-white" *ngFor="let userdata of exportadminpagedata">
       <p class="text-center">
         <mdb-icon fas icon="{{userdata.icon}}"></mdb-icon> {{userdata.title}}
@@ -48,6 +49,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </div>
