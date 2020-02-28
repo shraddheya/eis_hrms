@@ -21,13 +21,13 @@ export class AdminComponent implements OnInit {
           clickFun: (_: any) => { this.showhideDefault('default_show_Posts') },
           icon: "briefcase",
           default: {
+            title: "Posts",
             backicon: "backspace",
             addicon: "plus-circle",
             clickFun: (_: any) => { this.showhideDefault('default_hide_Posts') },
             show: false,
             data: {
-              clickFun: (_: any) => { this.clicked('') },
-              record: ["Master"]
+              record: ["Traniee", "Intern"]
             },
           },
           manual: {
@@ -58,13 +58,14 @@ export class AdminComponent implements OnInit {
           clickFun: (_: any) => { this.showhideDefault('default_show_Docaccess') },
           icon: "file-alt",
           default: {
+            title: "Documents_accesslevels",
             backicon: "backspace",
             addicon: "plus-circle",
             clickFun: (_: any) => { this.showhideDefault('default_hide_Docaccess') },
             show: false,
             data: {
               clickFun: (_: any) => { this.clicked('hide_defaultdocaccess') },
-              record: [],
+              record: ["Driving Licence"],
             },
           },
           manual: {
@@ -100,14 +101,37 @@ export class AdminComponent implements OnInit {
         return;
     }
   }
+
+  dynamicMainupulate(data, mode) {
+    if (data.name.slice(0, 3) == "DLT") {
+      callUrl({ mode: mode.toUpperCase() + "_DLT", data: JSON.stringify({ id: data.name.slice(7, data.name.length) }) }, (resp: any) => {
+        resp = JSON.parse(resp)
+        this.exportadminpagedata.forEach(el => {
+          if (el.manual.title == mode) { for (var i = 0; i < el.manual.data.length; i++) { if (el.manual.data[i].id == resp.id) el.manual.data.splice(i, 1) } }
+        })
+      })
+    }
+    if (data.name.slice(0, 3) == "ADD") {
+      var sendObj: any = {};
+      var input = data.name.substr(9);
+      (mode == "Posts") ? sendObj["post"] = input : sendObj["name"] = input;
+      callUrl({ mode: mode.toUpperCase() + "_ADD", data: JSON.stringify(sendObj) }, (resp: any) => {
+        console.log(JSON.parse(resp))
+        //var respObj = {}
+        // JSON.parse(resp).forEach(el => { respObj = el })
+        // this.exportadminpagedata.forEach(addel => { if (addel.manual.title == mode) addel.manual.data.push(respObj) })
+      })
+    }
+  }
   callFunction(mode) {
     switch (mode) {
       case 'manuallyadd_Posts':
-        var postinput = $("#fid_Posts_post").val()
-        if (postinput != "") callUrl({ mode: "POSTS_ADD", data: JSON.stringify({ post: postinput }) }, (resp: any) => {
+        var postinput = $("#fid_Posts_post")
+        if (postinput.val() != "") callUrl({ mode: "POSTS_ADD", data: JSON.stringify({ post: postinput.val() }) }, (resp: any) => {
           var respobj: any = {};
           JSON.parse(resp).forEach(el => { respobj = el })
           respobj["name"] = respobj.post;
+          postinput.val("")
           this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Posts") addpel.manual.data.push(respobj) })
         })
         return;
@@ -116,15 +140,17 @@ export class AdminComponent implements OnInit {
         ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val() })
         callUrl({ mode: "ACCESSLEVELS_ADD", data: JSON.stringify(sendObj) }, (resp: any) => {
           var respobj = {};
-          JSON.parse(resp).forEach(el => { respobj = el })
+          JSON.parse(resp).forEach(el => { respobj = el });
+          ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val("") })
           this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Dooraccess") addpel.manual.data.push(respobj) })
         })
         return;
       case 'manuallyadd_Documents_accesslevels':
-        var docinput = $("#fid_Documents_accesslevels_name").val();
-        if (postinput != "") callUrl({ mode: "DOCUMENTS_ACCESSLEVELS_ADD", data: JSON.stringify({ name: docinput }) }, (resp => {
+        var docinput = $("#fid_Documents_accesslevels_name");
+        if (docinput.val() != "") callUrl({ mode: "DOCUMENTS_ACCESSLEVELS_ADD", data: JSON.stringify({ name: docinput.val() }) }, (resp => {
           var respobj = {};
           JSON.parse(resp).forEach(el => { respobj = el })
+          docinput.val("")
           this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Docaccess") addpel.manual.data.push(respobj) })
         }))
         return;

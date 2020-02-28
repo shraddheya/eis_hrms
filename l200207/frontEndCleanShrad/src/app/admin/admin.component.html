@@ -18,7 +18,7 @@
               <div class="row">
                 <div class="col-8 text-left">{{defaultpost}}</div>
                 <div class="col-4 text-right">
-                  <a class="p-3" (click)='userdata.default.clickFun ? userdata.default.clickFun() : null'>
+                  <a class="p-3" #dynamicadd name=ADD|name:{{defaultpost}} (click)="dynamicMainupulate(dynamicadd,userdata.default.title)">
                     <mdb-icon fas icon="{{userdata.default.addicon}}"></mdb-icon>
                   </a>
                 </div>
@@ -42,7 +42,9 @@
                 <div class="col-3 ml-1 text-white">{{manual.inid}}</div>
                 <div class="col-3 ml-1 text-white">{{manual.outid}}</div>
                 <div class="col-2 ml-1 text-white">
-                  <mdb-icon fas icon="{{userdata.manual.removeicon}}"></mdb-icon>
+                  <a #dynamicdel name=DLT_id:{{manual.id}} (click)="dynamicMainupulate(dynamicdel,userdata.manual.title)">
+                    <mdb-icon fas icon="{{userdata.manual.removeicon}}"></mdb-icon>
+                  </a>
                 </div>
               </div>
             </div>
