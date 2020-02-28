@@ -1,17 +1,19 @@
 // tslint:disable: max-line-length
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from "angular-bootstrap-md";
+import { ModalDirective } from 'angular-bootstrap-md';
 import { callUrl } from '../ajaxes';
 
 import { Router } from '@angular/router';
 import $ from 'jquery';
-var check;
+var check
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss']
 })
+
 export class TopbarComponent implements OnInit {
+  checkdata:any;
   email: string;
   password: string;
   constructor(private router: Router) { }
@@ -59,10 +61,10 @@ export class TopbarComponent implements OnInit {
     },
   ];
   portalmenuDropdown = [
-    { icon: "bell", clickFun: (_: any) => { this.clicked('notification') }, show: true },
-    { icon: "user-shield", clickFun: (_: any) => { this.clicked('adminpanel') }, show: true },
-    { icon: "cog", clickFun: (_: any) => { this.clicked('setting') }, show: true },
-    { icon: "sign-out-alt", clickFun: (_: any) => { this.clicked('logout') }, show: true },
+    { icon: 'bell', clickFun: (_: any) => { this.clicked('notification') }, show: true },
+    { icon: 'user-shield', clickFun: (_: any) => { this.clicked('adminpanel') }, show: true },
+    { icon: 'cog', clickFun: (_: any) => { this.clicked('setting') }, show: true },
+    { icon: 'sign-out-alt', clickFun: (_: any) => { this.clicked('logout') }, show: true },
   ]
 
   callFunction(mode: string) {
@@ -82,13 +84,13 @@ export class TopbarComponent implements OnInit {
     switch (mode) {
       case 'showLoginModel':
         this.loginmodal.show();
-        $(".modal-backdrop").hide();
+        $('.modal-backdrop').hide();
         break;
       case 'hideLoginModel':
         this.loginmodal.hide();
         break;
       case 'menues':
-        console.log("Admin page");
+        console.log('Admin page');
         break;
       case 'adminpanel':
         this.router.navigate(['admin'])
@@ -98,30 +100,31 @@ export class TopbarComponent implements OnInit {
         break;
       case 'logout':
         this.router.navigate(['']);
-        localStorage.setItem("checklogin", "false")
+        localStorage.setItem('checklogin', 'false')
         break;
       default:
         break;
     }
   }
   passwordView(format, input, showhide_event) {
-    $(showhide_event).attr("type", format);
-    $(".show" + format).hide();
-    $(".show" + input).show();
+    $(showhide_event).attr('type', format);
+    $('.show' + format).hide();
+    $('.show' + input).show();
   }
 
   ngOnInit() {
-    let checkurl: string = window.location.href.replace("http://localhost:4200/", "")
-    if (checkurl == "portal" || checkurl == "admin") {
-      var check = localStorage.getItem("checklogin")
-      if ((check == null) || (check == "false")) {
+    console.log(check)
+    let checkurl: string = window.location.href.replace('http://localhost:4200/', '')
+    if (checkurl == 'portal' || checkurl == 'admin') {
+      var check = localStorage.getItem('checklogin')
+      if ((check == null) || (check == 'false')) {
         this.router.navigate([''])
       }
-      if (check == "true") {
+      if (check == 'true') {
         this.router.navigate([checkurl])
         this.topBarElements.forEach(el => {
-          (checkurl == "portal") ? (el.name == "Menue") ? el.show = true : el.show = false : "";
-          (checkurl == "admin") ? (el.name == "Backtoportal") ? el.show = true : el.show = false : "";
+          (checkurl == 'portal') ? (el.name == 'Menue') ? el.show = true : el.show = false : '';
+          (checkurl == 'admin') ? (el.name == 'Backtoportal') ? el.show = true : el.show = false : '';
         });
       }
     }

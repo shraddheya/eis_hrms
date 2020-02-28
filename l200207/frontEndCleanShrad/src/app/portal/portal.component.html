@@ -221,16 +221,18 @@
                 <div class="col-4 p-4" *ngFor="let crecordlist of recordlist.detail">
                   <div *ngIf="crecordlist.show">
                     <mdb-icon fas icon={{crecordlist.icon}}></mdb-icon>&nbsp;
-                    <label class="ml-2" [attr.contentEditable]=editabel required
+                    <label class="ml-2 updatedetail" id={{labelel.key}} [attr.contentEditable]=editabel required
                       *ngFor="let labelel of crecordlist.record">
-                      <span class="updatedetail" id={{labelel.key}}>{{labelel.value}}</span>
+                      {{labelel.value}}
                     </label>&nbsp;&nbsp;
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div id="calendar"></div>
+          <div>
+            <div id="calendar"></div>
+          </div>
         </div>
         <div class="modal-footer border border-white">
           <button class="update btn btn-dark form-group" *ngIf="editabel"
