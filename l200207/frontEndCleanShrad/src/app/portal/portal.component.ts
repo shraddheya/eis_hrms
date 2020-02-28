@@ -119,11 +119,13 @@ export class PortalComponent implements OnInit {
         this.addUsers.hide();
         this.users.push(user);
         this.createDataTree(this.users);
+        swal("User Added","","success")
         break;
       case 'deleteusers':
         this.hierachyView.hide();
         this.users.forEach(function (item, index, object) { (item.id == user.prid) ? object.splice(index, 1) : "" });
         this.createDataTree(this.users);
+        swal("User Deleted","","success")
         break;
       case 'updateuser':
         this.hierachyView.hide();
@@ -135,6 +137,7 @@ export class PortalComponent implements OnInit {
         };
         this.users.push(user);
         this.createDataTree(this.users);
+        swal("User Updated","","success")
         break;
     }
   }
@@ -241,6 +244,7 @@ export class PortalComponent implements OnInit {
     rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
   }
   hierarchyViewdata(data) {
+    console.log(data)
     this.jitNodeData = data
     this.clickedUserid = data.id;
     this.rootUserid = data.boss;
@@ -413,12 +417,10 @@ export class PortalComponent implements OnInit {
   }
   populateCalendarAttendance(prid, dataInterest = moment()) {
     callUrl({ mode: "GETATTENDANCE", data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
-      var attendance = resp
+      var attendance = JSON.parse(resp)
+      console.log(attendance)
       var workinghours;
-      if (attendance.length == 0) {
-        swal("Attendance Not Found", "", "info")
-      }
-      else {
+      if(attendance.length != 0) {
         $('#calendar').fullCalendar({
           defaultDate: moment().format('YYYY-MM-DD'),
           editable: true,

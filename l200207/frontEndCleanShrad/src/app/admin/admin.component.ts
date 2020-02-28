@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵSWITCH_TEMPLATE_REF_FACTORY__POST_R3__ } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import $ from 'jquery';
+declare var swal: any
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -109,6 +110,7 @@ export class AdminComponent implements OnInit {
         this.exportadminpagedata.forEach(el => {
           if (el.manual.title == mode) { for (var i = 0; i < el.manual.data.length; i++) { if (el.manual.data[i].id == resp.id) el.manual.data.splice(i, 1) } }
         })
+        swal("Record Removed","","success")
       })
     }
     if (data.name.slice(0, 3) == "ADD") {
@@ -116,10 +118,10 @@ export class AdminComponent implements OnInit {
       var input = data.name.substr(9);
       (mode == "Posts") ? sendObj["post"] = input : sendObj["name"] = input;
       callUrl({ mode: mode.toUpperCase() + "_ADD", data: JSON.stringify(sendObj) }, (resp: any) => {
-        console.log(JSON.parse(resp))
-        //var respObj = {}
-        // JSON.parse(resp).forEach(el => { respObj = el })
-        // this.exportadminpagedata.forEach(addel => { if (addel.manual.title == mode) addel.manual.data.push(respObj) })
+        var respObj = {}
+        JSON.parse(resp).forEach(el => { respObj = el })
+        this.exportadminpagedata.forEach(addel => { if (addel.manual.title == mode) addel.manual.data.push(respObj) })
+        swal("Record Added","","success")
       })
     }
   }
@@ -130,9 +132,9 @@ export class AdminComponent implements OnInit {
         if (postinput.val() != "") callUrl({ mode: "POSTS_ADD", data: JSON.stringify({ post: postinput.val() }) }, (resp: any) => {
           var respobj: any = {};
           JSON.parse(resp).forEach(el => { respobj = el })
-          respobj["name"] = respobj.post;
           postinput.val("")
           this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Posts") addpel.manual.data.push(respobj) })
+          swal("Record Added","","success")
         })
         return;
       case 'manuallyadd_Accesslevels':
@@ -143,6 +145,7 @@ export class AdminComponent implements OnInit {
           JSON.parse(resp).forEach(el => { respobj = el });
           ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val("") })
           this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Dooraccess") addpel.manual.data.push(respobj) })
+          swal("Record Added","","success")
         })
         return;
       case 'manuallyadd_Documents_accesslevels':
@@ -152,6 +155,7 @@ export class AdminComponent implements OnInit {
           JSON.parse(resp).forEach(el => { respobj = el })
           docinput.val("")
           this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Docaccess") addpel.manual.data.push(respobj) })
+          swal("Record Added","","success")
         }))
         return;
     }
