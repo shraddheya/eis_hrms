@@ -305,7 +305,7 @@ if ($mode === "POSTS_ADD") { // Add Post
   $stmt->bind_param("si", $data['post'], $data['boss']);
   $stmt->execute();
   if ($stmt->error) exit(' failure');
-  $stmtR = $link->prepare("SELECT id,post,boss FROM posts WHERE id=(LAST_INSERT_ID())");
+  $stmtR = $link->prepare("SELECT id,post AS `name`,boss FROM posts WHERE id=(LAST_INSERT_ID())");
   $stmtR->execute();
   $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
   print_r($mode . "success" . json_encode($getdata));
