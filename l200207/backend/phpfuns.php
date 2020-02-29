@@ -176,17 +176,18 @@ if ($mode === "SALARYSLIP") { // Select Salart
 
 if ($mode === "UPDATE_USERS") { // Users Can Be Updates
   $ql = $link->prepare("UPDATE users set title=?,fname=?,mname=?,lname=?,email=?,contactno=?,address_c_houseno=?,address_c_area=?,address_c_city=?,address_c_state=?,address_c_country=?,address_c_pincode=?, address_p_houseno=?,address_p_area=?,address_p_city=?,address_p_state=?,address_p_country=?,address_p_pincode=? WHERE prid =?");
-  $ql->bind_param("sssssssssssisssssii", $data['title'], $data['fname'], $data['mname'], $data['lname'], $data['email'], $data['contactno'], $data['address_c_houseno'], $data['address_c_area'], $data['address_c_city'], $data['address_c_state'], $data['address_c_country'], $data['address_c_pincode'], $data['address_p_houseno'], $data['address_p_area'], $data['address_p_city'], $data['address_p_state'], $data['address_p_country'], $data['address_p_pincode'], $data['id']);
+  $ql->bind_param("sssssssssssisssssii", $data['title'], $data['fname'], $data['mname'], $data['lname'], $data['email'], $data['contactno'], $data['address_c_houseno'], $data['address_c_area'], $data['address_c_city'], $data['address_c_state'], $data['address_c_country'], $data['address_c_pincode'], $data['address_p_houseno'], $data['address_p_area'], $data['address_p_city'], $data['address_p_state'], $data['address_p_country'], $data['address_p_pincode'], $data['prid']);
   $ql->execute();
   $idnew = $ql->insert_id;
-  if ($ql->error) exit(' failure');
+  if ($ql->error) exit($ql->error.' failure');
   $stmt = $link->prepare("SELECT * FROM users where id = $idnew");
   $stmt->execute();
   $newUsr = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-  if ($stmt->error) exit($stmt->error . ' failure');
+  if ($stmt->error) exit($stmt->error.' failure');
   print_r($mode . "success" . json_encode($data));
   exit();
 }
+
 
 if ($mode === "NOTIFICATION") { // Send Notification Who LoggedIn
   $stmt = $link->prepare("SELECT id,`when`,why,what,whom FROM `notifications` WHERE whom = ?");
