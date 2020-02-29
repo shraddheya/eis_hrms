@@ -81,8 +81,8 @@ if ($mode === "GETINITDATA") {
     $userinConsideration = $retArray[$idx];
     $selects = "u.prid as `id`, u.title, u.fname, u.mname, u.lname, u.email as `mail`, u.post, c.prid2 as boss";
     if ($permissions & 0b0001) $selects  .= ", u.contactno"
-      . ", c.connection";
-    if ($permissions & 0b0010) $selects  .= ", u.address_c_houseno"
+      . ", c.connection"
+      . ", u.address_c_houseno"
       . ", u.address_c_area"
       . ", u.address_c_city"
       . ", u.address_c_state"
@@ -96,6 +96,20 @@ if ($mode === "GETINITDATA") {
       . ", u.address_p_country"
       . ", u.address_p_pincode"
       . ", u.picture";
+    // if ($permissions & 0b0010) $selects  .= ", u.address_c_houseno"
+    //   . ", u.address_c_area"
+    //   . ", u.address_c_city"
+    //   . ", u.address_c_state"
+    //   . ", u.address_c_country"
+    //   . ", u.address_c_pincode"
+    //   . ", u.address_p_houseno"
+    //   . ", u.createdAt"
+    //   . ", u.address_p_area"
+    //   . ", u.address_p_city"
+    //   . ", u.address_p_state"
+    //   . ", u.address_p_country"
+    //   . ", u.address_p_pincode"
+    //   . ", u.picture";
     if ($permissions & 0b0100) $selects  .= ", u.current_salary";
     if ($permissions & 0b1000) $selects .= ", u.projects";
     $stmtN = $link->prepare("SELECT $selects FROM users as u, connections as c WHERE u.prid = c.prid1 AND c.prid2 = ?");
