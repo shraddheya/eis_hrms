@@ -97,6 +97,7 @@ export class PortalComponent implements OnInit {
     this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
       resp = JSON.parse(resp)
+      console.log(resp)
       this.accesslevels = resp.accesslevels;
       this.posts = resp.posts;
       this.users = resp.users;
