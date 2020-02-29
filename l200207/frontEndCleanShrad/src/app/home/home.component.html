@@ -5,7 +5,7 @@
       <div class="p-5">
         <div class="p-5">
           <mdb-carousel [animation]="'slide'" class="z-depth-3">
-            <mdb-carousel-item *ngFor="let imgName of ['baner', 'adminpanel']">
+            <mdb-carousel-item *ngFor="let imgName of ['portal', 'adminpage']">
               <img class="d-block w-100" src="../../assets/images/{{imgName}}.png">
             </mdb-carousel-item>
           </mdb-carousel>
@@ -76,13 +76,13 @@
             </mdb-card-title>
             <mdb-card-text style="height:0.5em;" class="font-weight-bold">
               Username - 
-              <span #inputUn (click)="copyInputcredential(inputUn)">
+              <span>
                 demo@edeitic.com
               </span>
             </mdb-card-text>
             <mdb-card-text style="height:0.5em;" class="font-weight-bold">
               Password - 
-              <span #inputPw (click)="copyInputcredential(inputPw)">
+              <span>
                 demo@edeitic.com
               </span>
             </mdb-card-text>

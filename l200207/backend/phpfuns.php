@@ -28,7 +28,7 @@ if ($mode === "LOGIN") {
     if ($stmtCheckTableList->error) exit(' Failure');
     $stmtCheckTableListR = $stmtCheckTableList->get_result();
     $createDBQ = "CREATE DATABASE IF NOT EXISTS `$DBnm`;";
-    while ($tblNm = $stmtCheckTableListR->fetch_array(MYSQLI_NUM)) $createDBQ = $createDBQ . "\nCREATE TABLE IF NOT EXISTS `$DBnm`.`$tblNm[0]` AS SELECT * FROM `eis_hrms_0demo`.`$tblNm[0]`;";
+    while ($tblNm = $stmtCheckTableListR->fetch_array(MYSQLI_NUM)) $createDBQ = $createDBQ . "\nCREATE TABLE IF NOT EXISTS `$DBnm`.`$tblNm[0]` LIKE `eis_hrms_0demo`.`$tblNm[0]`; INSERT INTO `$DBnm`.`$tblNm[0]` SELECT * FROM eis_hrms_0demo.`$tblNm[0]`;";
     $link->multi_query($createDBQ);
   } else {
     $_SESSION["demoUsrID"] = null;
@@ -209,7 +209,7 @@ if ($mode === "ADMINDASHBOARD") { // Sending All Tables
   $stmt = $link->prepare("SELECT * FROM holidays"); // holidays
   $stmt->execute();
   $UsrData["Holidays"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-  $stmt = $link->prepare("SELECT id,post FROM posts"); //Posts
+  $stmt = $link->prepare("SELECT id,post AS `name` FROM posts"); //Posts
   $stmt->execute();
   $UsrData["Posts"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
   $stmt = $link->prepare("SELECT * FROM salaries"); // Salaries
@@ -305,7 +305,7 @@ if ($mode === "POSTS_ADD") { // Add Post
   $stmt->bind_param("si", $data['post'], $data['boss']);
   $stmt->execute();
   if ($stmt->error) exit(' failure');
-  $stmtR = $link->prepare("SELECT id,post,boss FROM posts WHERE id=(LAST_INSERT_ID())");
+  $stmtR = $link->prepare("SELECT id,post AS `name`,boss FROM posts WHERE id=(LAST_INSERT_ID())");
   $stmtR->execute();
   $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
   print_r($mode . "success" . json_encode($getdata));
@@ -373,21 +373,16 @@ if ($mode === "GETCARDID") { // Connect with UI
 
 if ($mode === "REG_ATT") { //http://5th1n62/HRMS-PROJ/back-end/phpfuns.php?mode=REG_ATT&data=<tagIDxxxx>@@@<deviceIDxxxx>@@@in@@@<tagDATAxxxx>
   $data = explode('@@@', $data);
-  // print_r($data);
-  // echo  "<br>";
   if (count($data) != 4) four04("4 inputs required");
   $stmt     = $link->prepare("SELECT tagid FROM dataallassociation WHERE tagid = ? AND tagdata = ?");
   $stmt->bind_param("ss", $data[0], $data[3]);
   $stmt->execute();
   $rows     = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-  // print_r($data[1]);
-  // $stmt->close();
   if (!$rows) exit("=@Failure");
   $stmt     = $link->prepare("INSERT INTO attendance (prid, mode, device) values (?, ?, ?)");
   $stmt->bind_param("isi", $data[3], $data[2], $data[1]);
   $stmt->execute();
   $stmt->close();
-  // echo json_encode(true);
   print_r("=@Success");
   exit();
 }

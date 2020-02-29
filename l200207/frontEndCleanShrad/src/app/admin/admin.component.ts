@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ɵSWITCH_TEMPLATE_REF_FACTORY__POST_R3__ } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import $ from 'jquery';
+declare var swal: any
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -10,14 +10,11 @@ import $ from 'jquery';
 export class AdminComponent implements OnInit {
   adminpagedata: any;
   exportadminpagedata: any;
-  constructor(private router: Router) { }
+  constructor() { }
 
   ngOnInit() {
     callUrl({ mode: "ADMINDASHBOARD" }, (resp: any) => {
-      var resp = JSON.parse(resp);
-      resp.Posts.forEach(postel => { postel["data"] = postel.post });
-      resp.Accesslevels.forEach(dorrel => { dorrel["data"] = dorrel.name });
-      resp.Documents_accesslevels.forEach(docel => { docel["data"] = docel.name });
+      resp = JSON.parse(resp)
       this.adminpagedata = resp;
       this.exportadminpagedata = [
         {
@@ -25,13 +22,13 @@ export class AdminComponent implements OnInit {
           clickFun: (_: any) => { this.showhideDefault('default_show_Posts') },
           icon: "briefcase",
           default: {
+            title: "Posts",
             backicon: "backspace",
             addicon: "plus-circle",
             clickFun: (_: any) => { this.showhideDefault('default_hide_Posts') },
             show: false,
             data: {
-              clickFun: (_: any) => { this.clicked('hide_defaultdocaccess') },
-              record: ["Master"]
+              record: ["Traniee", "Intern"]
             },
           },
           manual: {
@@ -39,7 +36,7 @@ export class AdminComponent implements OnInit {
             removeicon: "minus-circle",
             show: true,
             data: resp.Posts,
-            inputfield: [{ name: "post", clickFun: (_: any) => { this.callFunction('manuallyadd_Posts') }, }]
+            inputfield: [{ name: "post", clickFun: (_: any) => { this.callFunction('manuallyadd_Posts') } }]
           },
         },
         {
@@ -62,13 +59,14 @@ export class AdminComponent implements OnInit {
           clickFun: (_: any) => { this.showhideDefault('default_show_Docaccess') },
           icon: "file-alt",
           default: {
+            title: "Documents_accesslevels",
             backicon: "backspace",
             addicon: "plus-circle",
             clickFun: (_: any) => { this.showhideDefault('default_hide_Docaccess') },
             show: false,
             data: {
               clickFun: (_: any) => { this.clicked('hide_defaultdocaccess') },
-              record: [],
+              record: ["Driving Licence"],
             },
           },
           manual: {
@@ -104,32 +102,60 @@ export class AdminComponent implements OnInit {
         return;
     }
   }
+
+  dynamicMainupulate(data, mode) {
+    if (data.name.slice(0, 3) == "DLT") {
+      callUrl({ mode: mode.toUpperCase() + "_DLT", data: JSON.stringify({ id: data.name.slice(7, data.name.length) }) }, (resp: any) => {
+        resp = JSON.parse(resp)
+        this.exportadminpagedata.forEach(el => {
+          if (el.manual.title == mode) { for (var i = 0; i < el.manual.data.length; i++) { if (el.manual.data[i].id == resp.id) el.manual.data.splice(i, 1) } }
+        })
+        swal("Record Removed","","success")
+      })
+    }
+    if (data.name.slice(0, 3) == "ADD") {
+      var sendObj: any = {};
+      var input = data.name.substr(9);
+      (mode == "Posts") ? sendObj["post"] = input : sendObj["name"] = input;
+      callUrl({ mode: mode.toUpperCase() + "_ADD", data: JSON.stringify(sendObj) }, (resp: any) => {
+        var respObj = {}
+        JSON.parse(resp).forEach(el => { respObj = el })
+        this.exportadminpagedata.forEach(addel => { if (addel.manual.title == mode) addel.manual.data.push(respObj) })
+        swal("Record Added","","success")
+      })
+    }
+  }
   callFunction(mode) {
-    var requestMode = mode.substr(12).toUpperCase();
     switch (mode) {
       case 'manuallyadd_Posts':
-        var postinput = $("#fid_Posts_post").val()
-        if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ post: postinput }) }, (resp: any) => {
-          var resp = JSON.parse(resp);
-          console.log(resp)
-          // resp["data"] = resp.post;
-          // console.log(resp)
+        var postinput = $("#fid_Posts_post")
+        if (postinput.val() != "") callUrl({ mode: "POSTS_ADD", data: JSON.stringify({ post: postinput.val() }) }, (resp: any) => {
+          var respobj: any = {};
+          JSON.parse(resp).forEach(el => { respobj = el })
+          postinput.val("")
+          this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Posts") addpel.manual.data.push(respobj) })
+          swal("Record Added","","success")
         })
         return;
       case 'manuallyadd_Accesslevels':
         var sendObj = {};
         ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val() })
-        Object.values(sendObj).forEach(chkel => {
-          (chkel == "") ? "" : "";
+        callUrl({ mode: "ACCESSLEVELS_ADD", data: JSON.stringify(sendObj) }, (resp: any) => {
+          var respobj = {};
+          JSON.parse(resp).forEach(el => { respobj = el });
+          ["name", "inid", 'outid'].forEach(el => { sendObj[el] = $("#fid_Accesslevels_" + el).val("") })
+          this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Dooraccess") addpel.manual.data.push(respobj) })
+          swal("Record Added","","success")
         })
-        // callUrl({ mode: requestMode, data: JSON.stringify(sendObj) }, (resp: any) => {
-
-        // })
         return;
       case 'manuallyadd_Documents_accesslevels':
-        var docinput = $("#fid_Documents_accesslevels_name").val();
-        if (postinput != "") callUrl({ mode: requestMode + "_ADD", data: JSON.stringify({ name: docinput })},(resp=>{
-          console.log(resp)
+        var docinput = $("#fid_Documents_accesslevels_name");
+        if (docinput.val() != "") callUrl({ mode: "DOCUMENTS_ACCESSLEVELS_ADD", data: JSON.stringify({ name: docinput.val() }) }, (resp => {
+          var respobj = {};
+          JSON.parse(resp).forEach(el => { respobj = el })
+          docinput.val("")
+          this.exportadminpagedata.forEach(addpel => { if (addpel.title == "Docaccess") addpel.manual.data.push(respobj) })
+          swal("Record Added","","success")
         }))
         return;
     }
