@@ -1,7 +1,7 @@
-import { Component, OnInit, ɵSWITCH_TEMPLATE_REF_FACTORY__POST_R3__ } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { callUrl } from '../ajaxes';
 import $ from 'jquery';
-declare var swal: any
+declare var swal: any;
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -13,68 +13,68 @@ export class AdminComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    callUrl({ mode: "ADMINDASHBOARD" }, (resp: any) => {
-      resp = JSON.parse(resp)
+    callUrl({ mode: 'ADMINDASHBOARD' }, (resp: any) => {
+      resp = JSON.parse(resp);
       this.adminpagedata = resp;
       this.exportadminpagedata = [
         {
-          title: "Posts",
+          title: 'Posts',
           clickFun: (_: any) => { this.showhideDefault('default_show_Posts') },
-          icon: "briefcase",
+          icon: 'briefcase',
           default: {
-            title: "Posts",
-            backicon: "backspace",
-            addicon: "plus-circle",
+            title: 'Posts',
+            backicon: 'backspace',
+            addicon: 'plus-circle',
             clickFun: (_: any) => { this.showhideDefault('default_hide_Posts') },
             show: false,
             data: {
-              record: ["Traniee", "Intern"]
-            },
+              record: ['Traniee', 'Intern']
+            }
           },
           manual: {
-            title: "Posts",
-            removeicon: "minus-circle",
+            title: 'Posts',
+            removeicon: 'minus-circle',
             show: true,
             data: resp.Posts,
-            inputfield: [{ name: "post", clickFun: (_: any) => { this.callFunction('manuallyadd_Posts') } }]
-          },
+            inputfield: [{ name: 'post', clickFun: (_: any) => { this.callFunction('manuallyadd_Posts') } }]
+          }
         },
         {
-          title: "Dooraccess",
-          icon: "door-open",
+          title: 'Dooraccess',
+          icon: 'door-open',
           manual: {
-            title: "Accesslevels",
-            removeicon: "minus-circle",
+            title: 'Accesslevels',
+            removeicon: 'minus-circle',
             show: true,
             data: resp.Accesslevels,
-            extra: "",
+            extra: '',
             inputfield: [
-              { name: "name" },
-              { name: "inid" },
-              { name: "outid", clickFun: (_: any) => { this.callFunction('manuallyadd_Accesslevels') }, }]
-          },
+              { name: 'name' },
+              { name: 'inid' },
+              { name: 'outid', clickFun: (_: any) => { this.callFunction('manuallyadd_Accesslevels') }, }]
+          }
         },
         {
-          title: "Docaccess",
+          title: 'Docaccess',
           clickFun: (_: any) => { this.showhideDefault('default_show_Docaccess') },
-          icon: "file-alt",
+          icon: 'file-alt',
           default: {
-            title: "Documents_accesslevels",
-            backicon: "backspace",
-            addicon: "plus-circle",
+            title: 'Documents_accesslevels',
+            backicon: 'backspace',
+            addicon: 'plus-circle',
             clickFun: (_: any) => { this.showhideDefault('default_hide_Docaccess') },
             show: false,
             data: {
               clickFun: (_: any) => { this.clicked('hide_defaultdocaccess') },
-              record: ["Driving Licence"],
+              record: ['Driving Licence'],
             },
           },
           manual: {
-            removeicon: "minus-circle",
-            title: "Documents_accesslevels",
+            removeicon: 'minus-circle',
+            title: 'Documents_accesslevels',
             show: true,
             data: resp.Documents_accesslevels,
-            inputfield: [{ name: "name", clickFun: (_: any) => { this.callFunction('manuallyadd_Documents_accesslevels') } }]
+            inputfield: [{ name: 'name', clickFun: (_: any) => { this.callFunction('manuallyadd_Documents_accesslevels') } }]
           },
         },
       ]

@@ -2,8 +2,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import { ModalDirective } from 'angular-bootstrap-md';
-import * as moment from 'moment';
-import * as $ from 'jquery';
+import moment from 'moment';
+import $ from 'jquery';
 import 'fullcalendar';
 declare var swal: any
 declare var $jit: any;
@@ -23,8 +23,8 @@ export class PortalComponent implements OnInit {
   posts: any;
   accesslevels: any;
   users: any;
-  adduserBosslist = { show: false }
-  adduserAlldetail = { show: false }
+  adduserBosslist: any = { show: false }
+  adduserAlldetail: any = { show: false }
   selOfBoss: any;
   selOfPost: any;
   selOfTitle: any;
@@ -37,7 +37,7 @@ export class PortalComponent implements OnInit {
   jitNodeData: any;
   attendancedata: any = [];
   addButton: any = false;
-  userRecordbody = [
+  userRecordbody: any = [
     {
       title: 'Crud',
       detail: [{
@@ -82,11 +82,11 @@ export class PortalComponent implements OnInit {
         show: false
       }]
     }];
-  salaryslipJson = {
+  salaryslipJson: any = {
     data: [{ title: 'User Detail', detail: [] }, { title: 'Grossincome', detail: [] }, { title: 'Extraincome', detail: [] }, { title: 'Totalicome', total: 0 }, { title: 'salary_permit', detail: [] }],
     show: true
   }
-  userDetails = { data: [{ title: 'Basic Detail', detail: [], show: true }, { title: 'Permanent Address', detail: [], show: true }, { title: 'Corresponding Address', detail: [], show: true }] }
+  userDetails: any = { data: [{ title: 'Basic Detail', detail: [], show: true }, { title: 'Permanent Address', detail: [], show: true }, { title: 'Corresponding Address', detail: [], show: true }] }
   constructor() { }
   ngOnInit() {
     this.initJIT();
@@ -272,15 +272,16 @@ export class PortalComponent implements OnInit {
         clickel.detail.push({ title: 'email', record: [{ key: 'email', value: clickedData.email.value }], icon: 'envelope', show: (clickedData.email.value == undefined || clickedData.email.value == '') ? false : true })
         clickel.detail.push({ title: 'contactno', record: [{ key: 'contactno', value: clickedData.contactno.value }], icon: 'phone', show: (clickedData.contactno.value == undefined || clickedData.contactno.value == '') ? false : true })
       }
-      if (clickel.title == 'Permanent Address') Object.keys(clickedData).forEach(el => { if (el.startsWith('address_p')) clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0) ? false : true }) })
-      if (clickel.title == 'Corresponding Address') Object.keys(clickedData).forEach(el => { if (el.startsWith('address_c')) clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0) ? false : true }) })
+      if (clickel.title == 'Permanent Address') Object.keys(clickedData).forEach(el => { if (el.startsWith('address_p')) clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0 || clickedData[el].value == '') ? false : true }) })
+      if (clickel.title == 'Corresponding Address') Object.keys(clickedData).forEach(el => { if (el.startsWith('address_c')) clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0 || clickedData[el].value == '') ? false : true }) })
     })
 
     var checkobj: any = { address_p: [], address_c: [] }; //Used to check defined values
     Object.keys(clickedData).forEach(el => {
-      if (el.startsWith('address_p')) if (clickedData[el].value != undefined) checkobj.address_p.push(clickedData[el].value);
-      if (el.startsWith('address_c')) if (clickedData[el].value != undefined) checkobj.address_c.push(clickedData[el].value);
+      if (el.startsWith('address_p')) if (clickedData[el].value != '' || clickedData[el].value != 0) checkobj.address_p.push(clickedData[el].value);
+      if (el.startsWith('address_c')) if (clickedData[el].value != '' || clickedData[el].value != 0) checkobj.address_c.push(clickedData[el].value);
     });
+
     this.userDetails.data.forEach(apel => {
       if (apel.title == 'Permanent Address') (checkobj.address_p == 0) ? apel.show = false : apel.show = true;
       if (apel.title == 'Corresponding Address') (checkobj.address_c == 0) ? apel.show = false : apel.show = true;
@@ -303,12 +304,7 @@ export class PortalComponent implements OnInit {
         this.hierachyView.hide();
         break;
       case 'editRecord':
-        this.userRecordbody.forEach(parel => {
-          (parel.title == 'Crud') ? parel.detail.forEach(carel => {
-            (carel.name == 'view') ? carel.show = true : carel.show = false;
-            (carel.name == 'delete') ? carel.show = true : '';
-          }) : '';
-        })
+        this.userRecordbody.forEach(parel => { if (parel.title == 'Crud') parel.detail.forEach(carel => { (carel.name == 'view') ? carel.show = true : carel.show = false }) })
         this.editabel = true;
         this.userDetails.data.forEach(el => {
           el.show = true;
@@ -317,10 +313,10 @@ export class PortalComponent implements OnInit {
         break;
       case 'viewRecord':
         this.userRecordbody.forEach(parel => {
-          (parel.title == 'Crud') ? parel.detail.forEach(carel => {
+          if (parel.title == 'Crud') parel.detail.forEach(carel => {
             (carel.name == 'edit') ? carel.show = true : carel.show = false;
-            (carel.name == 'delete') ? carel.show = true : '';
-          }) : '';
+            if (carel.name == 'delete') carel.show = true;
+          });
         })
         this.editabel = false;
         this.hierarchyViewdata(this.jitNodeData)
@@ -350,9 +346,7 @@ export class PortalComponent implements OnInit {
     var requestObj = JSON.stringify({ tagdata: this.clickedUserid })
     switch (mode) {
       case 'cardallot':
-        callUrl({ mode: 'CLEARASSOCIATION', data: requestObj }, (resp: any) => {
-          (resp == '"success"') ? callUrl({ mode: 'GETCARDID', data: requestObj }, (resps: any) => { this.objectToarray(JSON.parse(resps), 'fromCardallot') }) : '';
-        })
+        callUrl({ mode: 'CLEARASSOCIATION', data: requestObj }, (resp: any) => { if (resp == '"success"') callUrl({ mode: 'GETCARDID', data: requestObj }, (resp: any) => { this.objectToarray(JSON.parse(resp), 'fromCardallot') }) })
         break;
       case 'getcardid':
         if (this.checkcardRecord.tagid == '') callUrl({ mode: 'GETCARDID', data: requestObj }, (resp: any) => { this.objectToarray(JSON.parse(resp), 'fromCardallot') })
@@ -366,7 +360,7 @@ export class PortalComponent implements OnInit {
         $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
         var i = 0; i++; userData['prid'] = (new Date).getTime() + i - 2678400;
         callUrl({ mode: 'REGISTER', data: JSON.stringify(userData) }, (resp: any) => {
-          resp = JSON.parse(resp)
+          resp = JSON.parse(resp);
           resp['id'] = resp.prid;
           delete resp['prid'];
           this.addUserNode2GUI(resp, 'addusers');
@@ -374,9 +368,7 @@ export class PortalComponent implements OnInit {
         break;
       case 'updateData':
         var updObjt = {};
-        $('.updatedetail').each((_, el) => {
-          updObjt[el.id] = $(el).html()
-        });
+        $('.updatedetail').each((_, el) => { updObjt[el.id] = $(el).html() });
         updObjt['prid'] = this.clickedUserid;
         updObjt['boss'] = this.rootUserid;
         callUrl({ mode: 'UPDATE_USERS', data: JSON.stringify(updObjt) }, (resp: any) => {
@@ -387,9 +379,7 @@ export class PortalComponent implements OnInit {
         })
         break;
       case 'notification':
-        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
-          resp = JSON.parse(resp)
-        })
+        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => { resp = JSON.parse(resp) })
         break;
       case 'salaryslip_request':
         callUrl({ mode: 'SALARYSLIP', data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
@@ -444,23 +434,15 @@ export class PortalComponent implements OnInit {
     }
   }
   populateCalendarAttendance(prid, dataInterest = moment()) {
-    $('#calendar').hide()
+    $('#calendar').hide();
     callUrl({ mode: 'GETATTENDANCE', data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
-      var attendance = JSON.parse(resp)
+      var attendance = JSON.parse(resp);
       var workinghours;
       if (attendance.length != 0) {
-        $('#calendar').show()
-        $('#calendar').fullCalendar({
-          defaultDate: moment().format('YYYY-MM-DD'),
-          editable: true,
-          eventLimit: false,
-          viewRender: (view, event) => {
-            var moments = $('#calendar').fullCalendar('getDate');
-            var data = moments.format();
-          }
-        })
+        $('#calendar').show();
+        $('#calendar').fullCalendar({ defaultDate: moment().format('YYYY-MM-DD'), editable: true, eventLimit: false });
         var eventsCurrent = [];
-        var intAtt = attendance.sort((a, b) => { return a.createdAt - b.createdAt })
+        var intAtt = attendance.sort((a, b) => { return a.createdAt - b.createdAt });
         for (var idx = 0; idx < intAtt.length; idx++) {
           var atUnixTime = moment(intAtt[idx].createdAt, 'YYYY-MM-DD HH:mm:SS').unix()
           if (intAtt[idx].mode === 'OUT') {
@@ -471,7 +453,7 @@ export class PortalComponent implements OnInit {
               (intAtt[idxIn].mode === 'IN') ? evt['start'] = possEnd : evt.end = possEnd;
               if (intAtt[idxIn].mode === 'IN') break;
             }
-            eventsCurrent.push(evt)
+            eventsCurrent.push(evt);
           }
         }
         eventsCurrent.forEach(pushtime => {
@@ -479,7 +461,7 @@ export class PortalComponent implements OnInit {
           var endTime = moment(pushtime.end, 'YYYY-MM-DD HH:mm:SS');
           workinghours = endTime.diff(startTime, 'hours');
           pushtime['title'] = (workinghours + 1) + ' hrs';
-        })
+        });
         $('#calendar').fullCalendar('removeEvents');
         $('#calendar').fullCalendar('addEventSource', eventsCurrent);
       }
