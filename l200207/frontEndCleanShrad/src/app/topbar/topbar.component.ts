@@ -89,9 +89,6 @@ export class TopbarComponent implements OnInit {
       case 'hideLoginModel':
         this.loginmodal.hide();
         break;
-      case 'menues':
-        console.log('Admin page');
-        break;
       case 'adminpanel':
         this.router.navigate(['admin'])
         break;
@@ -113,18 +110,17 @@ export class TopbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(check)
     let checkurl: string = window.location.href.replace('http://localhost:4200/', '')
-    if (checkurl == 'portal' || checkurl == 'admin') {
+    if (checkurl === 'portal' || checkurl === 'admin') {
       var check = localStorage.getItem('checklogin')
-      if ((check == null) || (check == 'false')) {
+      if ((check === null) || (check === 'false')) {
         this.router.navigate([''])
       }
-      if (check == 'true') {
+      if (check === 'true') {
         this.router.navigate([checkurl])
         this.topBarElements.forEach(el => {
-          (checkurl == 'portal') ? (el.name == 'Menue') ? el.show = true : el.show = false : '';
-          (checkurl == 'admin') ? (el.name == 'Backtoportal') ? el.show = true : el.show = false : '';
+          (checkurl === 'portal') ? (el.name === 'Menue') ? el.show = true : el.show = false : '';
+          (checkurl === 'admin') ? (el.name === 'Backtoportal') ? el.show = true : el.show = false : '';
         });
       }
     }
