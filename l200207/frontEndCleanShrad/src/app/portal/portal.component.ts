@@ -83,12 +83,7 @@ export class PortalComponent implements OnInit {
       }]
     }];
   salaryslipJson = {
-    data: [
-      { title: 'User Detail', detail: [] },
-      { title: 'Grossincome', detail: [] },
-      { title: 'Extraincome', detail: [] },
-      { title: 'Totalicome', total: 0 },
-      { title: 'salary_permit', detail: [] }],
+    data: [{ title: 'User Detail', detail: [] }, { title: 'Grossincome', detail: [] }, { title: 'Extraincome', detail: [] }, { title: 'Totalicome', total: 0 }, { title: 'salary_permit', detail: [] }],
     show: true
   }
   userDetails = { data: [{ title: 'Basic Detail', detail: [], show: true }, { title: 'Permanent Address', detail: [], show: true }, { title: 'Corresponding Address', detail: [], show: true }] }
@@ -96,8 +91,7 @@ export class PortalComponent implements OnInit {
   ngOnInit() {
     this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
-      resp = JSON.parse(resp)
-      console.log(resp)
+      resp = JSON.parse(resp);
       this.accesslevels = resp.accesslevels;
       this.posts = resp.posts;
       this.users = resp.users;
@@ -106,8 +100,7 @@ export class PortalComponent implements OnInit {
         if (!permit.boss) { // This condition is used to check root user
           this.loginuserid = permit.id
           permission.data.forEach(perel => {
-            //Below condition is use to check permission
-            if (permit.permissions == perel.type) {
+            if (permit.permissions == perel.type) {//Below condition is use to check permission
               this.addButton = perel.show;
               this.userRecordbody.forEach(crdel => { if (crdel.title == permission.operation) { crdel.detail.forEach(stel => { perel.value.forEach(valel => { if (stel.name == valel) stel.show = perel.show }) }) } })
             }
