@@ -70,13 +70,16 @@
     <div class="modal-dialog modal-lg modal-side modal-top-right" role="document">
       <div class="modal-content">
         <div class="modal-header border border-white">
-          <button type="button" class="close pull-right" aria-label="Close" (click)="clicked('hidenotificationModel')">
-            <span aria-hidden="true">×</span>
-          </button>
+          <a (click)="clicked('hidenotificationModel')" style="font-size: 1.5em;" class="text-left">
+            <mdb-icon fas icon="chevron-circle-left"></mdb-icon>
+           </a>
+           <h4 class="modal-title w-100 text-center font-weight-bold" id="myModalLabel">
+            <mdb-icon fas icon="bell"></mdb-icon> Notifications 
+            </h4>
         </div>
         <div class="modal-body border border-white">
           <div *ngFor="let shownotification of data.notification">
-             <div class="row p-4 font-weight-bold">
+             <div class="row p-1 font-weight-bold">
                <div class="col-5 text-dark">{{shownotification.whom}}</div>
                <div class="col-4 text-dark">{{shownotification.why}}</div>
                <div class="col-3 text-dark">{{shownotification.when}}</div>

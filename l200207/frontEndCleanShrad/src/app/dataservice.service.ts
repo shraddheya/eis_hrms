@@ -9,7 +9,6 @@ export class DataserviceService {
     this.data[option] = value;
   }
   getServicedata() {
-    console.log(this.data)
     return this.data
   }
 }
