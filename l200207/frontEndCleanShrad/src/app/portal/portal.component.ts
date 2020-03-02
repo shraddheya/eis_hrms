@@ -2,6 +2,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import { ModalDirective } from 'angular-bootstrap-md';
+import { DataserviceService } from "../dataservice.service";
 import moment from 'moment';
 import $ from 'jquery';
 import 'fullcalendar';
@@ -18,6 +19,7 @@ export class PortalComponent implements OnInit {
   @ViewChild('hierachyView', { static: true }) hierachyView: ModalDirective;
   @ViewChild('salaryslip', { static: true }) salaryslip: ModalDirective;
   @ViewChild('printslip', { static: true }) private printslip: ElementRef;
+  public userdata: any;
   graphData: any;
   showTree: any;
   posts: any;
@@ -37,6 +39,9 @@ export class PortalComponent implements OnInit {
   jitNodeData: any;
   attendancedata: any = [];
   addButton: any = false;
+  public admincheck: any;
+  public image: any;
+  testObjectservice: any = {};
   userRecordbody: any = [
     {
       title: 'Crud',
@@ -87,7 +92,7 @@ export class PortalComponent implements OnInit {
     show: true
   }
   userDetails: any = { data: [{ title: 'Basic Detail', detail: [], show: true }, { title: 'Permanent Address', detail: [], show: true }, { title: 'Corresponding Address', detail: [], show: true }] }
-  constructor() { }
+  constructor(private dataService: DataserviceService) { }
   ngOnInit() {
     this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
@@ -99,6 +104,7 @@ export class PortalComponent implements OnInit {
       this.users.forEach(permit => {
         if (!permit.boss) { // This condition is used to check root user
           this.loginuserid = permit.id
+          this.image = atob(permit.picture)
           permission.data.forEach(perel => {
             if (permit.permissions == perel.type) {//Below condition is use to check permission
               this.addButton = perel.show;
@@ -106,8 +112,10 @@ export class PortalComponent implements OnInit {
             }
           })
         }
-        if ((permit.post >= 1) && (permit.post <= 3)) { }//Check Admin feature authority
+        if ((permit.post >= 1) && (permit.post <= 3)) { this.admincheck = true }//Check Admin feature authority
       })
+      this.dataService.setServicedata('image', this.image)
+      this.dataService.setServicedata('admin', this.admincheck)
       this.callFunction('notification')
       this.createDataTree(this.users);
       localStorage.setItem('checklogin', 'true')
@@ -379,7 +387,9 @@ export class PortalComponent implements OnInit {
         })
         break;
       case 'notification':
-        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => { resp = JSON.parse(resp) })
+        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
+         this.dataService.setServicedata('notification',JSON.parse(resp))
+        })
         break;
       case 'salaryslip_request':
         callUrl({ mode: 'SALARYSLIP', data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {

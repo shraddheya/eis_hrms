@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { callUrl } from '../ajaxes';
-
+import { DataserviceService } from "../dataservice.service";
 import { Router } from '@angular/router';
 import $ from 'jquery';
 var check
@@ -13,11 +13,13 @@ var check
 })
 
 export class TopbarComponent implements OnInit {
-  checkdata:any;
+  checkdata: any;
   email: string;
   password: string;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private dataService: DataserviceService) { }
+  public data: any = this.dataService.getServicedata(); // Use for data service
   @ViewChild('loginmodal', { static: true }) loginmodal: ModalDirective
+  @ViewChild('notificationmodal', { static: true }) notificationmodal: ModalDirective
   topBarElements = [
     {
       name: 'Features',
@@ -61,12 +63,11 @@ export class TopbarComponent implements OnInit {
     },
   ];
   portalmenuDropdown = [
-    { icon: 'bell', clickFun: (_: any) => { this.clicked('notification') }, show: true },
-    { icon: 'user-shield', clickFun: (_: any) => { this.clicked('adminpanel') }, show: true },
-    { icon: 'cog', clickFun: (_: any) => { this.clicked('setting') }, show: true },
-    { icon: 'sign-out-alt', clickFun: (_: any) => { this.clicked('logout') }, show: true },
+    { class: "dropdown-item", title: "notification", icon: 'bell', clickFun: (_: any) => { this.clicked('notificationshow') }, show: true },
+    { class: "dropdown-item", title: "adminpage", icon: 'user-shield', clickFun: (_: any) => { this.clicked('adminpanel') }, show: true },
+    { class: "dropdown-item", title: "setting", icon: 'cog', clickFun: (_: any) => { this.clicked('setting') }, show: true },
+    { class: "dropdown-item", title: "logout", icon: 'sign-out-alt', clickFun: (_: any) => { this.clicked('logout') }, show: true },
   ]
-
   callFunction(mode: string) {
     switch (mode) {
       case 'LOGIN':
@@ -82,6 +83,13 @@ export class TopbarComponent implements OnInit {
 
   clicked(mode: string) {
     switch (mode) {
+      case 'notificationshow':
+        this.notificationmodal.show();
+        $('.modal-backdrop').hide();
+        break;
+      case 'hidenotificationModel':
+        this.notificationmodal.hide();
+        break;
       case 'showLoginModel':
         this.loginmodal.show();
         $('.modal-backdrop').hide();
@@ -110,6 +118,7 @@ export class TopbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    //this.portalmenuDropdown.forEach(el => { if (el.title === "adminpage") el.show = this.datainfo.admin })
     let checkurl: string = window.location.href.replace('http://localhost:4200/', '')
     if (checkurl === 'portal' || checkurl === 'admin') {
       var check = localStorage.getItem('checklogin')
@@ -124,5 +133,5 @@ export class TopbarComponent implements OnInit {
         });
       }
     }
-   }
+  }
 }
