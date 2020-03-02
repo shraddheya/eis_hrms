@@ -38,10 +38,10 @@ if ($mode === "LOGIN") {
     // $_SESSION["DBnm"] = null;
   }
   mysqli_close($link);
-  exit($mode.'success');
+  exit($mode . 'success');
 } else {
   if (session_status() === PHP_SESSION_NONE) session_start();
-  if(!isset($_SESSION['user'])) exit($mode.'failure'.'NOTLOGGEDIN');
+  if (!isset($_SESSION['user'])) exit($mode . 'failure' . 'NOTLOGGEDIN');
 }
 
 if ($mode === "GETINITDATA") {
@@ -81,8 +81,8 @@ if ($mode === "GETINITDATA") {
     $userinConsideration = $retArray[$idx];
     $selects = "u.prid as `id`, u.title, u.fname, u.mname, u.lname, u.email as `mail`, u.post, c.prid2 as boss";
     if ($permissions & 0b0001) $selects  .= ", u.contactno"
-      . ", c.connection";
-    if ($permissions & 0b0010) $selects  .= ", u.address_c_houseno"
+      . ", c.connection"
+      . ", u.address_c_houseno"
       . ", u.address_c_area"
       . ", u.address_c_city"
       . ", u.address_c_state"
@@ -96,6 +96,20 @@ if ($mode === "GETINITDATA") {
       . ", u.address_p_country"
       . ", u.address_p_pincode"
       . ", u.picture";
+    // if ($permissions & 0b0010) $selects  .= ", u.address_c_houseno"
+    //   . ", u.address_c_area"
+    //   . ", u.address_c_city"
+    //   . ", u.address_c_state"
+    //   . ", u.address_c_country"
+    //   . ", u.address_c_pincode"
+    //   . ", u.address_p_houseno"
+    //   . ", u.createdAt"
+    //   . ", u.address_p_area"
+    //   . ", u.address_p_city"
+    //   . ", u.address_p_state"
+    //   . ", u.address_p_country"
+    //   . ", u.address_p_pincode"
+    //   . ", u.picture";
     if ($permissions & 0b0100) $selects  .= ", u.current_salary";
     if ($permissions & 0b1000) $selects .= ", u.projects";
     $stmtN = $link->prepare("SELECT $selects FROM users as u, connections as c WHERE u.prid = c.prid1 AND c.prid2 = ?");
@@ -127,18 +141,40 @@ if ($mode === "ISLOGGEDIN") { // Check Is-Login-?
   // exit();
 }
 
-if ($mode === "REGISTER") { // Add Users Who have Permissions
-  // print_r($data);
+if ($mode === "REGISTER") {
   $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-  $stmt->bind_param('ssssssiisssssisssssi', $data["prid"], $data["title"], $data["fname"], $data["mname"], $data["lname"], $data["email"], $data["contactno"], $data["post"], $data["address_c_houseno"], $data["address_c_area"], $data["address_c_city"], $data["address_c_state"], $data["address_c_country"], $data["address_c_pincode"], $data["address_p_houseno"], $data["address_p_area"], $data["address_p_city"], $data["address_p_state"], $data["address_p_country"], $data["address_p_pincode"]);
+  $stmt->bind_param(
+    'isssssiisssssisssssi',
+    $data['prid'],
+    $data["title"],
+    $data["fname"],
+    $data["mname"],
+    $data["lname"],
+    $data["email"],
+    $data["contactno"],
+    $data['post'],
+    $data["address_c_houseno"],
+    $data["address_c_area"],
+    $data["address_c_city"],
+    $data["address_c_state"],
+    $data["address_c_country"],
+    $data["address_c_pincode"],
+    $data["address_p_houseno"],
+    $data["address_p_area"],
+    $data["address_p_city"],
+    $data["address_p_state"],
+    $data["address_p_country"],
+    $data["address_p_pincode"]
+  );
   $stmt->execute();
-  if ($stmt->error) exit($stmt->error . "failure ");
+  if ($stmt->error) exit($stmt->error . " failure ");
   $stmtc = $link->prepare("INSERT INTO connections(prid1,prid2,connection)VALUES(?,?,'Boss')");
   $stmtc->bind_param('ii', $data['prid'], $data['boss']);
   $stmtc->execute();
-  $newcon = $stmtc->insert_id;
+  // $newcon = $stmtc->insert_id;
   if ($stmtc->error) exit($stmtc->error . ' Failure');
-  exit($mode . "success" . json_encode($data));
+  print_r($mode . " success" . json_encode($data));
+  exit();
 }
 
 if ($mode === "SALARYSLIP") { // Select Salart
@@ -154,10 +190,10 @@ if ($mode === "SALARYSLIP") { // Select Salart
 
 if ($mode === "UPDATE_USERS") { // Users Can Be Updates
   $ql = $link->prepare("UPDATE users set title=?,fname=?,mname=?,lname=?,email=?,contactno=?,address_c_houseno=?,address_c_area=?,address_c_city=?,address_c_state=?,address_c_country=?,address_c_pincode=?, address_p_houseno=?,address_p_area=?,address_p_city=?,address_p_state=?,address_p_country=?,address_p_pincode=? WHERE prid =?");
-  $ql->bind_param("sssssssssssisssssii", $data['title'], $data['fname'], $data['mname'], $data['lname'], $data['email'], $data['contactno'], $data['address_c_houseno'], $data['address_c_area'], $data['address_c_city'], $data['address_c_state'], $data['address_c_country'], $data['address_c_pincode'], $data['address_p_houseno'], $data['address_p_area'], $data['address_p_city'], $data['address_p_state'], $data['address_p_country'], $data['address_p_pincode'], $data['id']);
+  $ql->bind_param("sssssssssssisssssii", $data['title'], $data['fname'], $data['mname'], $data['lname'], $data['email'], $data['contactno'], $data['address_c_houseno'], $data['address_c_area'], $data['address_c_city'], $data['address_c_state'], $data['address_c_country'], $data['address_c_pincode'], $data['address_p_houseno'], $data['address_p_area'], $data['address_p_city'], $data['address_p_state'], $data['address_p_country'], $data['address_p_pincode'], $data['prid']);
   $ql->execute();
   $idnew = $ql->insert_id;
-  if ($ql->error) exit(' failure');
+  if ($ql->error) exit($ql->error.' failure');
   $stmt = $link->prepare("SELECT * FROM users where id = $idnew");
   $stmt->execute();
   $newUsr = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -165,6 +201,7 @@ if ($mode === "UPDATE_USERS") { // Users Can Be Updates
   print_r($mode . "success" . json_encode($data));
   exit();
 }
+
 
 if ($mode === "NOTIFICATION") { // Send Notification Who LoggedIn
   $stmt = $link->prepare("SELECT id,`when`,why,what,whom FROM `notifications` WHERE whom = ?");
