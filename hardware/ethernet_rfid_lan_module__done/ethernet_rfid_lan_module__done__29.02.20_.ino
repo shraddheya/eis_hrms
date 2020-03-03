@@ -1,10 +1,10 @@
 #include <MFRC522.h>
 #include <SPI.h>
-#include <UIPEthernet.h>
+#include <Ethernet.h>
 #include "printall.h"
 #define SS_PIN 8
 #define RST_PIN 9
-const int pinA = 4 , pinB = 3, pinC = 2, LED = 5;
+const int pinA = 6 , pinB = 4, pinC = 5 , LED = 3 , relay = 7;
 String MODE;
 String tagid = "";
 bool DEBUGmode;
@@ -16,8 +16,8 @@ byte mac[] = {0x90, 0xA2, 0xDA, 0x0F, 0x8A, 0x42};
 // numeric IP for Google (no DNS)
 // Set the static IP address of Arduino to use if the DHCP fails to assign
 IPAddress ip(192, 168, 0, 35);
-IPAddress server(192, 168, 0, 36);
-//char server[] = "5TH1N62";
+IPAddress server(192, 168, 0, 30);
+//char server[] = "DESKTOP-5BC1EG9";
 // Initialize the Ethernet client library
 // with the IP address and port of the server
 // that you want to connect to (port 80 is default for HTTP):
@@ -57,12 +57,8 @@ void tagdata_read()
     datastr += String(buffer1[i], HEX);
 
   for (int j = 0 ; j < 27 ; j++)
-  {
-    if (j % 2 == 1)
-    {
-      Tagdata +=   datastr.charAt(j);
-    }
-  }
+    if (j % 2 == 1)Tagdata +=   datastr.charAt(j);
+
   fprint("tagdata");
   fprint(Tagdata);
 }
@@ -99,24 +95,21 @@ int writeBlock(int blockNumber, byte arrayAddress[])
 
 void readmodeRFID() {
   String readclient;
-  while (client.available())
-  {
-    char c = client.read();
-    readclient += c;
-    // see if header http response has ended
-    if (c == '\n')
+  if (client.available()) {
+    client.find("=@");
+    while (client.available())
     {
-      fprint(readclient);
-      fprint("");
-      readclient = "";
+      char c = client.read();
+      readclient += c;
     }
-
-    // if the string is "true" then return message to client
-    if (readclient == "true")
+    fprint(readclient);
+    if (readclient == "Success")
     {
-      Serial.write("You got true!\n");
-      readclient = "";
+      digitalWrite(relay, HIGH);
+      delay(8000);
+      digitalWrite(relay, LOW);
     }
+    else digitalWrite(relay, LOW);
   }
   // Look for new cards
   mfrc522.PCD_Init();
@@ -141,7 +134,7 @@ void readmodeRFID() {
     if (client.connect(server, 80))
     {
       Serial.println("connected**");
-      client.print("GET /localhost/phpfuns.php?mode=REG_ATT&data=");
+      client.print("GET /hrms-eis/phpfuns.php?mode=REG_ATT&data=");
       client.print(tagid);
       tagid = "";
       client.print("@@@");
@@ -152,14 +145,13 @@ void readmodeRFID() {
       client.print(Tagdata);
       Tagdata = "";
       client.println(" HTTP/1.1");
-      client.println("Host:desktop-4t5la3j");
+      client.println("Host:DESKTOP-5BC1EG9");
       client.println("User-Agent: arduino-ethernet");
       client.println("Connection: close");
       client.println();
       retryflag = 0;
       break;
     }
-
     else
     {
       // if you couldn't make a connection:
@@ -185,7 +177,6 @@ void writeModeRFID() {
   mfrc522.PCD_Init();
   if (!mfrc522.PICC_IsNewCardPresent())
     return;
-
   // Select one of the cards
   if (!mfrc522.PICC_ReadCardSerial())
     return;
@@ -200,7 +191,6 @@ void writeModeRFID() {
     fprintln(tagid);
     fprint(" ");
     fprintln(UID);
-
     for (int index = 0; index < 5; index++) {
       fprint("\nTry Number : ");
       fprintln(index);
@@ -221,7 +211,6 @@ void writeModeRFID() {
         retryflag = 0;
         break;
       }
-
       else
       {
         // if you couldn't make a connection:
@@ -230,7 +219,6 @@ void writeModeRFID() {
         client.stop();
         retryflag = 1;
       }
-
     }
   }
   else
@@ -248,14 +236,13 @@ void writeModeRFID() {
     else Serial.print("error");
   }
   digitalWrite(LED, LOW);
-
 }
-
 void setup()
 {
   pinMode(pinA, INPUT_PULLUP);
   pinMode(pinB, INPUT_PULLUP);
   pinMode(pinC, INPUT_PULLUP);
+  pinMode(relay, OUTPUT);
   pinMode(LED, OUTPUT);
   DEBUGmode = digitalRead(pinA) == HIGH;
   W_Rmode = digitalRead(pinB) == HIGH;
@@ -275,6 +262,5 @@ void loop()
   W_Rmode = digitalRead(pinB) == HIGH;
   bool I_O = digitalRead(pinC); MODE = I_O == HIGH ? "IN" : "OUT";
   if ( W_Rmode == HIGH)    writeModeRFID();
-
   else                 readmodeRFID();
 }
