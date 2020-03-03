@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class DataserviceService {
-  data:any = new Object
+  public data: any = {}
   constructor() { }
-  setServicedata(option:any, value:any) {
-    this.data[option] = value;
-  }
   getServicedata() {
     return this.data
   }
+  setServicedata(option: any, value: any): void {
+    this.data[option] = value;
+  }
+
 }

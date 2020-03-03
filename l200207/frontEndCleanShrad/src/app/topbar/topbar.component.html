@@ -1,6 +1,6 @@
 <div class="fixed-top bg-dark">
   <mdb-navbar SideClass="navbar navbar-expand-sm navbar-dark" [containerInside]="false">
-    <mdb-navbar-brand><a class="navbar-brand" href="#home">HRMS</a></mdb-navbar-brand>
+    <mdb-navbar-brand><a class="navbar-brand" routerLink = "">HRMS</a></mdb-navbar-brand>
     <links>
       <ul class="navbar-nav ml-auto">
         <div class="btn-group" mdbDropdown>
@@ -11,7 +11,7 @@
             </a>
           </li>
           <li>
-            <img src={{data.image}} alt="" style="height: 3em;width: 3em;border-radius: 5em;">
+            <img src={{profilepic}} alt="" style="height: 3em;width: 3em;border-radius: 5em;">
           </li>
           <div class="dropdown-menu dropdown-primary pl-0 pr-4">
             <ul>
@@ -78,7 +78,7 @@
             </h4>
         </div>
         <div class="modal-body border border-white">
-          <div *ngFor="let shownotification of data.notification">
+          <div *ngFor="let shownotification of notification">
              <div class="row p-1 font-weight-bold">
                <div class="col-5 text-dark">{{shownotification.whom}}</div>
                <div class="col-4 text-dark">{{shownotification.why}}</div>

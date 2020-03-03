@@ -16,8 +16,12 @@ export class TopbarComponent implements OnInit {
   checkdata: any;
   email: string;
   password: string;
+
+  profilepic: any = "../assets/images/main.png";
+  notification: any = [];
+
   constructor(private router: Router, private dataService: DataserviceService) { }
-  public data: any = this.dataService.getServicedata(); // Use for data service
+ // Use for data service
   @ViewChild('loginmodal', { static: true }) loginmodal: ModalDirective
   @ViewChild('notificationmodal', { static: true }) notificationmodal: ModalDirective
   topBarElements = [
@@ -64,17 +68,23 @@ export class TopbarComponent implements OnInit {
   ];
   portalmenuDropdown = [
     { class: "dropdown-item", title: "notification", icon: 'bell', clickFun: (_: any) => { this.clicked('notificationshow') }, show: true },
-    { class: "dropdown-item", title: "adminpage", icon: 'user-shield', clickFun: (_: any) => { this.clicked('adminpanel') }, show: true },
+    { class: "dropdown-item", title: "adminpage", icon: 'user-shield', clickFun: (_: any) => { this.clicked('adminpanel') }, show: false },
     { class: "dropdown-item", title: "setting", icon: 'cog', clickFun: (_: any) => { this.clicked('setting') }, show: true },
-    { class: "dropdown-item", title: "logout", icon: 'sign-out-alt', clickFun: (_: any) => { this.clicked('logout') }, show: true },
+    { class: "dropdown-item", title: "logout", icon: 'sign-out-alt', clickFun: (_: any) => { this.callFunction('LOGOUT') }, show: true },
   ]
   callFunction(mode: string) {
     switch (mode) {
       case 'LOGIN':
         callUrl({ mode, data: JSON.stringify({ email: this.email, password: this.password }) }, (_: any) => {
+          localStorage.setItem('checklogin', 'true')
           this.router.navigate(['portal'])
-          check = true;
         });
+        break;
+      case 'LOGOUT':
+        callUrl({ mode }, (_: any) => {
+          localStorage.setItem('checklogin', 'false');
+          this.router.navigate(['']);
+        })
         break;
       default:
         break;
@@ -103,10 +113,6 @@ export class TopbarComponent implements OnInit {
       case 'backtoportal':
         this.router.navigate(['portal'])
         break;
-      case 'logout':
-        this.router.navigate(['']);
-        localStorage.setItem('checklogin', 'false')
-        break;
       default:
         break;
     }
@@ -118,20 +124,23 @@ export class TopbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.portalmenuDropdown.forEach(el => { if (el.title === "adminpage") el.show = this.datainfo.admin })
-    let checkurl: string = window.location.href.replace('http://localhost:4200/', '')
-    if (checkurl === 'portal' || checkurl === 'admin') {
-      var check = localStorage.getItem('checklogin')
-      if ((check === null) || (check === 'false')) {
-        this.router.navigate([''])
+    var login_check = localStorage.getItem('checklogin')
+    if (login_check === 'true') {
+      var data  = this.dataService.getServicedata()
+      if(Object.keys(data).length != 0){
+        this.profilepic = data.image;
+        this.notification = data.notification;
+        this.portalmenuDropdown.forEach(el => { if (el.title === "adminpage") el.show = data.admin })
       }
-      if (check === 'true') {
-        this.router.navigate([checkurl])
-        this.topBarElements.forEach(el => {
-          (checkurl === 'portal') ? (el.name === 'Menue') ? el.show = true : el.show = false : '';
-          (checkurl === 'admin') ? (el.name === 'Backtoportal') ? el.show = true : el.show = false : '';
-        });
-      }
+      var urlCheck_login = window.location.href.replace('http://localhost:4200/', '');
+      this.router.navigate([urlCheck_login])
+      this.topBarElements.forEach(el => {
+        (urlCheck_login === 'portal') ? (el.name === 'Menue') ? el.show = true : el.show = false : '';
+        (urlCheck_login === 'admin') ? (el.name === 'Backtoportal') ? el.show = true : el.show = false : '';
+      });
+    }
+    if (login_check === 'false') {
+      this.router.navigate([''])
     }
   }
 }

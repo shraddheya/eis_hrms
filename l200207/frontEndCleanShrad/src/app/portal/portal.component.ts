@@ -39,8 +39,6 @@ export class PortalComponent implements OnInit {
   jitNodeData: any;
   attendancedata: any = [];
   addButton: any = false;
-  public admincheck: any;
-  public image: any;
   testObjectservice: any = {};
   userRecordbody: any = [
     {
@@ -96,29 +94,28 @@ export class PortalComponent implements OnInit {
   ngOnInit() {
     this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
-      resp = JSON.parse(resp);
-      this.accesslevels = resp.accesslevels;
-      this.posts = resp.posts;
-      this.users = resp.users;
-      var permission: any = { operation: 'Crud', data: [{ type: 1, value: ['edit', 'delete'], show: true }, { type: 2, value: ['edit'], show: true }, { type: 3, show: false }] }
-      this.users.forEach(permit => {
-        if (!permit.boss) { // This condition is used to check root user
-          this.loginuserid = permit.id
-          this.image = atob(permit.picture)
-          permission.data.forEach(perel => {
-            if (permit.permissions == perel.type) {//Below condition is use to check permission
-              this.addButton = perel.show;
-              this.userRecordbody.forEach(crdel => { if (crdel.title == permission.operation) { crdel.detail.forEach(stel => { perel.value.forEach(valel => { if (stel.name == valel) stel.show = perel.show }) }) } })
-            }
-          })
-        }
-        if ((permit.post >= 1) && (permit.post <= 3)) { this.admincheck = true }//Check Admin feature authority
-      })
-      this.dataService.setServicedata('image', this.image)
-      this.dataService.setServicedata('admin', this.admincheck)
-      this.callFunction('notification')
-      this.createDataTree(this.users);
-      localStorage.setItem('checklogin', 'true')
+      if (resp != "eNOTLOGGEDIN") {
+        resp = JSON.parse(resp);
+        this.accesslevels = resp.accesslevels;
+        this.posts = resp.posts;
+        this.users = resp.users;
+        var permission: any = { operation: 'Crud', data: [{ type: 1, value: ['edit', 'delete'], show: true }, { type: 2, value: ['edit'], show: true }, { type: 3, show: false }] }
+        this.users.forEach(permit => {
+          if (!permit.boss) { // This condition is used to check root user
+            this.loginuserid = permit.id
+            this.testObjectservice["image"] = atob(permit.picture)
+            permission.data.forEach(perel => {
+              if (permit.permissions == perel.type) {//Below condition is use to check permission
+                this.addButton = perel.show;
+                this.userRecordbody.forEach(crdel => { if (crdel.title == permission.operation) { crdel.detail.forEach(stel => { perel.value.forEach(valel => { if (stel.name == valel) stel.show = perel.show }) }) } })
+              }
+            })
+          }
+          if ((permit.post >= 1) && (permit.post <= 3)) { this.testObjectservice["admin"] = true }//Check Admin feature authority
+        })
+        this.callFunction('notification')
+        this.createDataTree(this.users);
+      }
     });
   }
   addUserNode2GUI(user, mode, isPermanent = true) {
@@ -333,6 +330,7 @@ export class PortalComponent implements OnInit {
         this.userRecordbody.forEach(parel => { (parel.title == 'Buttons') ? parel.detail.forEach(carel => { (carel.name == 'cardimage') ? (this.checkcardRecord.tagid == '') ? carel.show = true : carel.show = false : '' }) : ''; })
         break;
       case 'salaryslipclick':
+        console.log(this.salaryslipJson.show);
         (this.salaryslipJson.show == true) ? this.salaryslip.show() : swal('Salary Not found', '', 'info');
         break;
       case 'salmodaldismiss':
@@ -388,17 +386,17 @@ export class PortalComponent implements OnInit {
         break;
       case 'notification':
         callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
-         this.dataService.setServicedata('notification',JSON.parse(resp))
+          this.testObjectservice["notification"] = JSON.parse(resp);
+          this.toTopbar()
         })
         break;
       case 'salaryslip_request':
         callUrl({ mode: 'SALARYSLIP', data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
           resp = JSON.parse(resp)
           this.salaryslipJson.data.forEach(salJson => { salJson.detail = [] })
-          var salaryObj: any = {}
-          var salary_json = resp
-          if (salary_json.length == 0) this.salaryslipJson.show = false;
-          salary_json.forEach(el => { salaryObj = el });
+          var salaryObj: any = {};
+          (resp.length == 0) ? this.salaryslipJson.show = false : this.salaryslipJson.show = true;
+          resp.forEach(el => { salaryObj = el });
 
           //code for userdetail
           var userarray: any = [{ key: 'fname', value: 'Firstname' }, { key: 'lname', value: 'Lastname' }, { key: 'createdAt', value: 'Date of Joining' }]
@@ -475,6 +473,11 @@ export class PortalComponent implements OnInit {
         $('#calendar').fullCalendar('removeEvents');
         $('#calendar').fullCalendar('addEventSource', eventsCurrent);
       }
+    })
+  }
+  toTopbar() {
+    Object.keys(this.testObjectservice).forEach(el => {
+      this.dataService.setServicedata(el, this.testObjectservice[el])
     })
   }
 }
