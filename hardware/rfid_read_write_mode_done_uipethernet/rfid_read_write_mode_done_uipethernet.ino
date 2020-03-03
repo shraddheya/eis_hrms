@@ -4,7 +4,7 @@
 #include "printall.h"
 #define SS_PIN 8
 #define RST_PIN 9
-const int pinA = 4 , pinB = 3, pinC = 2, LED = 5;
+const int pinA = 6 , pinB = 4, pinC = 5 , LED = 3 , relay = 7;
 String MODE;
 String tagid = "";
 bool DEBUGmode;
@@ -98,25 +98,22 @@ int writeBlock(int blockNumber, byte arrayAddress[])
 }
 
 void readmodeRFID() {
-  String readclient;
-  while (client.available())
-  {
-    char c = client.read();
-    readclient += c;
-    // see if header http response has ended
-    if (c == '\n')
+String readclient;
+  if (client.available()) {
+    client.find("=@");
+    while (client.available())
     {
-      fprint(readclient);
-      fprint("");
-      readclient = "";
+      char c = client.read();
+      readclient += c;
     }
-
-    // if the string is "true" then return message to client
-    if (readclient == "true")
+    fprint(readclient);
+    if (readclient == "Success")
     {
-      Serial.write("You got true!\n");
-      readclient = "";
+      digitalWrite(relay, HIGH);
+      delay(8000);
+      digitalWrite(relay, LOW);
     }
+    else digitalWrite(relay, LOW);
   }
   // Look for new cards
   mfrc522.PCD_Init();
@@ -200,7 +197,6 @@ void writeModeRFID() {
     fprintln(tagid);
     fprint(" ");
     fprintln(UID);
-
     for (int index = 0; index < 5; index++) {
       fprint("\nTry Number : ");
       fprintln(index);
@@ -221,7 +217,6 @@ void writeModeRFID() {
         retryflag = 0;
         break;
       }
-
       else
       {
         // if you couldn't make a connection:
@@ -230,7 +225,6 @@ void writeModeRFID() {
         client.stop();
         retryflag = 1;
       }
-
     }
   }
   else
