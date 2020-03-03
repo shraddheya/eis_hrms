@@ -16,8 +16,8 @@ byte mac[] = {0x90, 0xA2, 0xDA, 0x0F, 0x8A, 0x42};
 // numeric IP for Google (no DNS)
 // Set the static IP address of Arduino to use if the DHCP fails to assign
 IPAddress ip(192, 168, 0, 35);
-IPAddress server(192, 168, 0, 36);
-//char server[] = "5TH1N62";
+IPAddress server(192, 168, 0, 30);
+//char server[] = "DESKTOP-5BC1EG9";
 // Initialize the Ethernet client library
 // with the IP address and port of the server
 // that you want to connect to (port 80 is default for HTTP):
@@ -57,12 +57,8 @@ void tagdata_read()
     datastr += String(buffer1[i], HEX);
 
   for (int j = 0 ; j < 27 ; j++)
-  {
-    if (j % 2 == 1)
-    {
-      Tagdata +=   datastr.charAt(j);
-    }
-  }
+    if (j % 2 == 1)Tagdata +=   datastr.charAt(j);
+
   fprint("tagdata");
   fprint(Tagdata);
 }
@@ -98,7 +94,7 @@ int writeBlock(int blockNumber, byte arrayAddress[])
 }
 
 void readmodeRFID() {
-String readclient;
+  String readclient;
   if (client.available()) {
     client.find("=@");
     while (client.available())
@@ -131,14 +127,14 @@ String readclient;
   String UID = "1563431661";
   fprint("DATA id=");
   fprint(tagid); fprint("@@@"); fprint(UID); fprint("@@@"); fprint(MODE); fprint("@@@"); fprint(Tagdata);
-  for (int index = 0; index < 5; index++) {
+  for (int index = 0; index < 11; index++) {
     fprint("\nTry Number : ");
     fprintln(index);
     fprintln("connecting...**");
     if (client.connect(server, 80))
     {
       Serial.println("connected**");
-      client.print("GET /localhost/phpfuns.php?mode=REG_ATT&data=");
+      client.print("GET /hrms-eis/phpfuns.php?mode=REG_ATT&data=");
       client.print(tagid);
       tagid = "";
       client.print("@@@");
@@ -149,14 +145,13 @@ String readclient;
       client.print(Tagdata);
       Tagdata = "";
       client.println(" HTTP/1.1");
-      client.println("Host:desktop-4t5la3j");
+      client.println("Host:DESKTOP-5BC1EG9");
       client.println("User-Agent: arduino-ethernet");
       client.println("Connection: close");
       client.println();
       retryflag = 0;
       break;
     }
-
     else
     {
       // if you couldn't make a connection:
@@ -182,7 +177,6 @@ void writeModeRFID() {
   mfrc522.PCD_Init();
   if (!mfrc522.PICC_IsNewCardPresent())
     return;
-
   // Select one of the cards
   if (!mfrc522.PICC_ReadCardSerial())
     return;
@@ -193,24 +187,24 @@ void writeModeRFID() {
     mfrc522.PICC_HaltA();
     bool retryflag = 0;
     String UID = "1563431661";
-    fprint(" DATA id=\t");
-    fprintln(tagid);
-    fprint(" ");
+    fprint(" DATA id=");
+    fprint(tagid);
+    fprint("\t ");
     fprintln(UID);
-    for (int index = 0; index < 5; index++) {
+    for (int index = 0; index < 11; index++) {
       fprint("\nTry Number : ");
       fprintln(index);
       fprintln("connecting...**");
       if (client.connect(server, 80))
       {
         fprintln("connectED**");
-        client.print("GET /hrm-angular+php/phpfuns.php?mode=ALLOT_CARD&data=");
+        client.print("GET /hrms-eis/phpfuns.php?mode=ALLOT_CARD&data=");
         client.print(tagid);
         tagid = "";
         client.print("@@@");
         client.print(UID);
         client.println(" HTTP/1.1");
-        client.println("Host:5TH1N62");
+        client.println("Host:DESKTOP-5BC1EG9");
         client.println("User-Agent: arduino-ethernet");
         client.println("Connection: close");
         client.println();
@@ -242,14 +236,13 @@ void writeModeRFID() {
     else Serial.print("error");
   }
   digitalWrite(LED, LOW);
-
 }
-
 void setup()
 {
   pinMode(pinA, INPUT_PULLUP);
   pinMode(pinB, INPUT_PULLUP);
   pinMode(pinC, INPUT_PULLUP);
+  pinMode(relay, OUTPUT);
   pinMode(LED, OUTPUT);
   DEBUGmode = digitalRead(pinA) == HIGH;
   W_Rmode = digitalRead(pinB) == HIGH;
@@ -269,6 +262,5 @@ void loop()
   W_Rmode = digitalRead(pinB) == HIGH;
   bool I_O = digitalRead(pinC); MODE = I_O == HIGH ? "IN" : "OUT";
   if ( W_Rmode == HIGH)    writeModeRFID();
-
   else                 readmodeRFID();
 }
