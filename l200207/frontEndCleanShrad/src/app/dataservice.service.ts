@@ -6,10 +6,9 @@ export class DataserviceService {
   public data: any = {}
   constructor() { }
   getServicedata() {
-    return this.data
+    return this.data;
   }
-  setServicedata(option: any, value: any): void {
+  setServicedata(option: any, value: any) {
     this.data[option] = value;
   }
-
 }

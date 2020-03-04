@@ -9,6 +9,8 @@ import 'fullcalendar';
 declare var swal: any
 declare var $jit: any;
 let rgraph: any;
+let userAccess = {};
+var test;
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -39,7 +41,6 @@ export class PortalComponent implements OnInit {
   jitNodeData: any;
   attendancedata: any = [];
   addButton: any = false;
-  testObjectservice: any = {};
   userRecordbody: any = [
     {
       title: 'Crud',
@@ -103,7 +104,7 @@ export class PortalComponent implements OnInit {
         this.users.forEach(permit => {
           if (!permit.boss) { // This condition is used to check root user
             this.loginuserid = permit.id
-            this.testObjectservice["image"] = atob(permit.picture)
+            userAccess["image"] = atob(permit.picture)
             permission.data.forEach(perel => {
               if (permit.permissions == perel.type) {//Below condition is use to check permission
                 this.addButton = perel.show;
@@ -111,12 +112,15 @@ export class PortalComponent implements OnInit {
               }
             })
           }
-          if ((permit.post >= 1) && (permit.post <= 3)) { this.testObjectservice["admin"] = true }//Check Admin feature authority
+          if ((permit.post >= 1) && (permit.post <= 3)) { userAccess["admin"] = true  }//Check Admin feature authority
         })
-        this.callFunction('notification')
+        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
+          userAccess["notification"] = JSON.parse(resp) 
+        })
         this.createDataTree(this.users);
       }
     });
+    this.dataService.setServicedata('user',userAccess)
   }
   addUserNode2GUI(user, mode, isPermanent = true) {
     switch (mode) {
@@ -247,7 +251,7 @@ export class PortalComponent implements OnInit {
       pos.setc(-300, -300);
     });
     rgraph.compute('end');
-    rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
+    rgraph.fx.animate({ modes: ['polar'], duration: 50 });
   }
   hierarchyViewdata(data) {
     this.jitNodeData = data;
@@ -384,12 +388,6 @@ export class PortalComponent implements OnInit {
           this.addUserNode2GUI(resp, 'updateuser');
         })
         break;
-      case 'notification':
-        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
-          this.testObjectservice["notification"] = JSON.parse(resp);
-          this.toTopbar()
-        })
-        break;
       case 'salaryslip_request':
         callUrl({ mode: 'SALARYSLIP', data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
           resp = JSON.parse(resp)
@@ -475,9 +473,4 @@ export class PortalComponent implements OnInit {
       }
     })
   }
-  toTopbar() {
-    Object.keys(this.testObjectservice).forEach(el => {
-      this.dataService.setServicedata(el, this.testObjectservice[el])
-    })
-  }
-}
+ }

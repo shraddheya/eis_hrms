@@ -124,6 +124,7 @@ export class TopbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.dataService.getServicedata())
     var login_check = localStorage.getItem('checklogin')
     if (login_check === 'true') {
       var data  = this.dataService.getServicedata()
