@@ -21,7 +21,7 @@ export class TopbarComponent implements OnInit {
   notification: any = [];
 
   constructor(private router: Router, private dataService: DataserviceService) { }
- // Use for data service
+  // Use for data service
   @ViewChild('loginmodal', { static: true }) loginmodal: ModalDirective
   @ViewChild('notificationmodal', { static: true }) notificationmodal: ModalDirective
   topBarElements = [
@@ -117,21 +117,20 @@ export class TopbarComponent implements OnInit {
         break;
     }
   }
-  passwordView(format, input, showhide_event) {
+  passwordView(format: any, input: any, showhide_event: any) {
     $(showhide_event).attr('type', format);
     $('.show' + format).hide();
     $('.show' + input).show();
   }
 
   ngOnInit() {
-    console.log(this.dataService.getServicedata())
     var login_check = localStorage.getItem('checklogin')
     if (login_check === 'true') {
-      var data  = this.dataService.getServicedata()
-      if(Object.keys(data).length != 0){
-        this.profilepic = data.image;
-        this.notification = data.notification;
-        this.portalmenuDropdown.forEach(el => { if (el.title === "adminpage") el.show = data.admin })
+      var data = this.dataService.getServicedata()
+      if (Object.keys(data).length != 0) {
+        if (data.portal.image != undefined) this.profilepic = data.portal.image;
+        this.notification = data.portal.notification;
+        this.portalmenuDropdown.forEach(el => { if (el.title === "adminpage") el.show = data.portal.admin })
       }
       var urlCheck_login = window.location.href.replace('http://localhost:4200/', '');
       this.router.navigate([urlCheck_login])

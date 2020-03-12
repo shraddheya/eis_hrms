@@ -112,17 +112,17 @@ export class PortalComponent implements OnInit {
               }
             })
           }
-          if ((permit.post >= 1) && (permit.post <= 3)) { userAccess["admin"] = true  }//Check Admin feature authority
+          if ((permit.post >= 1) && (permit.post <= 3)) { userAccess["admin"] = true }//Check Admin feature authority
         })
         callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
-          userAccess["notification"] = JSON.parse(resp) 
+          userAccess["notification"] = JSON.parse(resp)
+          this.dataService.setServicedata('portal',userAccess)
         })
         this.createDataTree(this.users);
       }
-    });
-    this.dataService.setServicedata('user',userAccess)
+    })
   }
-  addUserNode2GUI(user, mode, isPermanent = true) {
+  addUserNode2GUI(user: any, mode: any, isPermanent: any = true) {
     switch (mode) {
       case 'addusers':
         this.addUsers.hide();
@@ -219,7 +219,7 @@ export class PortalComponent implements OnInit {
       }
     });
   }
-  changeIps_addGUIusers(mode) {
+  changeIps_addGUIusers(mode: any) {
     switch (mode) {
       case 'usrAdd_post':
         this.selOfBoss = this.users;
@@ -253,7 +253,7 @@ export class PortalComponent implements OnInit {
     rgraph.compute('end');
     rgraph.fx.animate({ modes: ['polar'], duration: 50 });
   }
-  hierarchyViewdata(data) {
+  hierarchyViewdata(data: any) {
     this.jitNodeData = data;
     this.clickedUserid = data.id; //Get Id after clicked
     this.rootUserid = data.boss;  //Get Boss Id after clicked
@@ -300,7 +300,7 @@ export class PortalComponent implements OnInit {
     this.callFunction('salaryslip_request');
     this.hierachyView.show();
   }
-  clicked(mode) {
+  clicked(mode: any) {
     switch (mode) {
       case 'addUser':
         this.addUsers.show();
@@ -352,7 +352,7 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  callFunction(mode) {
+  callFunction(mode: any) {
     var requestObj = JSON.stringify({ tagdata: this.clickedUserid })
     switch (mode) {
       case 'cardallot':
@@ -429,7 +429,7 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  objectToarray(input, mode) {
+  objectToarray(input: any, mode: any) {
     switch (mode) {
       case 'fromCardallot':
         var obj;
@@ -439,7 +439,8 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  populateCalendarAttendance(prid, dataInterest = moment()) {
+  populateCalendarAttendance(prid: any, dataInterest = moment()) {
+    this.dataService.setServicedata("prid", prid)
     $('#calendar').hide();
     callUrl({ mode: 'GETATTENDANCE', data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
       var attendance = JSON.parse(resp);
@@ -473,4 +474,4 @@ export class PortalComponent implements OnInit {
       }
     })
   }
- }
+}
