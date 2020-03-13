@@ -24,16 +24,13 @@ IPAddress server(192, 168, 0, 30);
 EthernetClient client;
 void readID()
 {
-  for (byte i = 0; i < mfrc522.uid.size; i++) {
-    tagid += String(mfrc522.uid.uidByte[i], HEX);
-  }
+  for (byte i = 0; i < mfrc522.uid.size; i++)  tagid += String(mfrc522.uid.uidByte[i], HEX);
 }
 void tagdata_read()
 {
   byte trailerBlock = 7;
   byte sector = 1;
   byte blockAddr = 5;
-
   MFRC522::StatusCode status;
   byte buffer1[18];
   byte size1 = sizeof(buffer1);
@@ -53,12 +50,8 @@ void tagdata_read()
     Serial.println(mfrc522.GetStatusCodeName(status));
   }
   int evn = 0; String datastr;
-  for (byte i = 0; i < 14; i++)
-    datastr += String(buffer1[i], HEX);
-
-  for (int j = 0 ; j < 27 ; j++)
-    if (j % 2 == 1)Tagdata +=   datastr.charAt(j);
-
+  for (byte i = 0; i < 14; i++)   datastr += String(buffer1[i], HEX);
+  for (int j = 0 ; j < 27 ; j++)  if (j % 2 == 1)Tagdata +=   datastr.charAt(j);
   fprint("tagdata");
   fprint(Tagdata);
 }
