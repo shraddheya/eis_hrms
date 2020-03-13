@@ -2,12 +2,15 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import { ModalDirective } from 'angular-bootstrap-md';
+import { DataserviceService } from "../dataservice.service";
 import moment from 'moment';
 import $ from 'jquery';
 import 'fullcalendar';
 declare var swal: any
 declare var $jit: any;
 let rgraph: any;
+let userAccess = {};
+var test;
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -18,6 +21,7 @@ export class PortalComponent implements OnInit {
   @ViewChild('hierachyView', { static: true }) hierachyView: ModalDirective;
   @ViewChild('salaryslip', { static: true }) salaryslip: ModalDirective;
   @ViewChild('printslip', { static: true }) private printslip: ElementRef;
+  public userdata: any;
   graphData: any;
   showTree: any;
   posts: any;
@@ -87,33 +91,38 @@ export class PortalComponent implements OnInit {
     show: true
   }
   userDetails: any = { data: [{ title: 'Basic Detail', detail: [], show: true }, { title: 'Permanent Address', detail: [], show: true }, { title: 'Corresponding Address', detail: [], show: true }] }
-  constructor() { }
+  constructor(private dataService: DataserviceService) { }
   ngOnInit() {
     this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
-      resp = JSON.parse(resp);
-      this.accesslevels = resp.accesslevels;
-      this.posts = resp.posts;
-      this.users = resp.users;
-      var permission: any = { operation: 'Crud', data: [{ type: 1, value: ['edit', 'delete'], show: true }, { type: 2, value: ['edit'], show: true }, { type: 3, show: false }] }
-      this.users.forEach(permit => {
-        if (!permit.boss) { // This condition is used to check root user
-          this.loginuserid = permit.id
-          permission.data.forEach(perel => {
-            if (permit.permissions == perel.type) {//Below condition is use to check permission
-              this.addButton = perel.show;
-              this.userRecordbody.forEach(crdel => { if (crdel.title == permission.operation) { crdel.detail.forEach(stel => { perel.value.forEach(valel => { if (stel.name == valel) stel.show = perel.show }) }) } })
-            }
-          })
-        }
-        if ((permit.post >= 1) && (permit.post <= 3)) { }//Check Admin feature authority
-      })
-      this.callFunction('notification')
-      this.createDataTree(this.users);
-      localStorage.setItem('checklogin', 'true')
-    });
+      if (resp != "eNOTLOGGEDIN") {
+        resp = JSON.parse(resp);
+        this.accesslevels = resp.accesslevels;
+        this.posts = resp.posts;
+        this.users = resp.users;
+        var permission: any = { operation: 'Crud', data: [{ type: 1, value: ['edit', 'delete'], show: true }, { type: 2, value: ['edit'], show: true }, { type: 3, show: false }] }
+        this.users.forEach(permit => {
+          if (!permit.boss) { // This condition is used to check root user
+            this.loginuserid = permit.id
+            userAccess["image"] = atob(permit.picture)
+            permission.data.forEach(perel => {
+              if (permit.permissions == perel.type) {//Below condition is use to check permission
+                this.addButton = perel.show;
+                this.userRecordbody.forEach(crdel => { if (crdel.title == permission.operation) { crdel.detail.forEach(stel => { perel.value.forEach(valel => { if (stel.name == valel) stel.show = perel.show }) }) } })
+              }
+            })
+          }
+          if ((permit.post >= 1) && (permit.post <= 3)) { userAccess["admin"] = true }//Check Admin feature authority
+        })
+        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
+          userAccess["notification"] = JSON.parse(resp)
+          this.dataService.setServicedata('portal',userAccess)
+        })
+        this.createDataTree(this.users);
+      }
+    })
   }
-  addUserNode2GUI(user, mode, isPermanent = true) {
+  addUserNode2GUI(user: any, mode: any, isPermanent: any = true) {
     switch (mode) {
       case 'addusers':
         this.addUsers.hide();
@@ -210,7 +219,7 @@ export class PortalComponent implements OnInit {
       }
     });
   }
-  changeIps_addGUIusers(mode) {
+  changeIps_addGUIusers(mode: any) {
     switch (mode) {
       case 'usrAdd_post':
         this.selOfBoss = this.users;
@@ -242,9 +251,9 @@ export class PortalComponent implements OnInit {
       pos.setc(-300, -300);
     });
     rgraph.compute('end');
-    rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
+    rgraph.fx.animate({ modes: ['polar'], duration: 50 });
   }
-  hierarchyViewdata(data) {
+  hierarchyViewdata(data: any) {
     this.jitNodeData = data;
     this.clickedUserid = data.id; //Get Id after clicked
     this.rootUserid = data.boss;  //Get Boss Id after clicked
@@ -291,7 +300,7 @@ export class PortalComponent implements OnInit {
     this.callFunction('salaryslip_request');
     this.hierachyView.show();
   }
-  clicked(mode) {
+  clicked(mode: any) {
     switch (mode) {
       case 'addUser':
         this.addUsers.show();
@@ -325,6 +334,7 @@ export class PortalComponent implements OnInit {
         this.userRecordbody.forEach(parel => { (parel.title == 'Buttons') ? parel.detail.forEach(carel => { (carel.name == 'cardimage') ? (this.checkcardRecord.tagid == '') ? carel.show = true : carel.show = false : '' }) : ''; })
         break;
       case 'salaryslipclick':
+        console.log(this.salaryslipJson.show);
         (this.salaryslipJson.show == true) ? this.salaryslip.show() : swal('Salary Not found', '', 'info');
         break;
       case 'salmodaldismiss':
@@ -342,7 +352,7 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  callFunction(mode) {
+  callFunction(mode: any) {
     var requestObj = JSON.stringify({ tagdata: this.clickedUserid })
     switch (mode) {
       case 'cardallot':
@@ -378,17 +388,13 @@ export class PortalComponent implements OnInit {
           this.addUserNode2GUI(resp, 'updateuser');
         })
         break;
-      case 'notification':
-        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => { resp = JSON.parse(resp) })
-        break;
       case 'salaryslip_request':
         callUrl({ mode: 'SALARYSLIP', data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
           resp = JSON.parse(resp)
           this.salaryslipJson.data.forEach(salJson => { salJson.detail = [] })
-          var salaryObj: any = {}
-          var salary_json = resp
-          if (salary_json.length == 0) this.salaryslipJson.show = false;
-          salary_json.forEach(el => { salaryObj = el });
+          var salaryObj: any = {};
+          (resp.length == 0) ? this.salaryslipJson.show = false : this.salaryslipJson.show = true;
+          resp.forEach(el => { salaryObj = el });
 
           //code for userdetail
           var userarray: any = [{ key: 'fname', value: 'Firstname' }, { key: 'lname', value: 'Lastname' }, { key: 'createdAt', value: 'Date of Joining' }]
@@ -423,7 +429,7 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  objectToarray(input, mode) {
+  objectToarray(input: any, mode: any) {
     switch (mode) {
       case 'fromCardallot':
         var obj;
@@ -433,7 +439,8 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  populateCalendarAttendance(prid, dataInterest = moment()) {
+  populateCalendarAttendance(prid: any, dataInterest = moment()) {
+    this.dataService.setServicedata("prid", prid)
     $('#calendar').hide();
     callUrl({ mode: 'GETATTENDANCE', data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
       var attendance = JSON.parse(resp);

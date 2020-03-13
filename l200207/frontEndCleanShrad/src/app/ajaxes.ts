@@ -1,11 +1,12 @@
 import $ from 'jquery';
-export  async function callUrl(data2Post, next) {
+export async function callUrl(data2Post, next) {
   $.ajax({
+    async: false,
     method: 'post',
     url: 'http://localhost/phpfuns.php',
     data: data2Post,
     xhrFields: {
-       withCredentials: true
+      withCredentials: true
     },
     success: (res, status, data) => {
       const idxSuccess = res.indexOf(data2Post.mode + 'success');
@@ -15,6 +16,6 @@ export  async function callUrl(data2Post, next) {
       } else {
       }
     },
-    error:  (res, status, data) => { console.log(res) }
+    error: (res, status, data) => { console.log(res) }
   });
 }
