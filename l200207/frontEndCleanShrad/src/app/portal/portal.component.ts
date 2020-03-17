@@ -116,7 +116,7 @@ export class PortalComponent implements OnInit {
         })
         callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
           userAccess["notification"] = JSON.parse(resp)
-          this.dataService.setServicedata('portal',userAccess)
+          this.dataService.setServicedata('portal', userAccess)
         })
         this.createDataTree(this.users);
       }
@@ -331,7 +331,19 @@ export class PortalComponent implements OnInit {
         this.hierarchyViewdata(this.jitNodeData)
         break;
       case 'allotimgLoad':
-        this.userRecordbody.forEach(parel => { (parel.title == 'Buttons') ? parel.detail.forEach(carel => { (carel.name == 'cardimage') ? (this.checkcardRecord.tagid == '') ? carel.show = true : carel.show = false : '' }) : ''; })
+        this.userRecordbody.forEach(parel => {
+          if (parel.title == 'Buttons') {
+            parel.detail.forEach(carel => {
+              if (carel.name == 'cardimage') {
+                if (this.checkcardRecord.tagid == '') { carel.show = true }
+                if (this.checkcardRecord.tagid != '') { 
+                  carel.show = false;
+                  swal('Card Alloted','','success')
+                }
+              }
+            })
+          }
+        })
         break;
       case 'salaryslipclick':
         console.log(this.salaryslipJson.show);
