@@ -346,7 +346,6 @@ export class PortalComponent implements OnInit {
         })
         break;
       case 'salaryslipclick':
-        console.log(this.salaryslipJson.show);
         (this.salaryslipJson.show == true) ? this.salaryslip.show() : swal('Salary Not found', '', 'info');
         break;
       case 'salmodaldismiss':
