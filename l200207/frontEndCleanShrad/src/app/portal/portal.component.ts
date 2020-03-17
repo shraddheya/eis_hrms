@@ -335,8 +335,8 @@ export class PortalComponent implements OnInit {
           if (parel.title == 'Buttons') {
             parel.detail.forEach(carel => {
               if (carel.name == 'cardimage') {
-                if (this.checkcardRecord.tagid == '') { carel.show = true }
-                if (this.checkcardRecord.tagid != '') { 
+                if(this.checkcardRecord.tagid == '') {carel.show = true }
+                else if(this.checkcardRecord.tagid !=''){
                   carel.show = false;
                   swal('Card Alloted','','success')
                 }
