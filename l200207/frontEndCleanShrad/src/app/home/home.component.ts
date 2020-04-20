@@ -1,6 +1,6 @@
 // tslint:disable: max-line-length
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import $ from 'jquery';
 @Component({
   selector: 'app-home',
@@ -42,28 +42,28 @@ export class HomeComponent implements OnInit {
   ];
   pricingList = [
     {
-      head: "Basic",
-      prize: "$50",
-      duration: "3 month",
-      icon: "fa-chalkboard",
+      head: 'Basic',
+      prize: '$50',
+      duration: '3 month',
+      icon: 'fa-chalkboard',
       clickFun: (_: any) => { this.clicked(); },
-      matter: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      matter: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
     },
     {
-      head: "Express",
-      prize: "$90",
-      duration: "6 month",
-      icon: "fa-briefcase ",
+      head: 'Express',
+      prize: '$90',
+      duration: '6 month',
+      icon: 'fa-briefcase ',
       clickFun: (_: any) => { this.clicked(); },
-      matter: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      matter: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
     },
     {
-      head: "Super",
-      prize: "$120",
-      duration: "1 year",
-      icon: "fa-gem",
+      head: 'Super',
+      prize: '$120',
+      duration: '1 year',
+      icon: 'fa-gem',
       clickFun: (_: any) => { this.clicked(); },
-      matter: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      matter: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
     }
   ];
   ngOnInit() {
