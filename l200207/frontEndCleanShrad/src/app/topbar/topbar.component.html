@@ -1,6 +1,6 @@
 <div class="fixed-top bg-dark">
   <mdb-navbar SideClass="navbar navbar-expand-sm navbar-dark" [containerInside]="false">
-    <mdb-navbar-brand><a class="navbar-brand" href="#home">HRMS</a></mdb-navbar-brand>
+    <mdb-navbar-brand><a class="navbar-brand" routerLink = "">HRMS</a></mdb-navbar-brand>
     <links>
       <ul class="navbar-nav ml-auto">
         <div class="btn-group" mdbDropdown>
@@ -11,12 +11,13 @@
             </a>
           </li>
           <li>
-            <img src="../../assets/images/main.png"  alt="" style="height: 3em;width: 3em;border-radius: 5em;">
+            <img src={{profilepic}} alt="Image not Found" style="height: 3em;width: 3em;border-radius: 5em;">
           </li>
           <div class="dropdown-menu dropdown-primary pl-0 pr-4">
             <ul>
               <li style="text-decoration: none;list-style-type: none;" *ngFor="let menudrop of portalmenuDropdown">
-                <a *ngIf="menudrop.show" class="dropdown-item" style="font-size: 1.6em;" (click)='menudrop.clickFun ? menudrop.clickFun() : null'>
+                <a *ngIf="menudrop.show" class={{menudrop.class}} style="font-size: 1.6em;"
+                  (click)='menudrop.clickFun ? menudrop.clickFun() : null'>
                   <mdb-icon fas icon="{{menudrop.icon}}"></mdb-icon>
                 </a>
               </li>
@@ -39,19 +40,19 @@
         <div class="modal-body">
           <form action="">
             <div class="md-form mb-5">
-            <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
-            <input autocomplete="e-Mail ID" type="email" (input)="email=$event.target.value" class="form-control" mdbInput>
-            <label for="defaultForm-email">Email</label>
+              <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
+              <input type="email" (input)="email=$event.target.value" class="form-control" mdbInput>
+              <label for="defaultForm-email">Email</label>
             </div>
             <div class="md-form mb-4">
-            <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
-            <input autocomplete="current-password" type="password" (input)="password=$event.target.value" (keydown.enter)="callFunction('LOGIN')"
-              #showhide_event class="form-control" mdbInput>
-            <span id="password_viewhide">
-              <i class="fas fa-eye showtext" (click)="passwordView('text','password',showhide_event)"></i>
-              <i class="fas fa-eye-slash showpassword" (click)="passwordView('password','text',showhide_event)"></i>
-            </span>
-            <label for="defaultForm-pass">Password</label>
+              <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
+              <input type="password" (input)="password=$event.target.value" (keydown.enter)="callFunction('LOGIN')"
+                #showhide_event class="form-control" mdbInput>
+              <span id="password_viewhide">
+                <i class="fas fa-eye showtext" (click)="passwordView('text','password',showhide_event)"></i>
+                <i class="fas fa-eye-slash showpassword" (click)="passwordView('password','text',showhide_event)"></i>
+              </span>
+              <label for="defaultForm-pass">Password</label>
             </div>
           </form>
           <a id="forpassword" (click)="clicked('forgetpassword')" class="dark-text ml-1">Forgot
@@ -60,6 +61,32 @@
         <div class="modal-footer">
           <button type="button" mdbBtn color="dark" (click)="callFunction('LOGIN')" class="relative waves-light"
             mdbWavesEffect>Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mdbModal #notificationmodal="mdbModal" class="modal fade" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
+    aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-side modal-top-right" role="document">
+      <div class="modal-content">
+        <div class="modal-header border border-white">
+          <a (click)="clicked('hidenotificationModel')" style="font-size: 1.5em;" class="text-left">
+            <mdb-icon fas icon="chevron-circle-left"></mdb-icon>
+           </a>
+           <h4 class="modal-title w-100 text-center font-weight-bold" id="myModalLabel">
+            <mdb-icon fas icon="bell"></mdb-icon> Notifications
+            </h4>
+        </div>
+        <div class="modal-body border border-white">
+          <div *ngFor="let shownotification of notification">
+             <div class="row p-1 font-weight-bold">
+               <div class="col-5 text-dark">{{shownotification.whom}}</div>
+               <div class="col-4 text-dark">{{shownotification.why}}</div>
+               <div class="col-3 text-dark">{{shownotification.when}}</div>
+             </div>
+          </div>
+        </div>
+        <div class="modal-footer border border-white">
         </div>
       </div>
     </div>

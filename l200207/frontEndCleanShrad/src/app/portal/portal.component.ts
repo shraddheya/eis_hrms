@@ -2,12 +2,15 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import { ModalDirective } from 'angular-bootstrap-md';
-import * as moment from 'moment';
-import * as $ from 'jquery';
+import { DataserviceService } from "../dataservice.service";
+import moment from 'moment';
+import $ from 'jquery';
 import 'fullcalendar';
 declare var swal: any
 declare var $jit: any;
 let rgraph: any;
+let userAccess = {};
+var test;
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -18,13 +21,14 @@ export class PortalComponent implements OnInit {
   @ViewChild('hierachyView', { static: true }) hierachyView: ModalDirective;
   @ViewChild('salaryslip', { static: true }) salaryslip: ModalDirective;
   @ViewChild('printslip', { static: true }) private printslip: ElementRef;
+  public userdata: any;
   graphData: any;
   showTree: any;
   posts: any;
   accesslevels: any;
   users: any;
-  adduserBosslist = { show: false }
-  adduserAlldetail = { show: false }
+  adduserBosslist: any = { show: false }
+  adduserAlldetail: any = { show: false }
   selOfBoss: any;
   selOfPost: any;
   selOfTitle: any;
@@ -37,7 +41,7 @@ export class PortalComponent implements OnInit {
   jitNodeData: any;
   attendancedata: any = [];
   addButton: any = false;
-  userRecordbody = [
+  userRecordbody: any = [
     {
       title: 'Crud',
       detail: [{
@@ -63,13 +67,15 @@ export class PortalComponent implements OnInit {
       title: 'Buttons',
       detail: [{
         name: 'cardbutton',
-        icon: 'id-card',
+        title: 'Allot',
+        icon: 'id-card-alt',
         clickFun: (_: any) => { this.callFunction('cardallot') },
-        style: 'waves-light rounded mb-0 h5 text-center z-depth-2 bg-dark text-white px-4 py-3',
+        style: 'waves-light rounded mb-0 h6 text-center z-depth-2 bg-dark text-white px-4 py-3',
         show: true
       }, {
         name: 'salaryslip',
         title: '0',
+        icon: 'rupee-sign',
         clickFun: (_: any) => { this.clicked('salaryslipclick') },
         style: 'waves-light rounded mb-0 h6 text-center z-depth-2 bg-dark text-white px-4 py-3',
         show: true
@@ -80,43 +86,43 @@ export class PortalComponent implements OnInit {
         show: false
       }]
     }];
-  salaryslipJson = {
-    data: [
-      { title: 'User Detail', detail: [] },
-      { title: 'Grossincome', detail: [] },
-      { title: 'Extraincome', detail: [] },
-      { title: 'Totalicome', total: 0 },
-      { title: 'salary_permit', detail: [] }],
+  salaryslipJson: any = {
+    data: [{ title: 'User Detail', detail: [] }, { title: 'Grossincome', detail: [] }, { title: 'Extraincome', detail: [] }, { title: 'Totalicome', total: 0 }, { title: 'salary_permit', detail: [] }],
     show: true
   }
-  userDetails = { data: [{ title: 'Basic Detail', detail: [], show: true }, { title: 'Permanent Address', detail: [], show: true }, { title: 'Corresponding Address', detail: [], show: true }] }
-  constructor() { }
+  userDetails: any = { data: [{ title: 'Basic Detail', detail: [], show: true }, { title: 'Permanent Address', detail: [], show: true }, { title: 'Corresponding Address', detail: [], show: true }] }
+  constructor(private dataService: DataserviceService) { }
   ngOnInit() {
     this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
-      resp = JSON.parse(resp)
-      this.accesslevels = resp.accesslevels;
-      this.posts = resp.posts;
-      this.users = resp.users;
-      var permission: any = { operation: 'Crud', data: [{ type: 1, value: ['edit', 'delete'], show: true }, { type: 2, value: ['edit'], show: true }, { type: 3, show: false }] }
-      this.users.forEach(permit => {
-        if (!permit.boss) {
-          this.loginuserid = permit.id
-          permission.data.forEach(perel => {
-            if (permit.permissions == perel.type) {
-              this.addButton = perel.show;
-              this.userRecordbody.forEach(crdel => { if (crdel.title == permission.operation) { crdel.detail.forEach(stel => { perel.value.forEach(valel => { if (stel.name == valel) stel.show = perel.show }) }) } })
-            }
-          })
-        }
-        if ((permit.post >= 1) && (permit.post <= 3)) { }
-      })
-      this.callFunction('notification')
-      this.createDataTree(this.users);
-      localStorage.setItem('checklogin', 'true')
-    });
+      if (resp != "eNOTLOGGEDIN") {
+        resp = JSON.parse(resp);
+        this.accesslevels = resp.accesslevels;
+        this.posts = resp.posts;
+        this.users = resp.users;
+        var permission: any = { operation: 'Crud', data: [{ type: 1, value: ['edit', 'delete'], show: true }, { type: 2, value: ['edit'], show: true }, { type: 3, show: false }] }
+        this.users.forEach(permit => {
+          if (!permit.boss) { // This condition is used to check root user
+            this.loginuserid = permit.id
+            userAccess["image"] = atob(permit.picture)
+            permission.data.forEach(perel => {
+              if (permit.permissions == perel.type) {//Below condition is use to check permission
+                this.addButton = perel.show;
+                this.userRecordbody.forEach(crdel => { if (crdel.title == permission.operation) { crdel.detail.forEach(stel => { perel.value.forEach(valel => { if (stel.name == valel) stel.show = perel.show }) }) } })
+              }
+            })
+          }
+          if ((permit.post >= 1) && (permit.post <= 3)) { userAccess["admin"] = true }//Check Admin feature authority
+        })
+        callUrl({ mode: "NOTIFICATION", data: JSON.stringify({ whom: this.loginuserid }) }, (resp: any) => {
+          userAccess["notification"] = JSON.parse(resp)
+          this.dataService.setServicedata('portal', userAccess)
+        })
+        this.createDataTree(this.users);
+      }
+    })
   }
-  addUserNode2GUI(user, mode, isPermanent = true) {
+  addUserNode2GUI(user: any, mode: any, isPermanent: any = true) {
     switch (mode) {
       case 'addusers':
         this.addUsers.hide();
@@ -125,13 +131,12 @@ export class PortalComponent implements OnInit {
         swal('User Added', '', 'success')
         break;
       case 'deleteusers':
-        this.hierachyView.hide();
         this.users.forEach(function (item, index, object) { (item.id == user.prid) ? object.splice(index, 1) : '' });
         this.createDataTree(this.users);
+        this.hierachyView.hide();
         swal('User Deleted', '', 'success')
         break;
       case 'updateuser':
-        this.hierachyView.hide();
         for (var i = 0; i < this.users.length; i++) {
           if (this.users[i].id == user.id) {
             this.users.splice(i, 1);
@@ -140,6 +145,7 @@ export class PortalComponent implements OnInit {
         };
         this.users.push(user);
         this.createDataTree(this.users);
+        this.hierachyView.hide();
         swal('User Updated', '', 'success')
         break;
     }
@@ -152,6 +158,7 @@ export class PortalComponent implements OnInit {
       Node: { color: '#FFFFFF' },
       Edge: { color: '#C0C0C0', lineWidth: 1, spline: false },
       onCreateLabel: (domElement, node) => {
+
         //domElement.innerHTML = node.fname + + (node.mname ? node.mname + ' ' : '') + '  ' + node.lname;
         domElement.innerHTML = node.fname + ' ' + node.lname;
         domElement.name = 'tooltip';
@@ -212,7 +219,7 @@ export class PortalComponent implements OnInit {
       }
     });
   }
-  changeIps_addGUIusers(mode) {
+  changeIps_addGUIusers(mode: any) {
     switch (mode) {
       case 'usrAdd_post':
         this.selOfBoss = this.users;
@@ -225,7 +232,7 @@ export class PortalComponent implements OnInit {
         return;
     }
   }
-  createDataTree(dataset: any) { // legacy code to convert flat data to hirarechy
+  createDataTree(dataset: any) { // legacy code to convert flat data to  hierarchy
     const hashTable = Object.create(null);
     dataset.forEach((aData: any) => hashTable[aData.id] = { ...aData, children: [] });
     const dataTree = [];
@@ -244,44 +251,56 @@ export class PortalComponent implements OnInit {
       pos.setc(-300, -300);
     });
     rgraph.compute('end');
-    rgraph.fx.animate({ modes: ['polar'], duration: 2000 });
+    rgraph.fx.animate({ modes: ['polar'], duration: 50 });
   }
-  hierarchyViewdata(data) {
+  hierarchyViewdata(data: any) {
     this.jitNodeData = data;
     this.clickedUserid = data.id; //Get Id after clicked
     this.rootUserid = data.boss;  //Get Boss Id after clicked
-    //Used for store current salary of clicked user
+
+    //Used for display current salary of clicked user
     this.userRecordbody.forEach(urel => { urel.detail.forEach(udel => { if (udel.name == 'salaryslip') (data.current_salary == undefined) ? udel.title = '0' : udel.title = data.current_salary }) })
-    var clickedData: any = {}; //This object is used to show value and icon dynamically for UI
+
+    //This object is used to show value and icon dynamically for UI
+    var clickedData: any = {};
     this.users[0]['boss'] = data.boss;
+    this.users[0]['email'] = this.users[0].mail;
+
     //Below code is used to make user detail for UI
     Object.keys(this.users[0]).forEach(el => { clickedData[el] = { value: data[el], icon: '' } })
-    var recordArrray = [{ key: 'houseno', icon: 'home' }, { key: 'area', icon: 'road' }, { key: 'city', icon: 'city' }, { key: 'state', icon: 'flag' }, { key: 'country', icon: 'globe' }, { key: 'pincode', icon: 'keyboard' }]
-    //Below code is used to filter address field form clickedData object
-    recordArrray.forEach(makeedit => { Object.keys(clickedData).forEach(test1 => { if (test1.endsWith(makeedit.key)) clickedData[test1].icon = makeedit.icon }) })
 
+    //Below code is used to filter address field form clickedData object
+    var recordArrray = [{ key: 'houseno', icon: 'home' }, { key: 'area', icon: 'road' }, { key: 'city', icon: 'city' }, { key: 'state', icon: 'flag' }, { key: 'country', icon: 'globe' }, { key: 'pincode', icon: 'keyboard' }]
+    recordArrray.forEach(makeedit => { Object.keys(clickedData).forEach(test1 => { if (test1.endsWith(makeedit.key)) clickedData[test1].icon = makeedit.icon }) })
     this.userDetails.data.forEach(el => { el.detail = [] })
+
+    //Below code is used to store user data
     this.userDetails.data.forEach(clickel => {
       if (clickel.title == 'Basic Detail') {
         clickel.detail.push({ title: 'name', record: [{ key: 'title', value: clickedData.title.value }, { key: 'fname', value: clickedData.fname.value }, { key: 'mname', value: clickedData.mname.value }, { key: 'lname', value: clickedData.lname.value },], icon: 'user', show: 'true' })
-        clickel.detail.push({ title: 'email', record: [{ key: 'email', value: clickedData.mail.value }], icon: 'envelope', show: (clickedData.mail.value == undefined || clickedData.mail.value == 0) ? false : true })
-        clickel.detail.push({ title: 'contactno', record: [{ key: 'contactno', value: clickedData.contactno.value }], icon: 'phone', show: (clickedData.contactno.value == undefined || clickedData.contactno.value == 0) ? false : true })
+        clickel.detail.push({ title: 'email', record: [{ key: 'email', value: clickedData.email.value }], icon: 'envelope', show: (clickedData.email.value == undefined || clickedData.email.value == '') ? false : true })
+        clickel.detail.push({ title: 'contactno', record: [{ key: 'contactno', value: clickedData.contactno.value }], icon: 'phone', show: (clickedData.contactno.value == undefined || clickedData.contactno.value == '') ? false : true })
       }
-      if (clickel.title == 'Permanent Address') Object.keys(clickedData).forEach(el => { (el.startsWith('address_p')) ? clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0) ? false : true }) : '' })
-      if (clickel.title == 'Corresponding Address') Object.keys(clickedData).forEach(el => { (el.startsWith('address_c')) ? clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0) ? false : true }) : '' })
+      if (clickel.title == 'Permanent Address') Object.keys(clickedData).forEach(el => { if (el.startsWith('address_p')) clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0 || clickedData[el].value == '') ? false : true }) })
+      if (clickel.title == 'Corresponding Address') Object.keys(clickedData).forEach(el => { if (el.startsWith('address_c')) clickel.detail.push({ title: el, record: [{ key: el, value: clickedData[el].value }], icon: clickedData[el].icon, show: (clickedData[el].value == undefined || clickedData[el].value == 0 || clickedData[el].value == '') ? false : true }) })
     })
+
     var checkobj: any = { address_p: [], address_c: [] }; //Used to check defined values
     Object.keys(clickedData).forEach(el => {
-      if (el.startsWith('address_p')) if (clickedData[el].value != undefined) checkobj.address_p.push(clickedData[el].value);
-      if (el.startsWith('address_c')) if (clickedData[el].value != undefined) checkobj.address_c.push(clickedData[el].value);
+      if (el.startsWith('address_p')) if (clickedData[el].value != '' || clickedData[el].value != 0) checkobj.address_p.push(clickedData[el].value);
+      if (el.startsWith('address_c')) if (clickedData[el].value != '' || clickedData[el].value != 0) checkobj.address_c.push(clickedData[el].value);
     });
-    (checkobj.address_p.length == 0) ? this.userDetails.data.forEach(apel => { (apel.title == 'Permanent Address') ? apel.show = false : '' }) : '';
-    (checkobj.address_c.length == 0) ? this.userDetails.data.forEach(acel => { (acel.title == 'Corresponding Address') ? acel.show = false : '' }) : '';
-    this.hierachyView.show();
+
+    this.userDetails.data.forEach(apel => {
+      if (apel.title == 'Permanent Address') (checkobj.address_p == 0) ? apel.show = false : apel.show = true;
+      if (apel.title == 'Corresponding Address') (checkobj.address_c == 0) ? apel.show = false : apel.show = true;
+    });
+    //this.userDetails.data.forEach(acel => { if(acel.title == 'Corresponding Address') acel.show = false });
     this.populateCalendarAttendance(data.id)
     this.callFunction('salaryslip_request');
+    this.hierachyView.show();
   }
-  clicked(mode) {
+  clicked(mode: any) {
     switch (mode) {
       case 'addUser':
         this.addUsers.show();
@@ -294,12 +313,7 @@ export class PortalComponent implements OnInit {
         this.hierachyView.hide();
         break;
       case 'editRecord':
-        this.userRecordbody.forEach(parel => {
-          (parel.title == 'Crud') ? parel.detail.forEach(carel => {
-            (carel.name == 'view') ? carel.show = true : carel.show = false;
-            (carel.name == 'delete') ? carel.show = true : '';
-          }) : '';
-        })
+        this.userRecordbody.forEach(parel => { if (parel.title == 'Crud') parel.detail.forEach(carel => { (carel.name == 'view') ? carel.show = true : carel.show = false }) })
         this.editabel = true;
         this.userDetails.data.forEach(el => {
           el.show = true;
@@ -308,16 +322,28 @@ export class PortalComponent implements OnInit {
         break;
       case 'viewRecord':
         this.userRecordbody.forEach(parel => {
-          (parel.title == 'Crud') ? parel.detail.forEach(carel => {
+          if (parel.title == 'Crud') parel.detail.forEach(carel => {
             (carel.name == 'edit') ? carel.show = true : carel.show = false;
-            (carel.name == 'delete') ? carel.show = true : '';
-          }) : '';
+            if (carel.name == 'delete') carel.show = true;
+          });
         })
         this.editabel = false;
         this.hierarchyViewdata(this.jitNodeData)
         break;
       case 'allotimgLoad':
-        this.userRecordbody.forEach(parel => { (parel.title == 'Buttons') ? parel.detail.forEach(carel => { (carel.name == 'cardimage') ? (this.checkcardRecord.tagid == '') ? carel.show = true : carel.show = false : '' }) : ''; })
+        this.userRecordbody.forEach(parel => {
+          if (parel.title == 'Buttons') {
+            parel.detail.forEach(carel => {
+              if (carel.name == 'cardimage') {
+                if(this.checkcardRecord.tagid == '') {carel.show = true }
+                else if(this.checkcardRecord.tagid !=''){
+                  carel.show = false;
+                  swal('Card Alloted','','success')
+                }
+              }
+            })
+          }
+        })
         break;
       case 'salaryslipclick':
         (this.salaryslipJson.show == true) ? this.salaryslip.show() : swal('Salary Not found', '', 'info');
@@ -337,13 +363,11 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  callFunction(mode) {
+  callFunction(mode: any) {
     var requestObj = JSON.stringify({ tagdata: this.clickedUserid })
     switch (mode) {
       case 'cardallot':
-        callUrl({ mode: 'CLEARASSOCIATION', data: requestObj }, (resp: any) => {
-          (resp == '"success"') ? callUrl({ mode: 'GETCARDID', data: requestObj }, (resps: any) => { this.objectToarray(JSON.parse(resps), 'fromCardallot') }) : '';
-        })
+        callUrl({ mode: 'CLEARASSOCIATION', data: requestObj }, (resp: any) => { if (resp == '"success"') callUrl({ mode: 'GETCARDID', data: requestObj }, (resp: any) => { this.objectToarray(JSON.parse(resp), 'fromCardallot') }) })
         break;
       case 'getcardid':
         if (this.checkcardRecord.tagid == '') callUrl({ mode: 'GETCARDID', data: requestObj }, (resp: any) => { this.objectToarray(JSON.parse(resp), 'fromCardallot') })
@@ -357,7 +381,7 @@ export class PortalComponent implements OnInit {
         $('.inputusers').each((_, r) => { userData[r.id.substr(7).toLowerCase()] = $(r).val() })
         var i = 0; i++; userData['prid'] = (new Date).getTime() + i - 2678400;
         callUrl({ mode: 'REGISTER', data: JSON.stringify(userData) }, (resp: any) => {
-          resp = JSON.parse(resp)
+          resp = JSON.parse(resp);
           resp['id'] = resp.prid;
           delete resp['prid'];
           this.addUserNode2GUI(resp, 'addusers');
@@ -365,35 +389,28 @@ export class PortalComponent implements OnInit {
         break;
       case 'updateData':
         var updObjt = {};
-        $('.updatedetail').each((_, el) => { 
-          console.log(el)
-          updObjt[el.id] = $(el).html() 
-        });
+        $('.updatedetail').each((_, el) => { updObjt[el.id] = $(el).html() });
         updObjt['prid'] = this.clickedUserid;
         updObjt['boss'] = this.rootUserid;
         callUrl({ mode: 'UPDATE_USERS', data: JSON.stringify(updObjt) }, (resp: any) => {
-          resp = JSON.parse(resp)
+          resp = JSON.parse(resp);
           resp.id = resp.prid;
           delete resp['prid'];
           this.addUserNode2GUI(resp, 'updateuser');
-        })
-        break;
-      case 'notification':
-        callUrl({mode:"NOTIFICATION",data:JSON.stringify({whom: this.loginuserid})},(resp:any)=>{
-          resp = JSON.parse(resp)
         })
         break;
       case 'salaryslip_request':
         callUrl({ mode: 'SALARYSLIP', data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
           resp = JSON.parse(resp)
           this.salaryslipJson.data.forEach(salJson => { salJson.detail = [] })
-          var salaryObj: any = {}
-          var salary_json = resp
-          if (salary_json.length == 0) this.salaryslipJson.show = false
-          salary_json.forEach(el => { salaryObj = el });
+          var salaryObj: any = {};
+          (resp.length == 0) ? this.salaryslipJson.show = false : this.salaryslipJson.show = true;
+          resp.forEach(el => { salaryObj = el });
+
           //code for userdetail
           var userarray: any = [{ key: 'fname', value: 'Firstname' }, { key: 'lname', value: 'Lastname' }, { key: 'createdAt', value: 'Date of Joining' }]
           this.users.forEach(usel => { if (usel.id == salaryObj.prid) this.salaryslipJson.data.forEach(wrel => { userarray.forEach(nel => { (wrel.title == 'User Detail') ? wrel.detail.push({ head: nel.value, value: usel[nel.key] }) : '' }) }) })
+
           //code for display gross icome and calculation
           var grossincome: any = ['basic_salary', 'hra', 'ta', 'da', 'overtime', 'bonus', 'house_rent'];
           var calculategross = 0;
@@ -401,6 +418,7 @@ export class PortalComponent implements OnInit {
           salaryObj['grossincome'] = calculategross;
           grossincome.push('grossincome')
           grossincome.forEach(grossel => { this.salaryslipJson.data.forEach(wrel => { if (wrel.title == 'Grossincome') wrel.detail.push({ head: grossel, value: salaryObj[grossel] }) }) })
+
           //code for display extra icome and calculation
           var extraInList = ['medical', 'telephone_internet', 'other'];
           var calculate_extra = 0;
@@ -408,17 +426,21 @@ export class PortalComponent implements OnInit {
           salaryObj['extraincome'] = calculate_extra
           extraInList.push('extraincome')
           this.salaryslipJson.data.forEach(wrsj => { if (wrsj.title == 'Extraincome') extraInList.forEach(exel => { wrsj.detail.push({ head: exel, value: salaryObj[exel] }) }) })
+
           // code for grand total
           this.salaryslipJson.data.forEach(gtel => { if (gtel.title == 'Totalicome') gtel.total = calculategross + calculate_extra })
+
           // code for display permission officer Id
           var salaryslipPermit = ['prepared_by', 'check_by', 'authorised_by'];
           this.salaryslipJson.data.forEach(elpo => { if (elpo.title == 'salary_permit') salaryslipPermit.forEach(spel => { elpo.detail.push({ head: spel, value: salaryObj[spel] }) }) })
-          console.log(this.salaryslipJson)
+
+          //Use to store current_salary into database
+          callUrl({ mode: "CURRENT_SALARY", data: JSON.stringify({ prid: this.clickedUserid, current_salary: calculategross + calculate_extra }) }, (resp: any) => { })
         })
         break;
     }
   }
-  objectToarray(input, mode) {
+  objectToarray(input: any, mode: any) {
     switch (mode) {
       case 'fromCardallot':
         var obj;
@@ -428,22 +450,17 @@ export class PortalComponent implements OnInit {
         break;
     }
   }
-  populateCalendarAttendance(prid, dataInterest = moment()) {
+  populateCalendarAttendance(prid: any, dataInterest = moment()) {
+    this.dataService.setServicedata("prid", prid)
+    $('#calendar').hide();
     callUrl({ mode: 'GETATTENDANCE', data: JSON.stringify({ prid: prid, month: dataInterest.month() + 1, year: dataInterest.year() }) }, (resp: any) => {
-      var attendance = JSON.parse(resp)
+      var attendance = JSON.parse(resp);
       var workinghours;
       if (attendance.length != 0) {
-        $('#calendar').fullCalendar({
-          defaultDate: moment().format('YYYY-MM-DD'),
-          editable: true,
-          eventLimit: false,
-          viewRender: (view, event) => {
-            var moments = $('#calendar').fullCalendar('getDate');
-            var data = moments.format();
-          }
-        })
+        $('#calendar').show();
+        $('#calendar').fullCalendar({ defaultDate: moment().format('YYYY-MM-DD'), editable: true, eventLimit: false });
         var eventsCurrent = [];
-        var intAtt = attendance.sort((a, b) => { return a.createdAt - b.createdAt })
+        var intAtt = attendance.sort((a, b) => { return a.createdAt - b.createdAt });
         for (var idx = 0; idx < intAtt.length; idx++) {
           var atUnixTime = moment(intAtt[idx].createdAt, 'YYYY-MM-DD HH:mm:SS').unix()
           if (intAtt[idx].mode === 'OUT') {
@@ -454,7 +471,7 @@ export class PortalComponent implements OnInit {
               (intAtt[idxIn].mode === 'IN') ? evt['start'] = possEnd : evt.end = possEnd;
               if (intAtt[idxIn].mode === 'IN') break;
             }
-            eventsCurrent.push(evt)
+            eventsCurrent.push(evt);
           }
         }
         eventsCurrent.forEach(pushtime => {
@@ -462,7 +479,7 @@ export class PortalComponent implements OnInit {
           var endTime = moment(pushtime.end, 'YYYY-MM-DD HH:mm:SS');
           workinghours = endTime.diff(startTime, 'hours');
           pushtime['title'] = (workinghours + 1) + ' hrs';
-        })
+        });
         $('#calendar').fullCalendar('removeEvents');
         $('#calendar').fullCalendar('addEventSource', eventsCurrent);
       }

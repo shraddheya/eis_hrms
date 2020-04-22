@@ -59,7 +59,7 @@
                   <p class="lead font-weight-bold">Pricing plan</p>
                   <p class="card-text">{{pricingdata.matter}}</p>
                   <a class="btn btn-dark btn-md text-white" name="basic" #pricingbasic
-                    (click)="payment('viapriceplan',pricingbasic.name)" role="button">Buy</a>
+                  (click)='pricingdata.clickFun ? pricingdata.clickFun() : null' role="button">Buy</a>
                 </div>
               </div>
             </div>

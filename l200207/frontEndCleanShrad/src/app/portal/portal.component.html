@@ -6,7 +6,7 @@
   <mdb-icon *ngIf="addButton" class="text-white buttPlus" fas icon="plus-circle" (click)="clicked('addUser')">
   </mdb-icon>
   <div mdbModal #addUsers="mdbModal" [config]="{backdrop: 'static'}" class="modal fade left" tabindex="-1" role="dialog"
-  style="overflow-x: hidden;overflow-y: auto;"  aria-labelledby="myModalLabel" aria-hidden="true">
+    style="overflow-x: hidden;overflow-y: auto;" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header text-center p-2 border border-white">
@@ -190,7 +190,7 @@
     </div>
   </div>
   <div mdbModal #hierachyView="mdbModal" [config]="{backdrop: 'static'}" class="modal" tabindex="-1" role="dialog"
-  style="overflow-x: hidden;overflow-y: auto;" aria-labelledby="myModalLabel" aria-hidden="true">
+    style="overflow-x: hidden;overflow-y: auto;" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header border border-white">
@@ -206,8 +206,9 @@
                   <a class={{corecordUser.style}} mdbWavesEffect
                     [attr.href]="corecordUser.href ? corecordUser.href : null"
                     (click)='corecordUser.clickFun ? corecordUser.clickFun() : null' *ngIf="corecordUser.show">
-                    <mdb-icon fas icon="{{corecordUser.icon}}"></mdb-icon>
-                    <span>{{corecordUser.title}}</span>
+                    <span>
+                      <mdb-icon fas icon="{{corecordUser.icon}}"></mdb-icon> {{corecordUser.title}}
+                    </span>
                     <img alt="" *ngIf="corecordUser.img" src={{corecordUser.img}} style="height:8em;width:8em;top:0em">
                   </a>
                 </div>
@@ -222,17 +223,13 @@
                   <div *ngIf="crecordlist.show">
                     <mdb-icon fas icon={{crecordlist.icon}}></mdb-icon>&nbsp;
                     <label class="ml-2 updatedetail" id={{labelel.key}} [attr.contentEditable]=editabel required
-                      *ngFor="let labelel of crecordlist.record">
-                      {{labelel.value}}
-                    </label>&nbsp;&nbsp;
+                      *ngFor="let labelel of crecordlist.record">{{labelel.value}}</label>&nbsp;&nbsp;
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div>
-            <div id="calendar"></div>
-          </div>
+          <div id="calendar"></div>
         </div>
         <div class="modal-footer border border-white">
           <button class="update btn btn-dark form-group" *ngIf="editabel"
@@ -242,7 +239,7 @@
     </div>
   </div>
   <div mdbModal #salaryslip="mdbModal" [config]="{backdrop: 'static'}" class="modal fade" tabindex="-1" role="dialog"
-  style="overflow-x: hidden;overflow-y: auto;" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    style="overflow-x: hidden;overflow-y: auto;" aria-labelledby="myBasicModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
