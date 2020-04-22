@@ -40,12 +40,12 @@
           <form action="">
             <div class="md-form mb-5">
             <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
-            <input type="email" (input)="email=$event.target.value" class="form-control" mdbInput>
+            <input autocomplete="e-Mail ID" type="email" (input)="email=$event.target.value" class="form-control" mdbInput>
             <label for="defaultForm-email">Email</label>
             </div>
             <div class="md-form mb-4">
             <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
-            <input type="password" (input)="password=$event.target.value" (keydown.enter)="callFunction('LOGIN')"
+            <input autocomplete="current-password" type="password" (input)="password=$event.target.value" (keydown.enter)="callFunction('LOGIN')"
               #showhide_event class="form-control" mdbInput>
             <span id="password_viewhide">
               <i class="fas fa-eye showtext" (click)="passwordView('text','password',showhide_event)"></i>

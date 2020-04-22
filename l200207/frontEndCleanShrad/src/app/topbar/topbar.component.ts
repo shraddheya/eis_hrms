@@ -15,7 +15,7 @@ let check: any;
 })
 
 export class TopbarComponent implements OnInit {
-  checkdata:any;
+  checkdata: any;
   email: string;
   password: string;
   constructor(private router: Router) { }
@@ -109,28 +109,29 @@ export class TopbarComponent implements OnInit {
         break;
     }
   }
-  passwordView(format, input, showhide_event) {
+  passwordView(format: any, input: any, showhide_event: any) {
     $(showhide_event).attr('type', format);
     $('.show' + format).hide();
     $('.show' + input).show();
   }
 
   ngOnInit() {
-    console.log(check)
-    let checkurl: string = window.location.href.replace('http://localhost:4200/', '')
-    if (checkurl == 'portal' || checkurl == 'admin') {
-      var check = localStorage.getItem('checklogin')
-      if ((check == null) || (check == 'false')) {
-        this.router.navigate([''])
+    // console.log(check);
+    const checkurl: string = window.location.href.replace('http://localhost:4200/', '');
+    if (checkurl === 'portal' || checkurl === 'admin') {
+      const check = localStorage.getItem('checklogin');
+      if ((check === null) || (check === 'false')) {
+        this.router.navigate(['']);
       }
-      if (check == 'true') {
-        this.router.navigate([checkurl])
+      if (check === 'true') {
+        this.router.navigate([checkurl]);
         this.topBarElements.forEach(el => {
-          (checkurl == 'portal') ? (el.name == 'Menue') ? el.show = true : el.show = false : '';
-          (checkurl == 'admin') ? (el.name == 'Backtoportal') ? el.show = true : el.show = false : '';
+          (checkurl === 'portal') ? (el.name === 'Menue') ? el.show = true : el.show = false : '';
+          (checkurl === 'admin') ? (el.name === 'Backtoportal') ? el.show = true : el.show = false : '';
         });
       }
     }
+    console.log('must run');
     // ((checkurl == "potal")||(checkurl == "admin"))?(checklogin == false)?this.router.navigate(['']):this.router.navigate([checklogin]):"";
   }
 }
