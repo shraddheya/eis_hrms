@@ -135,6 +135,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "frontEndCleanShrad"
+    }
+  },
+  "defaultProject": "frontEndCleanShrad",
+  "cli": {
+    "analytics": "8bedcb5e-43c2-45d9-bac0-11428deb2b32"
+  }
 }
