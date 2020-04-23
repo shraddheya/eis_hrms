@@ -4,7 +4,7 @@
   $(document).click(function () {
     location.reload();
   })
-  var callURL = data2post => {
+  var callURL = (data2post, next = (vars) => {}) => {
     // data2post.data.prid = 1560156094492
     data2post.data = JSON.stringify(data2post.data)
     $.ajax({
@@ -37,227 +37,304 @@
     })
   }
 
-
+  //#region functions to call in sequence
+  // GETCARDID();
+  // DLTUSER();
+  // SALARYSLIP();
+  // CURRENT_SALARY();
+  // DELETE_USERS();
+  // DOCUMENTS_ACCESSLEVELS_ADD();
+  // DOCUMENTS_ACCESSLEVELS_DLT();
+  // DOCUMENTS_ACCESSLEVELS_MEMBERS();
+  // GETATTENDANCE();
+  // ISLOGGEDIN();
+  // UPLOADPICTURE();
+  // CLEARASSOCIATION();
+  // UPDATE_USERS();
+  // LOGIN();
+  // ISLOGGEDIN();
+  // logout();
+  // FORGET();
+  // ADMINDASHBOARD();
+  // GETINITDATA();
+  // ACCESSLEVELS_ADD();
+  // ACCESSLEVELS_DLT();
+  // REGISTER();
+  // NOTIFICATION();
+  // POSTS_DLT();
+  // POSTS_ADD();
+  //#endregion
+  
   //#region data2post region 1
-  // callURL({
-  //   mode: "GETCARDID",
-  //   data: {
-  //     tagdata: "1577940978524"
-  //   }
-  // })
+  var GETCARDID = _ => {
+    callURL({
+    mode: "GETCARDID",
+    data: {
+      tagdata: "1577940978524"
+    }
+    })
+  }
 
-  // callURL({
-  //   mode: "DLTUSER",
-  //   data: {
-  //    prid: "1560156094490"
-  //   }
-  // })
-
-
-  // callURL({
-  //   mode: "SALARYSLIP",
-  //   data: {
-  //     prid: "1576729391917"
-  //   }
-  // })
-
-  // callURL({
-  //   mode: "CURRENT_SALARY",
-  //   data: {
-  //     prid: "1576729391917",
-  //     current_salary: "100"
-  //   }
-  // })
-
-  // callURL({
-  //   mode: "DELETE_USERS",
-  //   data: {
-  //    prid: "1576729391917"
-  //   }
-  // })
-
-  // callURL({
-  //   mode: "DOCUMENTS_ACCESSLEVELS_ADD",
-  //   data: {
-  //     name: "Voter-Id-Card"
-  //   }
-  // })
-
-  // callURL({
-  //   mode: "DOCUMENTS_ACCESSLEVELS_DLT",
-  //   data: {
-  //     id: "2"
-  //   }
-  // })
+  var DLTUSER = _ => {
+    callURL({
+    mode: "DLTUSER",
+    data: {
+     prid: "1560156094490"
+    }
+    })
+  }
 
 
-  // callURL({
-  //   mode: "DOCUMENTS_ACCESSLEVELS_MEMBERS",
-  //   data: {}
-  // })
+  var SALARYSLIP = _ => {
+    callURL({
+    mode: "SALARYSLIP",
+    data: {
+      prid: "1576729391917"
+    }
+    })
+  }
 
-  // callURL({
-  //   mode: "GETATTENDANCE",
-  //   data: {
-  //    prid: "1560156094488",
-  //    month : 2019-07-30,
-  //     year : 2019-07-30
-  //   }
-  // })
+  var CURRENT_SALARY = _ => {
+    callURL({
+    mode: "CURRENT_SALARY",
+    data: {
+      prid: "1576729391917",
+      current_salary: "100"
+    }
+    })
+  }
 
-  // callURL({
-  //   mode: "ISLOGGEDIN",
-  //   data: {
-  //    email: "saylor@edeitic.com"
-  //   }
-  // })
+  var DELETE_USERS = _ => {
+    callURL({
+    mode: "DELETE_USERS",
+    data: {
+     prid: "1576729391917"
+    }
+    })
+  }
 
-  // callURL({
-  //   mode: "UPLOADPICTURE",
-  //   data: {
-  //     prid: "321654987",
-  //    picture: "saylor@edeitic.com"
-  //   }
-  // })
+  var DOCUMENTS_ACCESSLEVELS_ADD = _ => {
+    callURL({
+    mode: "DOCUMENTS_ACCESSLEVELS_ADD",
+    data: {
+      name: "Voter-Id-Card"
+    }
+    })
+  }
 
-  // callURL({
-  //   mode: "CLEARASSOCIATION",
-  //   data: {
-  //     tagdata: "1577940978527"
-  //   }
-  // })
+  var DOCUMENTS_ACCESSLEVELS_DLT = _ => {
+    callURL({
+    mode: "DOCUMENTS_ACCESSLEVELS_DLT",
+    data: {
+      id: "2"
+    }
+    })
+  }
+
+
+  var DOCUMENTS_ACCESSLEVELS_MEMBERS = _ => {
+    callURL({
+      mode: "DOCUMENTS_ACCESSLEVELS_MEMBERS",
+      data: {}
+    })
+  }
+
+  var GETATTENDANCE = _ => {
+    callURL({
+      mode: "GETATTENDANCE",
+      data: {
+      prid: "1560156094488",
+      month : 2019-07-30,
+        year : 2019-07-30
+      }
+    })
+  }
+
+  var ISLOGGEDIN = _ => {
+    callURL({
+      mode: "ISLOGGEDIN",
+    })
+  }
+
+  var UPLOADPICTURE = _ => {
+    callURL({
+      mode: "UPLOADPICTURE",
+      data: {
+        prid: "321654987",
+      picture: "saylor@edeitic.com"
+      }
+    })
+  }
+
+  var CLEARASSOCIATION = _ => {
+    callURL({
+    mode: "CLEARASSOCIATION",
+    data: {
+      tagdata: "1577940978527"
+    }
+    })
+  }
 
 
 
-  // callURL({
-  //   mode: "UPDATE_USERS",
-  //   data: {
-  //     prid: "1560156094507",
-  //     title: "mr",
-  //     fname: "Izreal",
-  //     mname: "LOGWOOD",
-  //     lname: "Lozardoo",
-  //     email: "Izreal.LOGWOOD@edeitic.com",
-  //     contactno: "6546546545",
-  //     address_c_houseno: "DC/6",
-  //     address_c_area: "USA",
-  //     address_c_city: "USA",
-  //     address_c_state: "USA",
-  //     address_c_country: "USA",
-  //     address_c_pincode: "321",
-  //     address_p_houseno: "DC/6",
-  //     address_p_area: "USA",
-  //     address_p_city: "USA",
-  //     address_p_state: "USA",
-  //     address_p_country: "USA",
-  //     address_p_pincode: "321",
-  //   }
-  // })
+  var UPDATE_USERS = _ => {
+    callURL({
+    mode: "UPDATE_USERS",
+    data: {
+      prid: "1560156094507",
+      title: "mr",
+      fname: "Izreal",
+      mname: "LOGWOOD",
+      lname: "Lozardoo",
+      email: "Izreal.LOGWOOD@edeitic.com",
+      contactno: "6546546545",
+      address_c_houseno: "DC/6",
+      address_c_area: "USA",
+      address_c_city: "USA",
+      address_c_state: "USA",
+      address_c_country: "USA",
+      address_c_pincode: "321",
+      address_p_houseno: "DC/6",
+      address_p_area: "USA",
+      address_p_city: "USA",
+      address_p_state: "USA",
+      address_p_country: "USA",
+      address_p_pincode: "321",
+    }
+    })
+  }
 
-  callURL({
+  var LOGIN = _ => {
+    callURL({
     mode: "LOGIN",
     data: {
       email: "demo@edeitic.com",
       password: "demo@edeitic.com"
     }
-  })
+    })
+  }
 
-  // callURL({
-  //   mode : "ISLOGGEDIN",
-  //   data : {
-  //   //  email: "saylor@edeitic.com"
-  //   }
-  // })
+  var ISLOGGEDIN = _ => {
+    callURL({
+      mode : "ISLOGGEDIN",
+      data : {
+      //  email: "saylor@edeitic.com"
+      }
+    })
+  }
 
-  // callURL({
-  //   mode : "logout",
-  //   data : {
-  //    email: "saylor@edeitic.com"
-  //   }
-  // })
+  var logout = _ => {
+    callURL({
+      mode : "logout",
+      data : {
+      email: "saylor@edeitic.com"
+      }
+    })
+  }
 
-  // callURL({
-  //   mode : "FORGET",
-  //   data : {
-  //    email: "exampletest@edeitic.com"
-  //   }
-  // })
+  var FORGET = _ => {
+    callURL({
+      mode : "FORGET",
+      data : {
+      email: "exampletest@edeitic.com"
+      }
+    })
+  }
 
-  // callURL({
-  //   mode: "ADMINDASHBOARD",
-  //   data: {}
-  // })
-
-  callURL({
-    mode: "GETINITDATA",
+  var ADMINDASHBOARD = _ => {
+    callURL({
+    mode: "ADMINDASHBOARD",
     data: {}
-  })
+    })
+  }
+
+  var GETINITDATA = _ => {
+    callURL({
+    mode: "GETINITDATA",
+    })
+  }
 
 
-  // callURL({
-  //   mode: "ACCESSLEVELS_ADD",
-  //   data: {
-  //     name: "Door-2",
-  //     inid: "123456789",
-  //     outid: "987654321"
-  //   }
-  // })
+  var ACCESSLEVELS_ADD = _ => {
+    callURL({
+    mode: "ACCESSLEVELS_ADD",
+    data: {
+      name: "Door-2",
+      inid: "123456789",
+      outid: "987654321"
+    }
+    })
+  }
 
 
-  // callURL({
-  //   mode: "ACCESSLEVELS_DLT",
-  //   data: {
-  //     id: "3"
-  //   }
-  // })
+  var ACCESSLEVELS_DLT = _ => {
+    callURL({
+    mode: "ACCESSLEVELS_DLT",
+    data: {
+      id: "3"
+    }
+    })
+  }
 
 
-  //  callURL({
-  //     mode : "REGISTER",
-  //     data : {
-  //       address_c_area: "xyz",
-  //       address_c_city: "xyz",
-  //       address_c_country: "xyz",
-  //       address_c_houseno: "xyz",
-  //       address_c_pincode: "101",
-  //       address_c_state: "xyz",
-  //       address_p_area: "xyz",
-  //       address_p_city: "xyz",
-  //       address_p_country: "xyz",
-  //       address_p_houseno: "xyz",
-  //       address_p_pincode: "101",
-  //       address_p_state: "xyz",
-  //       boss: "1560156094488",
-  //       contactno: "7897897899",
-  //       fname: "New",
-  //       lname: "Add",
-  //       email: "newuser@edeitic.com",
-  //       mname: "User",
-  //       permission: "0",
-  //       post: "23",
-  //       prid: "1564462044190",
-  //       title: "Mr"
-  //     }
-  //   })
+  var REGISTER = _ => {
+    callURL({
+      mode : "REGISTER",
+      data : {
+        address_c_area: "xyz",
+        address_c_city: "xyz",
+        address_c_country: "xyz",
+        address_c_houseno: "xyz",
+        address_c_pincode: "101",
+        address_c_state: "xyz",
+        address_p_area: "xyz",
+        address_p_city: "xyz",
+        address_p_country: "xyz",
+        address_p_houseno: "xyz",
+        address_p_pincode: "101",
+        address_p_state: "xyz",
+        boss: "1560156094488",
+        contactno: "7897897899",
+        fname: "New",
+        lname: "Add",
+        email: "newuser@edeitic.com",
+        mname: "User",
+        permission: "0",
+        post: "23",
+        prid: "1564462044190",
+        title: "Mr"
+      }
+    })
+  }
 
-  // callURL({
-  //   mode: "NOTIFICATION",
-  //   data: { whom: "1560156094488" }
-  // })
+  var NOTIFICATION = _ => {
+    callURL({
+      mode: "NOTIFICATION",
+      data: { whom: "1560156094488" }
+    })
+  }
 
-//  callURL({
-//     mode : "POSTS_DLT",
-//     data : {
-//       id: "4"
-//     }
-//   })
+  var POSTS_DLT = _ => {
+    callURL({
+      mode : "POSTS_DLT",
+      data : {
+        id: "4"
+      }
+    })
+  }
+  var POSTS_ADD = _ => {
+    callURL({
+      mode : "POSTS_ADD",
+      data : {
+        post: "Intern1"
+      }
+    })
+  }
+//#endregion
 
-//  callURL({
-//     mode : "POSTS_ADD",
-//     data : {
-//       post: "Intern1"
-//     }
-//   })
-
+ 
+  LOGIN();
+  ISLOGGEDIN();
+  GETINITDATA();
 
 </script>

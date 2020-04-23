@@ -1,0 +1,36 @@
+<?php
+$permissions = [
+  0b00000001 => [
+    'title',
+    'fname',
+    'mname',
+    'lname',
+    'email',
+    'post',
+    'picture',
+  ], 0b00000010 => 'write permission for 0b00000001',
+  0b00000100 => [
+    'contactno',
+    'address_c_houseno',
+    'address_c_area',
+    'address_c_city',
+    'address_c_state',
+    'address_c_country',
+    'address_c_pincode',
+    'address_p_houseno',
+    'address_p_area',
+    'address_p_city',
+    'address_p_state',
+    'address_p_country',
+    'address_p_pincode',
+  ], 0b00001000 => 'write permission for 0b00000100',
+  0b00010000 => [
+    'access_levels',
+    'services',
+    'permissions',
+    'documents_accesslevels',
+    'leaves',
+    'current_salary',
+    // 'experience',
+  ], 0b00100000 => 'write permission for 0b00000100',
+];
