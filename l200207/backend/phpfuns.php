@@ -178,8 +178,184 @@ if ($mode === "REGISTER") {
   $stmtc->execute();
   // $newcon = $stmtc->insert_id;
   if ($stmtc->error) exit($stmtc->error . ' Failure');
-  print_r($mode . " success" . json_encode($data));
-  exit($mode . " success" . json_encode($data));
+  exit($mode . "success" . json_encode($data));
+}
+
+if ($mode === "SALARYSLIP") { // Select Salart
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("SELECT prid,basic_salary,pf,medical,ta,da,hra,overtime,prepared_by,check_by,authorised_by,telephone_internet,bonus,house_rent,other FROM salaries where prid = ?");
+  $stmt->bind_param("i", $data['prid']);
+  $stmt->execute();
+  $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  print_r($res);
+  if ($stmt->error) exit($stmt->error . ' Failure');
+  print_r($mode . "success" . json_encode($res));
+  exit();
+}
+
+if ($mode === "UPDATE_USERS") { // Users Can Be Updates
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $ql = $link->prepare("UPDATE users set title=?,fname=?,mname=?,lname=?,email=?,contactno=?,address_c_houseno=?,address_c_area=?,address_c_city=?,address_c_state=?,address_c_country=?,address_c_pincode=?, address_p_houseno=?,address_p_area=?,address_p_city=?,address_p_state=?,address_p_country=?,address_p_pincode=? WHERE prid =?");
+  $ql->bind_param("sssssssssssisssssii", $data['title'], $data['fname'], $data['mname'], $data['lname'], $data['email'], $data['contactno'], $data['address_c_houseno'], $data['address_c_area'], $data['address_c_city'], $data['address_c_state'], $data['address_c_country'], $data['address_c_pincode'], $data['address_p_houseno'], $data['address_p_area'], $data['address_p_city'], $data['address_p_state'], $data['address_p_country'], $data['address_p_pincode'], $data['prid']);
+  $ql->execute();
+  $idnew = $ql->insert_id;
+  if ($ql->error) exit($ql->error.' failure');
+  $stmt = $link->prepare("SELECT * FROM users where id = $idnew");
+  $stmt->execute();
+  $newUsr = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  if ($stmt->error) exit($stmt->error.' failure');
+  print_r($mode . "success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "NOTIFICATION") { // Send Notification Who LoggedIn
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("SELECT id,`when`,why,what,whom FROM `notifications` WHERE whom = ?");
+  $stmt->bind_param("i", $data['whom']);
+  $stmt->execute();
+  $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  if ($stmt->error) exit($stmt->error . ' failure');
+  print_r($mode . "success" . json_encode($result));
+  exit;
+}
+
+if ($mode === "ACCESSLEVELS_ADD") {
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("INSERT INTO accesslevels(`name`,`inid`,`outid`)VALUES(?,?,?)");
+  $stmt->bind_param("sss", $data['name'], $data['inid'], $data['outid']);
+  $stmt->execute();
+  if ($stmt->error) exit($stmt->error . ' Failure');
+  $stmtR = $link->prepare("SELECT id,`name`,inid,outid FROM accesslevels WHERE id=(LAST_INSERT_ID())");
+  $stmtR->execute();
+  $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
+  print_r($mode . "success" . json_encode($getdata));
+  exit();
+}
+
+if ($mode === "CURRENT_SALARY") {
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("UPDATE users SET current_salary = ? WHERE prid =?");
+  $stmt->bind_param("ii", $data['current_salary'], $data['prid']);
+  $stmt->execute();
+  if ($stmt->error) exit($stmt->error . "Failure");
+  print_r($mode . "success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "DELETE_USERS") { // Delete Users
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $permissions = 0b00001000;
+  if ($permissions & 0b00001000) {
+    $stmt = $link->prepare("DELETE FROM users WHERE prid = ?");
+    $stmt->bind_param("i", $data['prid']);
+    $stmt->execute();
+    if ($stmt->error) exit(' failure');
+    print_r($mode . "success" . json_encode($data));
+    exit();
+  }
+}
+
+if ($mode === "DOCUMENTS_ACCESSLEVELS_ADD") { // Add Document Accesslevels 
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("INSERT INTO documents_accesslevels(`name`) VALUES(?)");
+  $stmt->bind_param("s", $data['name']);
+  $stmt->execute();
+  if ($stmt->error) exit(' Failure');
+  $stmtR = $link->prepare("SELECT id,name FROM documents_accesslevels WHERE id=(LAST_INSERT_ID())");
+  $stmtR->execute();
+  $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
+  print_r($mode . "success" . json_encode($getdata));
+  exit();
+}
+
+if ($mode === "DOCUMENTS_ACCESSLEVELS_DLT") {
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("DELETE FROM `documents_accesslevels` WHERE id =?");
+  $stmt->bind_param("i", $data['id']);
+  $stmt->execute();
+  if ($stmt->error) exit(' failure');
+  print_r($mode . "success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "ACCESSLEVELS_DLT") {
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("DELETE FROM `accesslevels` WHERE id =?");
+  $stmt->bind_param("i", $data['id']);
+  $stmt->execute();
+  if ($stmt->error) exit(' failure');
+  print_r($mode . "success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "GETATTENDANCE") { // Get Attendance If have Permissions
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $attend = [];
+  $permitted = true;
+  if (!$permitted) exit('failure');
+  $stmt = $link->prepare("SELECT *  FROM attendance WHERE prid = ? ");
+  $stmt->bind_param('i', $data['prid']);
+  $stmt->execute();
+  $attend = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  if ($stmt->error) exit($stmt->error);
+  $stmt->close();
+  print_r($mode . "success" . json_encode($attend));
+  exit();
+}
+
+if ($mode === "LOGOUT") { // Users Logout Mode
+  unset($_SESSION['userData']);
+  session_unset();
+  session_destroy();
+  exit($mode . 'success' . json_encode('LOGGED OUT'));
+}
+
+if ($mode === "POSTS_ADD") { // Add Post
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("INSERT INTO posts(post,boss) VALUES(?,?)");
+  $stmt->bind_param("si", $data['post'], $data['boss']);
+  $stmt->execute();
+  if ($stmt->error) exit(' failure');
+  $stmtR = $link->prepare("SELECT id,post AS `name`,boss FROM posts WHERE id=(LAST_INSERT_ID())");
+  $stmtR->execute();
+  $getdata = $stmtR->get_result()->fetch_all(MYSQLI_ASSOC);
+  print_r($mode . "success" . json_encode($getdata));
+  exit();
+}
+
+if ($mode === "POSTS_DLT") {
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("DELETE FROM `posts` WHERE id =?");
+  $stmt->bind_param("i", $data['id']);
+  $stmt->execute();
+  if ($stmt->error) exit(' failure');
+  print_r($mode . "success" . json_encode($data));
+  exit();
+}
+
+if ($mode === "UPLOADPICTURE") { // Upload Profile Picture
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("UPDATE users SET picture=? WHERE prid =?");
+  $data['picture'] = base64_encode($data['picture']);
+  $stmt->bind_param("si", $data['picture'], $data['prid']);
+  $stmt->execute();
+  $bs = base64_decode($data['picture']);
+  if ($stmt->error) exit(' failure');
+  print_r($mode . "success" . json_encode($bs));
+  exit();
 }
 
 if ($mode === "ADMINDASHBOARD") { // Sending All Tables
