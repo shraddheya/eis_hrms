@@ -143,3 +143,81 @@ if ($mode === "ISLOGGEDIN") { // Check Is-Login-?
   // print_r($mode . "success" . json_encode($_SESSION['userData']));
   // exit();
 }
+
+if ($mode === "REGISTER") {
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+  $stmt->bind_param(
+    'isssssiisssssisssssi',
+    $data['prid'],
+    $data["title"],
+    $data["fname"],
+    $data["mname"],
+    $data["lname"],
+    $data["email"],
+    $data["contactno"],
+    $data['post'],
+    $data["address_c_houseno"],
+    $data["address_c_area"],
+    $data["address_c_city"],
+    $data["address_c_state"],
+    $data["address_c_country"],
+    $data["address_c_pincode"],
+    $data["address_p_houseno"],
+    $data["address_p_area"],
+    $data["address_p_city"],
+    $data["address_p_state"],
+    $data["address_p_country"],
+    $data["address_p_pincode"]
+  );
+  $stmt->execute();
+  if ($stmt->error) exit($stmt->error . " failure ");
+  $stmtc = $link->prepare("INSERT INTO connections(prid1,prid2,connection)VALUES(?,?,'Boss')");
+  $stmtc->bind_param('ii', $data['prid'], $data['boss']);
+  $stmtc->execute();
+  // $newcon = $stmtc->insert_id;
+  if ($stmtc->error) exit($stmtc->error . ' Failure');
+  print_r($mode . " success" . json_encode($data));
+  exit($mode . " success" . json_encode($data));
+}
+
+if ($mode === "ADMINDASHBOARD") { // Sending All Tables
+  $dbcreds = (object)$_SESSION['DB'];
+  $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
+  $stmt = $link->prepare("SELECT id,`name`,`inid`,`outid` FROM accesslevels"); // accesslevels
+  $stmt->execute();
+  $UsrData["Accesslevels"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM attendance"); // Attendance
+  $stmt->execute();
+  $UsrData["Attendance"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM connections"); // Connections
+  $stmt->execute();
+  $UsrData["Connections"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT id,`name` FROM documents_accesslevels"); // documents
+  $stmt->execute();
+  $UsrData["Documents_accesslevels"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM experience"); // experience
+  $stmt->execute();
+  $UsrData["Experience"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM holidays"); // holidays
+  $stmt->execute();
+  $UsrData["Holidays"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT id,post AS `name` FROM posts"); //Posts
+  $stmt->execute();
+  $UsrData["Posts"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM salaries"); // Salaries
+  $stmt->execute();
+  $UsrData["Salaries"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT id,`name` FROM services"); // Services
+  $stmt->execute();
+  $UsrData["Services"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT * FROM transactions"); // Transactions
+  $stmt->execute();
+  $UsrData["Transactions"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  $stmt = $link->prepare("SELECT prid,title,fname,lname,email,post,createdAt FROM users");
+  $stmt->execute();
+  $UsrData["Users"] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+  if ($stmt->error) exit(' failure');
+  exit($mode . "success" . json_encode($UsrData));
+}

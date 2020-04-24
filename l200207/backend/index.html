@@ -12,6 +12,9 @@
       url: "http://localhost/phpfuns.php",
       // url: "http://localhost:9000/phpfuns_shraddheya.php",
       data: data2post,
+      xhrFields: {
+      withCredentials: true
+    },
       success: (res, status, data) => {
         $('div,pre').remove()
         console.log("res :", res)
@@ -295,13 +298,13 @@
         address_p_state: "xyz",
         boss: "1560156094488",
         contactno: "7897897899",
-        fname: "New",
-        lname: "Add",
-        email: "newuser@edeitic.com",
-        mname: "User",
+        fname: "Asus",
+        lname: "Asus",
+        email: "asus@edeitic.com",
+        mname: "Asus",
         permission: "0",
         post: "23",
-        prid: "1564462044190",
+        prid: "1564462044178",
         title: "Mr"
       }
     })
@@ -336,5 +339,7 @@
   LOGIN();
   ISLOGGEDIN();
   GETINITDATA();
+  REGISTER();
+  ADMINDASHBOARD();
 
 </script>
