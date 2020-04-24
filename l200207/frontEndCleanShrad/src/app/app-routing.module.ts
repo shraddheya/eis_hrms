@@ -5,13 +5,10 @@ import { PortalComponent } from './portal/portal.component';
 import { AdminComponent } from './admin/admin.component';
 import { Four04Component } from './four04/four04.component';
 
-
 const routes: Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'portal', component: PortalComponent},
-  {path: 'admin', component: AdminComponent},
-  {path: 'oopsy', component: Four04Component},
-  {path: '**', redirectTo: 'oopsy'},
+  { path: '', component: HomeComponent },
+  { path: 'portal', component: PortalComponent },
+  { path: 'admin', component: AdminComponent },
 ];
 
 @NgModule({

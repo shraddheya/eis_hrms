@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class DataserviceService {
-  public data: any = {}
+  public data: any = {};
   constructor() { }
   getServicedata() {
     return this.data;

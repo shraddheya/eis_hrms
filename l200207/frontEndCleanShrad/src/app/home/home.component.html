@@ -1,97 +1,94 @@
-<div id="home">
-  <div class="masterDiv">
-    <app-topbar></app-topbar>
-    <section class="bg-white font-weight-bold" id="homesection" style="font-family:'Geneva'">
-      <div class="p-5">
-        <div class="p-5">
-          <mdb-carousel [animation]="'slide'" class="z-depth-3">
-            <mdb-carousel-item *ngFor="let imgName of ['portal', 'adminpage']">
-              <img class="d-block w-100" src="../../assets/images/{{imgName}}.png">
-            </mdb-carousel-item>
-          </mdb-carousel>
-          <div class="p-4 z-depth-3">
-            <h5 class="text-center">This is a platform where you can manage your office Work</h5>
-          </div>
+<div class="masterDiv">
+  <section class="bg-white font-weight-bold" id="homesection" style="font-family:'Geneva'">
+    <div class="p-0">
+      <div class="p-3">
+        <mdb-carousel [animation]="'slide'" class="z-depth-3">
+          <mdb-carousel-item *ngFor="let imgName of ['portal_31', 'adminpage_31']">
+            <img class="d-block w-100" src="../../assets/images/{{imgName}}.png">
+          </mdb-carousel-item>
+        </mdb-carousel>
+        <div class="p-4 z-depth-3">
+          <h5 class="text-center">This is a platform where you can manage your office Work</h5>
         </div>
       </div>
-    </section>
-    <section class="bg-white" id="features">
-      <div class="p-1">
-        <div class="container my-5 p-3 z-depth-1">
-          <section class="dark-grey-text">
-            <h2 class="text-center font-weight-bold mb-4 pb-2">Features</h2>
-            <p class="text-center lead grey-text mx-auto mb-5">
-              Below features of HRMS will making your work easy
-            </p>
-            <div class="row p-5">
-              <div class="col-md-6" *ngFor="let colL of featuresList">
-                <div class="row mb-3 p-3" *ngFor="let rowL of colL">
-                  <div class="col-2">
-                    <i class="fas fa-2x {{rowL.icon}} deep-dark-text"></i>
-                  </div>
-                  <div class="col-10">
-                    <h5 class="font-weight-bold mb-3">{{rowL.head}}</h5>
-                    <p class="grey-text mb-0">{{rowL.matter}}</p>
-                  </div>
+    </div>
+  </section>
+  <section class="bg-white" id="features">
+    <div class="p-1">
+      <div class="container my-5 p-3 z-depth-1">
+        <section class="dark-grey-text">
+          <h2 class="text-center font-weight-bold mb-4 pb-2">Features</h2>
+          <p class="text-center lead grey-text mx-auto mb-5">
+            Below features of HRMS will making your work easy
+          </p>
+          <div class="row p-5">
+            <div class="col-md-6" *ngFor="let colL of featuresList">
+              <div class="row mb-3 p-3" *ngFor="let rowL of colL">
+                <div class="col-2">
+                  <i class="fas fa-2x {{rowL.icon}} deep-dark-text"></i>
                 </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-    </section>
-    <section class="bg-white" id="pricingplan">
-      <div class="" style="padding:3em">
-        <section class="p-md-3 mx-md-5 text-center text-lg-left">
-          <h2 class="text-center mx-auto font-weight-bold mb-5">Pricing Plan</h2>
-          <div class="row">
-            <div class="col-lg-4 mb-4" *ngFor="let pricingdata of pricingList">
-              <div class="card text-center">
-                <div class="card-header white-text grey darken-3">
-                  <h4>{{pricingdata.head}}</h4>
-                  <div class="d-flex justify-content-center align-items-end">
-                    <h3 class="mb-0 h3">{{pricingdata.prize}}</h3>
-                    <p class="mb-0 ml-2">/ {{pricingdata.duration}}</p>
-                  </div>
-                </div>
-                <i class="fas fa-2x {{pricingdata.icon}} pt-5 dark-text"></i>
-                <div class="card-body">
-                  <p class="lead font-weight-bold">Pricing plan</p>
-                  <p class="card-text">{{pricingdata.matter}}</p>
-                  <a class="btn btn-dark btn-md text-white" name="basic" #pricingbasic
-                  (click)='pricingdata.clickFun ? pricingdata.clickFun() : null' role="button">Buy</a>
+                <div class="col-10">
+                  <h5 class="font-weight-bold mb-3">{{rowL.head}}</h5>
+                  <p class="grey-text mb-0">{{rowL.matter}}</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
       </div>
-    </section>
-    <section class="bg-white p-5">
-      <div class="p-3" id="demo_logincredentail">
-        <mdb-card class="z-depth-2">
-          <mdb-card-body>
-            <mdb-card-title>
-              <h5>Use below Cedentials for Demo</h5>
-            </mdb-card-title>
-            <mdb-card-text style="height:0.5em;" class="font-weight-bold">
-              Username - 
-              <span>
-                demo@edeitic.com
-              </span>
-            </mdb-card-text>
-            <mdb-card-text style="height:0.5em;" class="font-weight-bold">
-              Password - 
-              <span>
-                demo@edeitic.com
-              </span>
-            </mdb-card-text>
-          </mdb-card-body>
-        </mdb-card>
-      </div>
-      <a href="#homesection">
-        <mdb-icon fas icon="chevron-circle-up" class="clicktop text-white bg-dark z-depth-1 rounded-circle"></mdb-icon>
-      </a>
-    </section>
-   </div>
+    </div>
+  </section>
+  <section class="bg-white" id="pricingplan">
+    <div class="" style="padding:3em">
+      <section class="p-md-3 mx-md-5 text-center text-lg-left">
+        <h2 class="text-center mx-auto font-weight-bold mb-5">Pricing Plan</h2>
+        <div class="row">
+          <div class="col-lg-4 mb-4" *ngFor="let pricingdata of pricingList">
+            <div class="card text-center">
+              <div class="card-header white-text grey darken-3">
+                <h4>{{pricingdata.head}}</h4>
+                <div class="d-flex justify-content-center align-items-end">
+                  <h3 class="mb-0 h3">{{pricingdata.prize}}</h3>
+                  <p class="mb-0 ml-2">/ {{pricingdata.duration}}</p>
+                </div>
+              </div>
+              <i class="fas fa-2x {{pricingdata.icon}} pt-5 dark-text"></i>
+              <div class="card-body">
+                <p class="lead font-weight-bold">Pricing plan</p>
+                <p class="card-text">{{pricingdata.matter}}</p>
+                <a class="btn btn-dark btn-md text-white" name="basic" #pricingbasic
+                  (click)='pricingdata.clickFun ? pricingdata.clickFun() : null' role="button">Buy</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="bg-white p-5">
+    <div class="p-3" id="demo_logincredentail">
+      <mdb-card class="z-depth-2">
+        <mdb-card-body>
+          <mdb-card-title>
+            <h5>Use below Cedentials for Demo</h5>
+          </mdb-card-title>
+          <mdb-card-text style="height:0.5em;" class="font-weight-bold">
+            Username -
+            <span>
+              demo@edeitic.com
+            </span>
+          </mdb-card-text>
+          <mdb-card-text style="height:0.5em;" class="font-weight-bold">
+            Password -
+            <span>
+              demo@edeitic.com
+            </span>
+          </mdb-card-text>
+        </mdb-card-body>
+      </mdb-card>
+    </div>
+    <a href="#homesection">
+      <mdb-icon fas icon="chevron-circle-up" class="clicktop text-white bg-dark z-depth-1 rounded-circle"></mdb-icon>
+    </a>
+  </section>
 </div>

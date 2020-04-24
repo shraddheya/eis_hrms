@@ -1,13 +1,19 @@
 {
   "name": "front-end-clean-shrad",
   "version": "0.0.0",
+  "config": {
+    "buildpath": "C:/Users/Sourabh/Documents/eis_hrms_deploy/dist"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build:here": "ng build",
+    "build": "ng build --prod --output-path=%npm_package_config_buildpath%",
+    "postbuild": "git -C %npm_package_config_buildpath% add -A && git -C %npm_package_config_buildpath% commit -m 'msg' && git -C %npm_package_config_buildpath% push",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "pathcheck": "echo %npm_package_config_buildpath%"
   },
   "private": true,
   "dependencies": {

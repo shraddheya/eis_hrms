@@ -1,6 +1,6 @@
 .masterDiv{
   position: absolute;
-  top: 0;
+  top: 4em;
   bottom: 0;
   left: 0;
   right: -17px; /* Increase/Decrease this value for cross-browser compatibility */
@@ -19,8 +19,5 @@
     bottom: 0em;
     z-index:5;
   }
-  .modal-backdrop{
-    display:none;
-    height:auto
-  }
+ 
   

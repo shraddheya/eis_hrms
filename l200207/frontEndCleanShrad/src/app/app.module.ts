@@ -10,8 +10,10 @@ import { FormsModule } from '@angular/forms';
 import { TopbarComponent } from './topbar/topbar.component';
 import { PortalComponent } from './portal/portal.component';
 import { AdminComponent } from './admin/admin.component';
+import { NotificationComponent } from './notification/notification.component';
+import { LoginregistrationComponent } from './loginregistration/loginregistration.component';
 import { Four04Component } from './four04/four04.component';
-
+import { ProfileComponent } from './profile/profile.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +21,10 @@ import { Four04Component } from './four04/four04.component';
     TopbarComponent,
     PortalComponent,
     AdminComponent,
-    Four04Component
+    Four04Component,
+    NotificationComponent,
+    LoginregistrationComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

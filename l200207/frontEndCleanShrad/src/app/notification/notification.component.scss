@@ -1,0 +1,12 @@
+.bages{
+    position: relative;
+    right: 0.7em;
+    top: -1.4em;
+    padding: 3px;
+    color: #fff;
+    background-color: #bf1f1f;
+    font-size: 0.6em;
+    border-radius: 5em;
+    content: attr(data-badge);
+    border: solid 1px #c93a3a;
+  }

@@ -1,0 +1,32 @@
+<div class="btn-group" mdbDropdown>
+  <div mdbDropdownToggle>
+    <img src={{profilePic}} alt="" style="height:1.6em;width:1.6em;" class="inlinePic">
+  </div>
+  <div style="font-size: 0.9em;" class="dropdown-menu dropdown-menu-right dropdown-primary">
+    <div class="p-1">
+      <span class="text-center">Signed in as</span><br>
+      <span class="font-weight-bold"></span>
+    </div>
+    <hr class='text-primary'>
+    <ul style="list-style-type: none;" class="mr-5">
+      <li>
+        <a class="dropdown-item waves-light font-weight-bold" style="font-size: 1em;" mdbWavesEffect
+          routerLink='admin'>
+          <mdb-icon fas icon="cog"></mdb-icon> Admin
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item waves-light font-weight-bold" style="font-size: 1em;" mdbWavesEffect
+          (click)="doAjax('Settings')">
+          <mdb-icon fas icon="cog"></mdb-icon> Setting
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item waves-light font-weight-bold" style="font-size: 1em;" mdbWavesEffect
+          (click)="doAjax('LOGOUT')">
+          <mdb-icon fas icon="sign-out-alt"></mdb-icon>Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

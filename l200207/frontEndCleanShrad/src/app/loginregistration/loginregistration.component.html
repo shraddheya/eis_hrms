@@ -1,0 +1,97 @@
+<button mdbBtn size="sm" (click)="loginregistration.show()" class="font-weight-bold" color="dark">
+  LOGIN / REGISTER
+</button>
+<div mdbModal #loginregistration="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-side modal-top-right" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="back_modal">
+          <a (click)="loginregistration.hide()" class="text-dark">
+            <mdb-icon fas icon="times"></mdb-icon>
+          </a>
+        </div>
+
+        <h4 class="modal-title w-100 font-weight-bold">
+          <a mdbBtn size="sm" class="text-white bg-dark" (click)="clicked('signinmode')">
+            <mdb-icon fas icon="user-alt"></mdb-icon> Login
+          </a>
+        </h4>
+        <h4 class="modal-title w-100 font-weight-bold">
+          <a mdbBtn size="sm" class="text-white bg-dark" (click)="clicked('signupmode')">
+            <mdb-icon fas icon="user-plus"></mdb-icon> Register
+          </a>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div #loginsection *ngIf="loginviewSection">
+
+          <div class="md-form mb-4">
+            <mdb-icon fas icon="envelope" class="prefix text-dark"></mdb-icon>
+            <input mdbInput type="email" (input)="email=$event.target.value" class="form-control">
+            <label for="defaultForm-email" class="text-dark">Email</label>
+          </div>
+          <div class="md-form mb-4">
+            <mdb-icon fas icon="lock" class="prefix text-dark"></mdb-icon>
+            <input mdbInput #showhideEvent type="password" (input)="password=$event.target.value" class="form-control">
+            <label for="defaultForm-pass" class="text-dark">Password</label>
+            <span id="password_viewhide">
+              <i class="fas fa-eye showtext text-dark" (click)="passwordView('text','password',showhideEvent)"></i>
+              <i class="fas fa-eye-slash showpassword text-dark" (click)="passwordView('password','text',showhideEvent)"></i>
+            </span>
+          </div>
+          <div class="col-md-5 offset-md-2 p-1 loginBtn">
+            <button mdbBtn size='sm' (click)='callFunction("LOGIN")' type="button"
+              class="px-4 py-2 bg-dark text-white relative waves-light" mdbWavesEffect>
+              Login
+            </button>
+          </div>
+
+          <div id="forpassword" class="font-weight-bold text-dark text-right">
+            <a>Forgot Password?</a><br>
+          </div>
+        </div>
+        <div #signupsection class="p-2 mt-3" *ngIf="registerviewSection">
+          <div class="md-form mb-4">
+            <mdb-icon fas icon="user" class="prefix text-dark"></mdb-icon>
+            <input type="text" (input)="regUsername=$event.target.value" class="form-control">
+            <label for="defaultForm-username" class="text-dark">Enter Usename</label>
+          </div>
+          <div class="md-form mb-4">
+            <mdb-icon fas icon="envelope" class="prefix text-dark"></mdb-icon>
+            <input type="email" (input)="regEmail=$event.target.value" class="form-control">
+            <label for="defaultForm-email" class="text-dark">Enter Email</label>
+          </div>
+          <div class="md-form mb-4">
+            <mdb-icon fas icon="lock" class="prefix text-dark"></mdb-icon>
+            <input type="password" (input)="regCrpassword=$event.target.value" class="form-control">
+            <label for="defaultForm-pass" class="text-dark">Create Password</label>
+          </div>
+          <div class="md-form mb-4">
+            <mdb-icon fas icon="lock" class="prefix text-dark"></mdb-icon>
+            <input #showhideEvent type="password" (input)="regConpassword=$event.target.value" class="form-control">
+            <label for="defaultForm-pass" class="text-dark">Confirm Password</label>
+            <span id="password_viewhide">
+              <i class="fas fa-eye showtext text-dark" (click)="passwordView('text','password',showhideEvent)"></i>
+              <i class="fas fa-eye-slash showpassword text-dark" (click)="passwordView('password','text',showhideEvent)"></i>
+            </span>
+          </div>
+          <div class="col-md-6 offset-md-3 p-1 RegBtn">
+            <button mdbBtn size='sm' type="button" (click)="callFunction('SIGNUP')"
+              class="px-4 py-2 text-white bg-dark relative waves-light" mdbWavesEffect>
+              Register
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="bottomSocial btn-group btn-group-sm btnGrpSocialLogin" role="group" aria-label="Basic example">
+          <a type="button" *ngFor="let item of socialLoginBtn | keyvalue" id="buttAuth{{item.key}}"
+            href="http://localhost:3000/{{item.value.link}}" class="btn btnNav">
+            <mdb-icon fab icon="{{item.value.icon}}" class="iconssociallogin text-dark"></mdb-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

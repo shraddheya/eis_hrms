@@ -1,0 +1,42 @@
+.bottomSocial {
+  position: relative;
+  margin: auto;
+}
+.showpassword {
+  display: none;
+}
+#password_viewhide {
+  position: absolute;
+  top: 0.3em;
+  right: 0em;
+  font-size: 1.4em;
+}
+.back_modal{
+  position: absolute;
+  font-size: 1.3em;
+  top: 0em;
+  left: -1.3em;
+  border-top: rounded;
+  border-top-left-radius: 1em;
+  background-color: white;
+  border-bottom-left-radius: 1em;
+  opacity: 0.4;
+}
+#forpassword {
+  font-size: 0.8em;
+}
+.loginBtn {
+  margin-left: 35%;
+}
+.RegBtn {
+  margin-left: 35%;
+}
+.btnNav {
+  background: #ffffff99;
+  border-radius: 2em;
+  color: var(--gray-dark);
+  margin-left: 0.4em;
+}
+.modal-backdrop{
+  display:none;
+}

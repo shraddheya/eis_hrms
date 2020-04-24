@@ -1,0 +1,15 @@
+<div class="btn-group p-2" mdbDropdown>
+  <div mdbDropdownToggle>
+    <mdb-icon fas icon="bell" class="text-white"></mdb-icon><span class="bages">1</span>
+  </div>
+  <div class="dropdown-menu dropdown-menu-right dropdown-primary">
+    <div style='width:25em;'>
+      <div *ngFor="let shownotification of notification" class="row p-1 font-weight-bold">
+        <div class="col-1 text-dark">{{shownotification.whom}}</div>
+        <div class="col-2 text-dark">{{shownotification.why}}</div>
+        <div class="col-5 text-dark">{{shownotification.what}}</div>
+        <div class="col-4 text-dark">{{shownotification.when}}</div>
+      </div>
+    </div>
+  </div>
+</div>

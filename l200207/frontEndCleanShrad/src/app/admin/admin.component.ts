@@ -14,6 +14,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     callUrl({ mode: 'ADMINDASHBOARD' }, (resp: any) => {
+      console.log(resp);
       resp = JSON.parse(resp);
       this.adminpagedata = resp;
       this.exportadminpagedata = [
