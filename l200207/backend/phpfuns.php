@@ -147,7 +147,7 @@ if ($mode === "ISLOGGEDIN") { // Check Is-Login-?
 if ($mode === "REGISTER") {
   $dbcreds = (object)$_SESSION['DB'];
   $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
-  $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+  $stmt = $link->prepare("INSERT into users(prid,title,fname,mname,lname,email as mail,contactno,post,address_c_houseno,address_c_area,address_c_city,address_c_state,address_c_country,address_c_pincode,address_p_houseno,address_p_area,address_p_city,address_p_state,address_p_country,address_p_pincode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
   $stmt->bind_param(
     'isssssiisssssisssssi',
     $data['prid'],
@@ -197,7 +197,7 @@ if ($mode === "SALARYSLIP") { // Select Salart
 if ($mode === "UPDATE_USERS") { // Users Can Be Updates
   $dbcreds = (object)$_SESSION['DB'];
   $link = mysqli_connect($dbcreds->host, $dbcreds->username, $dbcreds->password, $dbcreds->nm);
-  $ql = $link->prepare("UPDATE users set title=?,fname=?,mname=?,lname=?,email=?,contactno=?,address_c_houseno=?,address_c_area=?,address_c_city=?,address_c_state=?,address_c_country=?,address_c_pincode=?, address_p_houseno=?,address_p_area=?,address_p_city=?,address_p_state=?,address_p_country=?,address_p_pincode=? WHERE prid =?");
+  $ql = $link->prepare("UPDATE users set title=?,fname=?,mname=?,lname=?,email as mail=?,contactno=?,address_c_houseno=?,address_c_area=?,address_c_city=?,address_c_state=?,address_c_country=?,address_c_pincode=?, address_p_houseno=?,address_p_area=?,address_p_city=?,address_p_state=?,address_p_country=?,address_p_pincode=? WHERE prid =?");
   $ql->bind_param("sssssssssssisssssii", $data['title'], $data['fname'], $data['mname'], $data['lname'], $data['email'], $data['contactno'], $data['address_c_houseno'], $data['address_c_area'], $data['address_c_city'], $data['address_c_state'], $data['address_c_country'], $data['address_c_pincode'], $data['address_p_houseno'], $data['address_p_area'], $data['address_p_city'], $data['address_p_state'], $data['address_p_country'], $data['address_p_pincode'], $data['prid']);
   $ql->execute();
   $idnew = $ql->insert_id;
