@@ -129,10 +129,11 @@ export class PortalComponent implements OnInit {
         this.users = resp.users;
         const permission: any = {
           operation: 'Crud', data: [
-            { type: 1, value: ['edit', 'delete'], show: true },
+            { type: 100, value: ['edit', 'delete'], show: true },
             { type: 2, value: ['edit'], show: true },
             { type: 3, show: false }]
         };
+        // Perssion code
         this.users.forEach(permit => {
           if (!permit.boss) { // This condition is used to check root user
             this.loginuserid = permit.id;
@@ -174,33 +175,32 @@ export class PortalComponent implements OnInit {
   addUserNode2GUI(user: any, mode: any, isPermanent: any = true) {
     switch (mode) {
       case 'addusers':
-        this.addUsers.hide();
         this.users.push(user);
         this.createDataTree(this.users);
         swal('User Added', '', 'success');
+        this.addUsers.hide();
         break;
       case 'deleteusers':
-        // tslint:disable-next-line: triple-equals
-        this.users.forEach((item, index, object) => {
-          // tslint:disable-next-line: triple-equals
-          if (item.id == user.prid) object.splice(index, 1);
+        console.log(user);
+        // tslint:disable-next-line: only-arrow-functions
+        this.users.forEach(function (item: any, index: any, object: any) {
+          if (item.id === user.prid) object.splice(index, 1);
         });
         this.createDataTree(this.users);
+        swal('Suuccesfully Deleted', '', 'success');
         this.hierachyView.hide();
-        swal('User Deleted', '', 'success');
         break;
       case 'updateuser':
-        for (let i = 0; i < this.users.length; i++) {
-          // tslint:disable-next-line: triple-equals
-          if (this.users[i].id == user.id) {
+        for (var i = 0; i < this.users.length; i++) {
+          if (this.users[i].id === user.id) {
             this.users.splice(i, 1);
             i--;
           }
         }
         this.users.push(user);
         this.createDataTree(this.users);
+        swal('Succesfully Updated', '', 'success');
         this.hierachyView.hide();
-        swal('User Updated', '', 'success');
         break;
     }
   }
@@ -315,7 +315,6 @@ export class PortalComponent implements OnInit {
     this.jitNodeData = data;
     this.clickedUserid = data.id; // Get Id after clicked
     this.rootUserid = data.boss;  // Get Boss Id after clicked
-
     // Used for display current salary of clicked user
     this.userRecordbody.forEach(urel => {
       urel.detail.forEach(udel => {
@@ -323,17 +322,14 @@ export class PortalComponent implements OnInit {
         if (udel.name == 'salaryslip') (data.current_salary == undefined) ? udel.title = '0' : udel.title = data.current_salary;
       });
     });
-
     // This object is used to show value and icon dynamically for UI
     const clickedData: any = {};
     // tslint:disable-next-line: no-string-literal
     this.users[0]['boss'] = data.boss;
     // tslint:disable-next-line: no-string-literal
     this.users[0]['email'] = this.users[0].mail;
-
     // Below code is used to make user detail for UI
     Object.keys(this.users[0]).forEach(el => { clickedData[el] = { value: data[el], icon: '' }; });
-
     // Below code is used to filter address field form clickedData object
     const recordArrray = [
       { key: 'houseno', icon: 'home' },
@@ -349,7 +345,6 @@ export class PortalComponent implements OnInit {
       });
     });
     this.userDetails.data.forEach(el => { el.detail = []; });
-
     // Below code is used to store user data
     this.userDetails.data.forEach(clickel => {
       // tslint:disable-next-line: triple-equals
@@ -407,7 +402,6 @@ export class PortalComponent implements OnInit {
         }
       });
     });
-
     const checkobj: any = { address_p: [], address_c: [] }; // Used to check defined values
     Object.keys(clickedData).forEach(el => {
       if (el.startsWith('address_p')) {
@@ -419,7 +413,6 @@ export class PortalComponent implements OnInit {
         if (clickedData[el].value != '' || clickedData[el].value != 0) checkobj.address_c.push(clickedData[el].value);
       }
     });
-
     this.userDetails.data.forEach(apel => {
       // tslint:disable-next-line: triple-equals
       if (apel.title == 'Permanent Address') (checkobj.address_p == 0) ? apel.show = false : apel.show = true;

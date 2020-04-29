@@ -4071,7 +4071,7 @@ THE SOFTWARE.
           'fname': obj.fname,
           'mname':obj.mname,
           'lname':obj.lname,
-          'email':obj.mail,
+          'email':obj.email,
           'contactno':obj.contactno,
           'password':obj.password,
           'post':obj.post,
