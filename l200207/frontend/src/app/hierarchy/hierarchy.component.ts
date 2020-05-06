@@ -205,13 +205,18 @@ export class HierarchyComponent implements OnInit {
     }
   }
   uploadimage(fileInput: any) {
-    this.fileData = <File>fileInput.target.files[0];
-    var mimeType = this.fileData.type;
-    if (mimeType.match(/image\/*/) == null) return;
-    var reader = new FileReader();
+    this.fileData = fileInput.target.files[0] as File;
+    const mimeType = this.fileData.type;
+    if (mimeType.match(/image\/*/) == null) { return; }
+    const reader = new FileReader();
     reader.readAsDataURL(this.fileData);
+    // tslint:disable-next-line: variable-name
     reader.onload = (_event) => {
-      this.serverConnection.callUrl({mode: "UPLOADPICTURE", data: JSON.stringify({ prid: usrprid, picture: reader.result }) }, res => { this.responseData(res) })
+      this.serverConnection.callUrl({
+        mode: "UPLOADPICTURE",
+        data: JSON.stringify({ prid: usrprid, picture: reader.result }) },
+        res => { this.responseData(res); 
+      });
     }
   }
   initJIT() {

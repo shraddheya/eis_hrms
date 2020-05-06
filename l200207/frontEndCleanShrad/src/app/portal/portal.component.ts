@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { callUrl } from '../ajaxes';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { DataserviceService } from '../dataservice.service';
+import { HttpClient } from '@angular/common/http';
 import moment from 'moment';
 import $ from 'jquery';
 import 'fullcalendar';
@@ -44,6 +45,8 @@ export class PortalComponent implements OnInit {
   jitNodeData: any;
   attendancedata: any = [];
   addButton: any = false;
+  fileData: File = null;
+  image;
   userRecordbody: any = [
     {
       title: 'Crud',
@@ -116,7 +119,7 @@ export class PortalComponent implements OnInit {
       { title: 'Corresponding Address', detail: [], show: true }
     ]
   };
-  constructor(private dataService: DataserviceService) { }
+  constructor(private dataService: DataserviceService, private http: HttpClient) { }
   ngOnInit() {
     this.initJIT();
     callUrl({ mode: 'GETINITDATA' }, (resp: any) => {
@@ -181,20 +184,22 @@ export class PortalComponent implements OnInit {
         this.addUsers.hide();
         break;
       case 'deleteusers':
-        console.log(user);
-        // tslint:disable-next-line: only-arrow-functions
-        this.users.forEach(function (item: any, index: any, object: any) {
-          if (item.id === user.prid) object.splice(index, 1);
-        });
+        // tslint:disable-next-line: no-shadowed-variable
+        for (let i = this.users.length - 1; i >= 0; i--) {
+          if (this.users[i].id === user.prid) {
+            this.users.splice(i, 1);
+          }
+        }
         this.createDataTree(this.users);
-        swal('Suuccesfully Deleted', '', 'success');
+        // swal('Suuccesfully Deleted', '', 'success');
         this.hierachyView.hide();
         break;
       case 'updateuser':
-        for (var i = 0; i < this.users.length; i++) {
+        console.log(user);
+        // tslint:disable-next-line: no-shadowed-variable
+        for (let i = this.users.length - 1; i >= 0; i--) {
           if (this.users[i].id === user.id) {
             this.users.splice(i, 1);
-            i--;
           }
         }
         this.users.push(user);
@@ -313,24 +318,20 @@ export class PortalComponent implements OnInit {
   }
   hierarchyViewdata(data: any) {
     this.jitNodeData = data;
-    this.clickedUserid = data.id; // Get Id after clicked
-    this.rootUserid = data.boss;  // Get Boss Id after clicked
-    // Used for display current salary of clicked user
+    this.clickedUserid = data.id;
+    this.rootUserid = data.boss;
     this.userRecordbody.forEach(urel => {
       urel.detail.forEach(udel => {
         // tslint:disable-next-line: triple-equals
         if (udel.name == 'salaryslip') (data.current_salary == undefined) ? udel.title = '0' : udel.title = data.current_salary;
       });
     });
-    // This object is used to show value and icon dynamically for UI
     const clickedData: any = {};
     // tslint:disable-next-line: no-string-literal
     this.users[0]['boss'] = data.boss;
     // tslint:disable-next-line: no-string-literal
     this.users[0]['email'] = this.users[0].mail;
-    // Below code is used to make user detail for UI
     Object.keys(this.users[0]).forEach(el => { clickedData[el] = { value: data[el], icon: '' }; });
-    // Below code is used to filter address field form clickedData object
     const recordArrray = [
       { key: 'houseno', icon: 'home' },
       { key: 'area', icon: 'road' },
@@ -345,7 +346,6 @@ export class PortalComponent implements OnInit {
       });
     });
     this.userDetails.data.forEach(el => { el.detail = []; });
-    // Below code is used to store user data
     this.userDetails.data.forEach(clickel => {
       // tslint:disable-next-line: triple-equals
       if (clickel.title == 'Basic Detail') {
@@ -419,11 +419,11 @@ export class PortalComponent implements OnInit {
       // tslint:disable-next-line: triple-equals
       if (apel.title == 'Corresponding Address') (checkobj.address_c == 0) ? apel.show = false : apel.show = true;
     });
-    // this.userDetails.data.forEach(acel => { if(acel.title == 'Corresponding Address') acel.show = false });
     this.populateCalendarAttendance(data.id);
     this.callFunction('salaryslip_request');
     this.hierachyView.show();
   }
+
   clicked(mode: any) {
     switch (mode) {
       case 'addUser':
@@ -519,9 +519,10 @@ export class PortalComponent implements OnInit {
         this.clicked('allotimgLoad');
         break;
       case 'deleteRecord':
-        callUrl({ mode: 'DELETE_USERS', data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
-          this.addUserNode2GUI(JSON.parse(resp), 'deleteusers');
-        });
+        // callUrl({ mode: 'DELETE_USERS', data: JSON.stringify({ prid: this.clickedUserid }) }, (resp: any) => {
+        //   this.addUserNode2GUI(JSON.parse(resp), 'deleteusers');
+        // });
+        this.addUserNode2GUI({ prid: this.clickedUserid }, 'deleteusers');
         break;
       case 'addusers':
         // tslint:disable-next-line: prefer-const
@@ -689,5 +690,13 @@ export class PortalComponent implements OnInit {
         $('#calendar').fullCalendar('addEventSource', eventsCurrent);
       }
     });
+  }
+  uploadimage(event) {
+    // tslint:disable-next-line: no-angle-bracket-type-assertion
+    const image = <File> event.target.files[0];
+    const fd = new FormData();
+    fd.append('image', this.image, this.image.name);
+    console.log(fd);
+
   }
 }

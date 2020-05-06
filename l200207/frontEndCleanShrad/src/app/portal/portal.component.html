@@ -197,7 +197,18 @@
             style="font-size: 1.7em;"></mdb-icon>
           <h4 class="modal-title w-100 font-weight-bold text-center">User Record</h4>
         </div>
+        
         <div class="modal-body  border border-white">
+            <div class="row">
+              <div class="col-12">
+                <img class="profileimage" id="usersDp" src="../../assets/images/main.png" alt="Image not found">
+              </div>
+            </div>
+            <div id="updprofile" class="file z-depth-1 bg-white">
+              <mdb-icon fas icon="camera" class="p-1 picset"></mdb-icon>
+              <input class="profilePic" #profilePicture (change)="uploadimage($event)" type="file" name="file" />
+            </div>
+
           <div class="row p-4">
             <div class="col-4" *ngFor="let recordUser of userRecordbody">
               <div class="row">
@@ -208,7 +219,7 @@
                     <span>
                       <mdb-icon fas icon="{{corecordUser.icon}}"></mdb-icon> {{corecordUser.title}}
                     </span>
-                    <img alt="" *ngIf="corecordUser.img" src={{corecordUser.img}} style="height:8em;width:8em;top:0em">
+                    <img alt="Imge not found" *ngIf="corecordUser.img" src={{corecordUser.img}} style="height:8em;width:8em;top:0em">
                   </a>
                 </div>
               </div>
