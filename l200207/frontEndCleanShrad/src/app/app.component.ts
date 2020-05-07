@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
       filter(event => event instanceof NavigationEnd)
     );
     navEndEvents.subscribe((event: NavigationEnd) => {
-      gtag('config', 'UA-164482339-1', {
+      gtag('config', 'UA-165836157-2', {
         // tslint:disable-next-line: object-literal-key-quotes
         'page_path': event.urlAfterRedirects
       });
